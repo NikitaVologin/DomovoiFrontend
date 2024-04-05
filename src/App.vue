@@ -1,6 +1,6 @@
 <template>
 <div>
-	
+	<router-view></router-view>
 </div>
 </template>
 
@@ -12,12 +12,10 @@ import axios from 'axios'
 export default defineComponent({
 	components: {  },
 	data() {
-		
+		return {}
 	},
 	mounted() {
-		axios.get('https://agency.amberday.net/api/', {}).then(res => {
-			console.log(res)
-		})
+		
 	},
 	computed: {
 	},

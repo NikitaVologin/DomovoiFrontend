@@ -1,0 +1,66 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@100;200;300;400;500;600;700;800;900&display=swap');
+
+* {
+	font-family: 'Inter', sans-serif;
+	box-sizing: border-box;
+}
+
+body {
+	background: #f2f2f2;
+	margin: 0;
+}
+
+.content-width-container {
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+
+	.content-width {
+		width: 75%;
+	}
+}
+
+main {
+	padding: 50px 0 150px;
+}
+
+.card {
+	border-radius: 10px;
+	background: #fff;
+	box-shadow: 0 0 10px 10px #00000005;
+	padding: 1.5rem 1.75rem;
+}
+
+input[type="text"], input[type="number"], input[type="password"], .input-style {
+	padding: .3rem .5rem;
+	font-size: 1rem;
+	outline: none;
+	border-radius: 5px;
+	border: 1px solid #888;
+	font-weight: 300;
+
+	&.input-number_short {
+		width: 75px;
+	}
+	&.input-number_medium {
+		width: 100px;
+	}
+
+	&:focus {
+		border-color: #555;
+	}
+}
+
+select {
+	padding: .3rem .5rem;
+	font-size: 1rem;
+	outline: none;
+	border-radius: 5px;
+	border: 1px solid #888;
+	font-weight: 300;
+	cursor: pointer;
+}
+
+label {
+	display: inline-block;
+}
