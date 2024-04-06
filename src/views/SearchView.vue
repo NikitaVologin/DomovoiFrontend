@@ -102,7 +102,7 @@
 import { defineComponent } from 'vue';
 import Header from "../components/Header.vue"
 import AnnouncementCard from "../components/AnnouncementCard.vue"
-import { AnnouncementViewModel } from "../domain/viewModel/AnnouncementViewModel"
+import { AnnouncementViewModel } from "../viewModel/AnnouncementViewModel"
 
 type DealType = "buy"|"lease";
 

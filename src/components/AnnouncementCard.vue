@@ -20,7 +20,7 @@
 
 <script lang="ts">
 import { defineComponent } from 'vue';
-import { AnnouncementViewModel } from '../domain/viewModel/AnnouncementViewModel';
+import { AnnouncementViewModel } from '../viewModel/AnnouncementViewModel';
 
 export default defineComponent({
 	props: {
