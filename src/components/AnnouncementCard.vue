@@ -6,13 +6,13 @@
 	<div class="ann-card__body">
 		<div class="ann-card__body__head">
 			<div class="ann-card__body__head__address">{{ announcement.address }}</div>
-			<div class="ann-card__body__head__price">{{ announcement.price }}₽</div>
+			<div class="ann-card__body__head__price" v-if="!minimized">{{ announcement.price }}₽</div>
 		</div>
-		<div class="ann-card__body__numbers">
+		<div class="ann-card__body__numbers" v-if="!minimized">
 			<span class="ann-card__body__numbers__item" v-if="roomsStr.trim() != ''">{{ roomsStr }}</span>
 			<span class="ann-card__body__numbers__item" v-if="roomsStr.trim() != ''">{{ announcement.area }} м2</span>
 		</div>
-		<div class="ann-card__body__district">Район {{ announcement.destrict }}</div>
+		<div class="ann-card__body__district" v-if="!minimized">Район {{ announcement.destrict }}</div>
 	</div>
 </div>
 </template>
@@ -27,7 +27,8 @@ export default defineComponent({
 		announcement: {
 			type: AnnouncementViewModel,
 			required: true,
-		}
+		},
+		minimized: Boolean,
 	},
 	computed: {
 		roomsStr() : string {

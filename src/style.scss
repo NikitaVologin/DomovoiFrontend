@@ -28,7 +28,6 @@ main {
 	border-radius: 10px;
 	background: #fff;
 	box-shadow: 0 0 10px 10px #00000005;
-	padding: 1.5rem 1.75rem;
 }
 
 input[type="text"], input[type="number"], input[type="password"], .input-style {
@@ -63,4 +62,19 @@ select {
 
 label {
 	display: inline-block;
+}
+
+button, .button-style {
+	background: #d34343;
+	color: #fff;
+	padding: .5rem 1rem;
+	font-size: 1rem;
+	border: none;
+	border-radius: 10px;
+	cursor: pointer;
+	transition: 0.15s;
+
+	&:hover {
+		background: #c83737;
+	}
 }
