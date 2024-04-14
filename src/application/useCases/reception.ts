@@ -1,3 +1,4 @@
+/// <reference path = "src/domain/commonDomain.ts" />
 namespace Application {
     let CounterAgent = Domain.CounterAgent;
     export class Reception {

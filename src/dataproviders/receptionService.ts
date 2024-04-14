@@ -1,3 +1,4 @@
+/// <reference path = "../domain/commonDomain.ts" />
 namespace DataProviders {
     export class ReceptionService implements Application.ReceptionService {
 
