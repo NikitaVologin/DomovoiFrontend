@@ -277,6 +277,9 @@ export default defineComponent({
 				overflow: hidden;
 				.search-head__card_map__map {
 					outline: none;
+					&:deep(.leaflet-control) { z-index: 0 !important}
+					&:deep(.leaflet-pane) { z-index: 0 !important}
+					&:deep(.leaflet-top, .leaflet-bottom) {z-index: 0 !important}
 				}
 			}
 		}
