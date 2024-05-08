@@ -1,34 +1,35 @@
-namespace Domain {
-    export class Office extends CommercialBuilding {
-        
-        private _name?: string | undefined;
+import { Building } from "../building";
+import { CommercialBuilding } from "../commercialBuilding";
 
-        public get name(): string | undefined {
-            return this._name;
-        }
-        public set name(value: string | undefined) {
-            this._name = value;
-        }
+export class Office extends CommercialBuilding {
 
-        private _roomsCount!: number;
+    private _name?: string | undefined;
 
-        public get roomsCount(): number {
-            return this._roomsCount;
-        }
+    public get name(): string | undefined {
+        return this._name;
+    }
+    public set name(value: string | undefined) {
+        this._name = value;
+    }
 
-        public set roomsCount(value: number) {
-            this._roomsCount = value;
-        }
+    private _roomsCount!: number;
 
-        public constructor(id: number, area: number, floorsCount: number,
-            entry: boolean, adress: string, isUse: boolean, isAcces: boolean,
-            roomsCount: number,
-            name: string | undefined,
-            building?: Building | undefined,
-            type?: string | undefined) {
-            super(id, area, floorsCount, entry, adress, isUse, isAcces, building, type);
-            this.roomsCount = roomsCount;
-            this.name = name;
-        }
+    public get roomsCount(): number {
+        return this._roomsCount;
+    }
+
+    public set roomsCount(value: number) {
+        this._roomsCount = value;
+    }
+
+    public constructor(id: number, area: number, floorsCount: number,
+        entry: boolean, adress: string, isUse: boolean, isAcces: boolean,
+        roomsCount: number,
+        name: string | undefined,
+        building?: Building | undefined,
+        type?: string | undefined) {
+        super(id, area, floorsCount, entry, adress, isUse, isAcces, building, type);
+        this.roomsCount = roomsCount;
+        this.name = name;
     }
 }

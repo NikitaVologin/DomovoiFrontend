@@ -2,10 +2,10 @@ import { AnnouncementViewModel } from "./AnnouncementViewModel";
 import { ReviewViewModel } from "./ReviewViewModel";
 
 export class CounteragentViewModel {
-	FIO:string = "Иванов Иван Иванович";
-	announcements:Array<AnnouncementViewModel>;
-	reviews:Array<ReviewViewModel>;
-	private _avatar?:string;
+	FIO: string = "Иванов Иван Иванович";
+	announcements: Array<AnnouncementViewModel>;
+	reviews: Array<ReviewViewModel>;
+	private _avatar?: string;
 
 	get avatar() {
 		if (this._avatar === undefined) return '/src/assets/img/avatar_default.png';
