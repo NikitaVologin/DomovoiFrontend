@@ -31,35 +31,15 @@
 					<div class="search-head__card_filters__col">
 						<div class="search-head__card_filters__col__item">
 							<div class="search-head__card_filters__col__item__caption">Тип сделки:</div>
-							<div class="search-head__card_filters__col__item__inputs">
-								<div>
-									<input type="radio" v-model="head.filters.dealType" :value="'buy'" id="deal-type-radio-buy" hidden>
-									<label
-										:for="`deal-type-radio-buy`"
-										class="search-head__card_filters__col__item__inputs__item search-head__card_filters__col__item__inputs__item_radio input-style"
-										:class="head.filters.dealType == 'buy' ? 'search-head__card_filters__col__item__inputs__item_radio_checked' : ''"
-									>
-										Покупка
-									</label>
-								</div>
-								<div>
-									<input type="radio" v-model="head.filters.dealType" :value="'lease'" id="deal-type-radio-lease" hidden>
-									<label
-										:for="`deal-type-radio-lease`"
-										class="search-head__card_filters__col__item__inputs__item search-head__card_filters__col__item__inputs__item_radio input-style"
-										:class="head.filters.dealType == 'lease' ? 'search-head__card_filters__col__item__inputs__item_radio_checked' : ''"
-									>
-										Аренда
-									</label>
-								</div>
-							</div>
+							<Picker
+								:items="store.state.realEstateParameterPickers.dealTypeForCustomers"
+								@change="val => head.filters.dealType = val"
+							></Picker>
 						</div>
 						<div class="search-head__card_filters__col__item">
 							<div class="search-head__card_filters__col__item__caption">Тип недвижимости:</div>
 							<div class="search-head__card_filters__col__item__inputs">
-								<select>
-									<option value="">Квартира</option>
-								</select>
+								<EstateTypePicker></EstateTypePicker>
 							</div>
 						</div>
 					</div>
@@ -74,18 +54,11 @@
 						</div>
 						<div class="search-head__card_filters__col__item">
 							<div class="search-head__card_filters__col__item__caption">Кол-во комнат:</div>
-							<div class="search-head__card_filters__col__item__inputs">
-								<div v-for="nRooms in [1,2,3,4]">
-									<input type="checkbox" v-model="head.filters.roomsCount" :value="nRooms" :id="`rooms-checkbox-${nRooms}`" hidden>
-									<label
-										:for="`rooms-checkbox-${nRooms}`"
-										class="search-head__card_filters__col__item__inputs__item search-head__card_filters__col__item__inputs__item_checkbox input-style"
-										:class="head.filters.roomsCount.includes(nRooms) ? 'search-head__card_filters__col__item__inputs__item_checkbox_checked' : ''"
-									>
-										{{ `${nRooms}${nRooms == 4 ? '+' : ''}` }}
-									</label>
-								</div>
-							</div>
+							<Picker
+								:items="store.state.realEstateParameterPickers.roomsCount"
+								multiple=""
+								@change="val => head.filters.roomsCount = val"
+							></Picker>
 						</div>
 						<div class="search-head__card_filters__col__item">
 							<div class="search-head__card_filters__col__item__caption">Площадь, м2:</div>
@@ -130,9 +103,12 @@
 
 <script lang="ts">
 import { defineComponent } from 'vue';
+import store from '../store';
 import "leaflet/dist/leaflet.css";
 import { LMap, LTileLayer } from "@vue-leaflet/vue-leaflet";
 import Header from "../components/Header.vue"
+import Picker from "../components/Picker.vue"
+import EstateTypePicker from "../components/EstateTypePicker.vue" 
 import AnnouncementCard from "../components/AnnouncementCard.vue"
 import { AnnouncementViewModel } from "../viewModel/AnnouncementViewModel"
 
@@ -146,9 +122,10 @@ interface FilterRange {
 }
 
 export default defineComponent({
-	components: { Header, AnnouncementCard, LMap, LTileLayer },
+	components: { Header, Picker, EstateTypePicker, AnnouncementCard, LMap, LTileLayer },
 	data() {
 		return {
+			store: store,
 			head: {
 				filtersShown: true,
 				mapShown: true,
