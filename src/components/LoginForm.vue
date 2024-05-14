@@ -10,9 +10,9 @@
 	</div>
 
 	<div class="inputs-container" v-if="mode==1">
-		<input type="email" name="email" placeholder="E-mail" v-model="signupData.email" @input="checkUserExists" required autocomplete="off">
+		<input type="email" placeholder="E-mail" v-model="signupData.email" @input="checkUserExists" required autocomplete="off">
 		<input type="password" placeholder="Пароль" v-model="signupData.password" required readonly onfocus="this.removeAttribute('readonly')">
-		<input type="submit"  value="Зарегистрироваться" :disabled="submitButtonDisabled">
+		<input type="submit" value="Зарегистрироваться" :disabled="submitButtonDisabled">
 		<span class="error-message" v-if="userExists===true">Пользователь с этой почтой уже существует</span>
 		<span class="error-message" v-else-if="error">Произошла ошибка</span>
 	</div>
@@ -43,17 +43,17 @@ export default defineComponent({
 	components: { },
 	data() {
 		return {
-			mode: 0 as 0|1, // 0 - login, 1 - signup
+			mode: 1 as 0|1, // 0 - login, 1 - signup
 			loginData: { email: "", password: "" },
-			signupData: { email: "", password: "", reserveKey: "" },
+			signupData: { email: "", password: "" },
 			userExists: "unchecked" as Boolean|"unchecked",
-			question: "default",
 			error: false,
-			modeWasChanged: false,
+			modeKey: 0,
 		}
 	},
 	computed: {
 		submitButtonDisabled() : boolean {
+			return false;
 			if (this.mode == 0) return !this.loginDataValid();
 			return !this.signupDataValid();
 		},
@@ -74,7 +74,6 @@ export default defineComponent({
 			return this.signupData.email.trim()!='' &&
 				this.signupData.password.trim()!='' &&
 				this.userExists===false &&
-				(!includeReserveKey || this.signupData.reserveKey.trim()!='') &&
 				this.emailValid();
 		},
 
@@ -92,25 +91,29 @@ export default defineComponent({
 		},
 
 		async submit() {
-			console.log("hehehe")
 			if (this.mode == 0) await this.submitLogin()
 			else await this.submitSignup()
 		},
 		async submitLogin() {
+			console.log('submitLogin');
 			this.error = false;
 			let rc = container.resolve(ReceptionController);
 			console.log('data', this.loginData)
 			console.log(await rc.registration("Physical", this.loginData.email, this.loginData.password))
 		},
 		async submitSignup() {
+			console.log('submitSignup');
 			// if (!this.signupDataValid()) return;	
 			this.error = false;
+			let rc = container.resolve(ReceptionController);
+			console.log('data', this.signupData)
+			console.log(await rc.authorize(this.signupData.email, this.signupData.password))
 		},
 		
 		switchMode(mode:0|1) {
 			this.error=false;
 			this.mode = mode;
-			this.modeWasChanged = true;
+			this.modeKey++;
 		},
 	},
 })

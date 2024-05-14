@@ -1,6 +1,7 @@
 import axios, { Axios, AxiosInstance, AxiosResponse } from "axios";
 import {Response} from "../../src/dataproviders/models/response";
 import { inject, singleton } from "tsyringe";
+import { rejects } from "assert";
 
 @singleton()
 export class HTTPClient implements HTTPClient {
@@ -24,14 +25,21 @@ export class HTTPClient implements HTTPClient {
     }
 
     async post<T>(url: string, data?: any): Promise<Response<T>> {
-        try {
-            const axiosResponse = await this._axios.post<T>(url, data);
-            let response = this.map<T>(axiosResponse);
-            return response;
-        }
-        catch (error) {
-            throw (error);
-        }
+		return new Promise<Response<T>>((resolve, reject) => {
+			// try {
+				this._axios.post<T>(url, data).then(response => {
+					let mappedResponse = this.map<T>(response);
+					resolve(mappedResponse);
+				}).catch(error => {
+					console.log('err in http-c')
+					reject(error)
+				})
+			// }
+			// catch (error) {
+			// 	console.log('err in http-c');
+			// 	throw (error);
+			// }
+		})
     }
 
     async delete<T>(url: string): Promise<Response<T>> {
