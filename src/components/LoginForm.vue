@@ -99,7 +99,7 @@ export default defineComponent({
 			this.error = false;
 			let rc = container.resolve(ReceptionController);
 			//await rc.authorize(this.loginData.email, this.loginData.password))
-			console.log(await rc.registration("Physical", this.loginData.email, this.loginData.password))
+			console.log(await rc.authorize(this.signupData.email, this.signupData.password))
 		},
 		async submitSignup() {
 			console.log('submitSignup');
@@ -107,7 +107,7 @@ export default defineComponent({
 			this.error = false;
 			let rc = container.resolve(ReceptionController);
 			console.log('data', this.signupData)
-			console.log(await rc.authorize(this.signupData.email, this.signupData.password))
+			console.log(await rc.registration("Physical", this.loginData.email, this.loginData.password))
 		},
 		
 		switchMode(mode:0|1) {
