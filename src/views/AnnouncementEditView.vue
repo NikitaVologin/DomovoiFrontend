@@ -8,7 +8,7 @@
 				<div class="primary-parameters__item__caption">Тип сделки:</div>
 				<Picker
 					:items="store.state.realEstateParameterPickers.dealTypeForBusiness"
-					@change="val => params.dealType = val"
+					@change="(val: any) => params.dealType = val"
 				></Picker>
 			</div>
 			<div class="primary-parameters__item">

@@ -33,7 +33,7 @@
 							<div class="search-head__card_filters__col__item__caption">Тип сделки:</div>
 							<Picker
 								:items="store.state.realEstateParameterPickers.dealTypeForCustomers"
-								@change="val => head.filters.dealType = val"
+								@change="(val: any) => head.filters.dealType = val"
 							></Picker>
 						</div>
 						<div class="search-head__card_filters__col__item">
@@ -57,7 +57,7 @@
 							<Picker
 								:items="store.state.realEstateParameterPickers.roomsCount"
 								multiple=""
-								@change="val => head.filters.roomsCount = val"
+								@change="(val: any) => head.filters.roomsCount = val"
 							></Picker>
 						</div>
 						<div class="search-head__card_filters__col__item">
