@@ -6,5 +6,5 @@ import { DealType } from "../../domain/deals/dealType.ts";
 export interface IAnnouncementBoard {
     getAnnouncementById(id: string): Promise<AnnouncementViewModel>;
     getAnnouncements(count: number): Promise<AnnouncementViewModel[]>;
-    postAnnouncement(announcement: Announcement, realityType: RealityType, dealType: DealType): string;
+    postAnnouncement(announcement: Announcement, realityType: RealityType, dealType: DealType): Promise<string>;
 }

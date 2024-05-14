@@ -9,6 +9,9 @@ import { HTTPClient } from './httpConnection/httpCommon';
 import { ReceptionService } from './dataproviders/receptionService';
 import { Reception } from './application/useCases/reception';
 import { ReceptionController } from './controllers/receptionController';
+import { AnnouncementBoardService } from './dataproviders/announcementBoardService';
+import { AnnouncementBord } from './application/useCases/announcementBord';
+import { AnnouncementController } from './controllers/announcementContoller';
 
 createApp(App).provide("$store", store).use(router).use(store).mount('#app');
 
@@ -21,10 +24,17 @@ container.register("IReceptionService", {
 container.register("IReception", {
     useClass: Reception
 });
+container.register("IAnnouncementBoardService", {
+    useClass: AnnouncementBoardService
+});
+container.register("IAnnouncementBord", {
+    useClass: AnnouncementBord
+})
 container.register("baseURL", {
     useValue: "http://localhost:8080"
 });
 
 const receptionController = container.resolve(ReceptionController);
+const announcementController = container.resolve(AnnouncementController);
 
 receptionController.registration(CounteragentType.Legal.toString(), "", "");

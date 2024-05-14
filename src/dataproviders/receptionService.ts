@@ -24,7 +24,7 @@ export class ReceptionService implements IReceptionService {
         });
 
         if (response.status == 200) {
-            return response.data[0];
+            return response.data;
         }
 
         return new Promise((resolve, reject) => {
@@ -44,7 +44,7 @@ export class ReceptionService implements IReceptionService {
         });
 
         if (response.status == 200) {
-            return response.data[0];
+            return response.data;
         }
 
         return new Promise((resolve, reject) => {

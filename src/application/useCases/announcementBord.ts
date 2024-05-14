@@ -11,13 +11,28 @@ export class AnnouncementBord implements IAnnouncementBoard {
 
     public constructor(@inject("IAnnouncementBoardService") private readonly _announcementBordSerivce: IAnnouncementBoardService) { }
 
-    getAnnouncementById(id: string): Promise<AnnouncementViewModel> {
+    async getAnnouncementById(id: string): Promise<AnnouncementViewModel> {
         throw new Error("Method not implemented.");
+        let announcement = await this._announcementBordSerivce.getAnnouncementById(id);
+        let viewModel = new AnnouncementViewModel();
+        return viewModel;
     }
-    getAnnouncements(count: number): Promise<AnnouncementViewModel[]> {
+
+    async getAnnouncements(count: number): Promise<AnnouncementViewModel[]> {
         throw new Error("Method not implemented.");
+        let announcements = await this._announcementBordSerivce.getAnnouncements(count);
+        let list: AnnouncementViewModel[] = [];
+        for(let announcement in announcements) {
+            let viewModel = new AnnouncementViewModel();
+            list.push(viewModel);
+        }
+        return list;
     }
-    postAnnouncement(announcement: Announcement, realityType: RealityType, dealType: DealType): string {
+
+    async postAnnouncement(announcement: Announcement, realityType: RealityType, dealType: DealType): Promise<string> {
         throw new Error("Method not implemented.");
+        let id = await this._announcementBordSerivce.postAnnouncement(announcement,
+             realityType.toString(), dealType.toString());
+        return id;
     }
 }

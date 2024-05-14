@@ -16,7 +16,8 @@ export class AnnouncementBoardService implements IAnnouncementBoardService {
         });
 
         if (response.status == 200) {
-            return response.data[0];
+            let announcement = this.mapToAnnouncement(response.data);
+            return announcement;
         }
 
         return new Promise((resolve, reject) => {
@@ -32,7 +33,11 @@ export class AnnouncementBoardService implements IAnnouncementBoardService {
         });
 
         if (response.status == 200) {
-            return response.data[0];
+            let list: Announcement[] = [];
+            for (let object in response.data) {
+                list.push(this.mapToAnnouncement(object));
+            }
+            return list;
         }
 
         return new Promise((resolve, reject) => {
@@ -58,11 +63,15 @@ export class AnnouncementBoardService implements IAnnouncementBoardService {
         });
 
         if (response.status == 200) {
-            return response.data[0];
+            return response.data;
         }
 
         return new Promise((resolve, reject) => {
             reject(response);
         });
+    }
+
+    private mapToAnnouncement(object: any): Announcement {
+        throw new Error("Method not implemented.");
     }
 }
