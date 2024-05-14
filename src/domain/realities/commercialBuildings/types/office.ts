@@ -25,7 +25,7 @@ export class Office extends CommercialBuilding {
     public constructor(id: number, area: number, floorsCount: number,
         entry: boolean, adress: string, isUse: boolean, isAcces: boolean,
         roomsCount: number,
-        name: string | undefined,
+        name?: string | undefined,
         building?: Building | undefined,
         type?: string | undefined) {
         super(id, area, floorsCount, entry, adress, isUse, isAcces, building, type);

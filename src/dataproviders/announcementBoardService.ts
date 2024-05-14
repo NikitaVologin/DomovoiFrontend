@@ -2,11 +2,18 @@ import { injectable, inject} from "tsyringe";
 import { IAnnouncementBoardService } from "../application/interfaces/announcementBoadService";
 import { Announcement } from "../domain/announcements/announcement";
 import { IHTTPClient } from "./interfaces/HTTPClient";
+import { Mapper } from "./mappers/mapperContrainer";
+import { Reality } from "../domain/realities/reality";
+import { CounterAgent } from "../domain/counteragents/counteragent";
+import { Rent } from "../domain/deals/types/rent/rent";
+import { RentConditions } from "../domain/deals/types/rent/rentConditions";
+import { RentRules } from "../domain/deals/types/rent/rentRules";
 
 @injectable()
 export class AnnouncementBoardService implements IAnnouncementBoardService {
 
-    public constructor(@inject("IHTTPClient") private readonly _httpClient: IHTTPClient) { }
+    public constructor(@inject("IHTTPClient") private readonly _httpClient: IHTTPClient,
+        private readonly _mapper: Mapper) { }
 
     async getAnnouncementById(id: string): Promise<Announcement> {
         let url = "/Announcement/" + id;
@@ -16,7 +23,13 @@ export class AnnouncementBoardService implements IAnnouncementBoardService {
         });
 
         if (response.status == 200) {
-            let announcement = this.mapToAnnouncement(response.data);
+            let announcement = this._mapper.map<any, Announcement>(response.data, 
+                new Announcement(0,
+                    new Reality(0, 0),
+                    new Rent(0, new RentConditions(0, 0, 0, 0, 0), new RentRules(0, false, false, false)),
+                    new CounterAgent("", "")
+                )
+            );
             return announcement;
         }
 
@@ -35,7 +48,13 @@ export class AnnouncementBoardService implements IAnnouncementBoardService {
         if (response.status == 200) {
             let list: Announcement[] = [];
             for (let object in response.data) {
-                list.push(this.mapToAnnouncement(object));
+                list.push(this._mapper.map<any, Announcement>(object, 
+                    new Announcement(0,
+                        new Reality(0, 0),
+                        new Rent(0, new RentConditions(0, 0, 0, 0, 0), new RentRules(0, false, false, false)),
+                        new CounterAgent("", "")
+                    ))
+                );
             }
             return list;
         }

@@ -10,7 +10,7 @@ import { ReceptionService } from './dataproviders/receptionService';
 import { Reception } from './application/useCases/reception';
 import { ReceptionController } from './controllers/receptionController';
 import { AnnouncementBoardService } from './dataproviders/announcementBoardService';
-import { AnnouncementBord } from './application/useCases/announcementBord';
+import { AnnouncementBoard } from './application/useCases/announcementBoard';
 import { AnnouncementController } from './controllers/announcementContoller';
 
 createApp(App).provide("$store", store).use(router).use(store).mount('#app');
@@ -27,8 +27,8 @@ container.register("IReception", {
 container.register("IAnnouncementBoardService", {
     useClass: AnnouncementBoardService
 });
-container.register("IAnnouncementBord", {
-    useClass: AnnouncementBord
+container.register("IAnnouncementBoard", {
+    useClass: AnnouncementBoard
 })
 container.register("baseURL", {
     useValue: "http://localhost:8080"

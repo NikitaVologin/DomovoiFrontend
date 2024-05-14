@@ -8,20 +8,20 @@ import { DealType } from "../domain/deals/dealType";
 @injectable()
 export class AnnouncementController {
 
-    constructor(@inject("IAnnouncementBord") private readonly _announcementBord: IAnnouncementBoard) { }
+    constructor(@inject("IAnnouncementBoard") private readonly _AnnouncementBoard: IAnnouncementBoard) { }
 
     async getAnnouncementById(id: string): Promise<AnnouncementViewModel> {
-        let viewModel = await this._announcementBord.getAnnouncementById(id);
+        let viewModel = await this._AnnouncementBoard.getAnnouncementById(id);
         return viewModel;
     }
 
     async getAnnouncements(count: number): Promise<AnnouncementViewModel[]> {
-        let viewModels = await this._announcementBord.getAnnouncements(count);
+        let viewModels = await this._AnnouncementBoard.getAnnouncements(count);
         return viewModels;
     } 
 
     async postAnnouncement(announcement: Announcement, realityType: RealityType, dealType: DealType): Promise<string> {
-        let id = await this._announcementBord.postAnnouncement(announcement, realityType, dealType);
+        let id = await this._AnnouncementBoard.postAnnouncement(announcement, realityType, dealType);
         return id;    
     }
 }

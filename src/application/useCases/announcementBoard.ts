@@ -7,20 +7,18 @@ import { RealityType } from "../../domain/realities/realityType";
 import { DealType } from "../../domain/deals/dealType";
 
 @injectable()
-export class AnnouncementBord implements IAnnouncementBoard {
+export class AnnouncementBoard implements IAnnouncementBoard {
 
-    public constructor(@inject("IAnnouncementBoardService") private readonly _announcementBordSerivce: IAnnouncementBoardService) { }
+    public constructor(@inject("IAnnouncementBoardService") private readonly _AnnouncementBoardSerivce: IAnnouncementBoardService) { }
 
     async getAnnouncementById(id: string): Promise<AnnouncementViewModel> {
-        throw new Error("Method not implemented.");
-        let announcement = await this._announcementBordSerivce.getAnnouncementById(id);
+        let announcement = await this._AnnouncementBoardSerivce.getAnnouncementById(id);
         let viewModel = new AnnouncementViewModel();
         return viewModel;
     }
 
     async getAnnouncements(count: number): Promise<AnnouncementViewModel[]> {
-        throw new Error("Method not implemented.");
-        let announcements = await this._announcementBordSerivce.getAnnouncements(count);
+        let announcements = await this._AnnouncementBoardSerivce.getAnnouncements(count);
         let list: AnnouncementViewModel[] = [];
         for(let announcement in announcements) {
             let viewModel = new AnnouncementViewModel();
@@ -30,8 +28,7 @@ export class AnnouncementBord implements IAnnouncementBoard {
     }
 
     async postAnnouncement(announcement: Announcement, realityType: RealityType, dealType: DealType): Promise<string> {
-        throw new Error("Method not implemented.");
-        let id = await this._announcementBordSerivce.postAnnouncement(announcement,
+        let id = await this._AnnouncementBoardSerivce.postAnnouncement(announcement,
              realityType.toString(), dealType.toString());
         return id;
     }
