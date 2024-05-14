@@ -28,47 +28,50 @@
 			</div>
 			<div class="search-head__cards-container">
 				<div class="search-head__card search-head__card_filters card" v-if="head.filtersShown">
-					<div class="search-head__card_filters__col">
-						<div class="search-head__card_filters__col__item">
-							<div class="search-head__card_filters__col__item__caption">Тип сделки:</div>
-							<Picker
-								:items="store.state.realEstateParameterPickers.dealTypeForCustomers"
-								@change="val => head.filters.dealType = val"
-							></Picker>
+					<div class="search-head__card_filters__inputs">
+						<div class="search-head__card_filters__inputs__col">
+							<div class="search-head__card_filters__inputs__col__item">
+								<div class="search-head__card_filters__inputs__col__item__caption">Тип сделки:</div>
+								<Picker
+									:items="store.state.realEstateParameterPickers.dealTypeForCustomer"
+									@change="val => head.filters.dealType = val"
+								></Picker>
+							</div>
+							<div class="search-head__card_filters__inputs__col__item">
+								<div class="search-head__card_filters__inputs__col__item__caption">Тип недвижимости:</div>
+								<div class="search-head__card_filters__inputs__col__item__inputs">
+									<EstateTypePicker></EstateTypePicker>
+								</div>
+							</div>
 						</div>
-						<div class="search-head__card_filters__col__item">
-							<div class="search-head__card_filters__col__item__caption">Тип недвижимости:</div>
-							<div class="search-head__card_filters__col__item__inputs">
-								<EstateTypePicker></EstateTypePicker>
+						<div class="search-head__card_filters__inputs__col">
+							<div class="search-head__card_filters__inputs__col__item">
+								<div class="search-head__card_filters__inputs__col__item__caption">Цена, рублей:</div>
+								<div class="search-head__card_filters__inputs__col__item__inputs">
+									<input type="number" v-model="head.filters.price.from" class="input-number_medium search-head__card_filters__inputs__col__item__inputs__item" placeholder="от">
+									<div class="search-head__card_filters__inputs__col__item__inputs__dash">—</div>
+									<input type="number" v-model="head.filters.price.to" class="input-number_medium search-head__card_filters__inputs__col__item__inputs__item" placeholder="до">
+								</div>
+							</div>
+							<div class="search-head__card_filters__inputs__col__item">
+								<div class="search-head__card_filters__inputs__col__item__caption">Кол-во комнат:</div>
+								<Picker
+									:items="store.state.realEstateParameterPickers.roomsCount"
+									multiple=""
+									@change="val => head.filters.roomsCount = val"
+								></Picker>
+							</div>
+							<div class="search-head__card_filters__inputs__col__item">
+								<div class="search-head__card_filters__inputs__col__item__caption">Площадь, м2:</div>
+								<div class="search-head__card_filters__inputs__col__item__inputs">
+									<input type="number" v-model="head.filters.area.from" class="input-number_short search-head__card_filters__inputs__col__item__inputs__item" placeholder="от">
+									<div class="search-head__card_filters__inputs__col__item__inputs__dash">—</div>
+									<input type="number" v-model="head.filters.area.to" class="input-number_short search-head__card_filters__inputs__col__item__inputs__item" placeholder="до">
+								</div>
 							</div>
 						</div>
 					</div>
-					<div class="search-head__card_filters__col">
-						<div class="search-head__card_filters__col__item">
-							<div class="search-head__card_filters__col__item__caption">Цена, рублей:</div>
-							<div class="search-head__card_filters__col__item__inputs">
-								<input type="number" v-model="head.filters.price.from" class="input-number_medium search-head__card_filters__col__item__inputs__item" placeholder="от">
-								<div class="search-head__card_filters__col__item__inputs__dash">—</div>
-								<input type="number" v-model="head.filters.price.to" class="input-number_medium search-head__card_filters__col__item__inputs__item" placeholder="до">
-							</div>
-						</div>
-						<div class="search-head__card_filters__col__item">
-							<div class="search-head__card_filters__col__item__caption">Кол-во комнат:</div>
-							<Picker
-								:items="store.state.realEstateParameterPickers.roomsCount"
-								multiple=""
-								@change="val => head.filters.roomsCount = val"
-							></Picker>
-						</div>
-						<div class="search-head__card_filters__col__item">
-							<div class="search-head__card_filters__col__item__caption">Площадь, м2:</div>
-							<div class="search-head__card_filters__col__item__inputs">
-								<input type="number" v-model="head.filters.area.from" class="input-number_short search-head__card_filters__col__item__inputs__item" placeholder="от">
-								<div class="search-head__card_filters__col__item__inputs__dash">—</div>
-								<input type="number" v-model="head.filters.area.to" class="input-number_short search-head__card_filters__col__item__inputs__item" placeholder="до">
-							</div>
-						</div>
-					</div>
+					<input type="submit" value="Найти" @click="submitSearch">
 				</div>
 				<div class="search-head__card search-head__card_map card" v-if="head.mapShown">
 					<keep-alive>
@@ -111,6 +114,8 @@ import Picker from "../components/Picker.vue"
 import EstateTypePicker from "../components/EstateTypePicker.vue" 
 import AnnouncementCard from "../components/AnnouncementCard.vue"
 import { AnnouncementViewModel } from "../viewModel/AnnouncementViewModel"
+import { container } from 'tsyringe';
+import { AnnouncementController } from '../controllers/announcementContoller';
 
 type DealType = "buy"|"lease";
 
@@ -139,18 +144,16 @@ export default defineComponent({
 			map: {
 				zoom: 13.5,
 			},
-			announcementCards: [
-				new AnnouncementViewModel(),
-				new AnnouncementViewModel(),
-				new AnnouncementViewModel(),
-				new AnnouncementViewModel(),
-				new AnnouncementViewModel(),
-				new AnnouncementViewModel(),
-			]
+			announcementCards: [] as Array<AnnouncementViewModel>
 		}
 	},
 	methods: {
-
+		async submitSearch() {
+			let ac = container.resolve(AnnouncementController);
+			let announcements = await ac.getAnnouncements(10);
+			console.log(announcements)
+			this.announcementCards = announcements as Array<AnnouncementViewModel>;
+		}
 	}
 })
 </script>
@@ -205,42 +208,44 @@ export default defineComponent({
 		row-gap: 1rem;
 		.search-head__card {
 			&.search-head__card_filters {
-				display: flex;
-				column-gap: 3rem;
 				padding: 1.5rem 1.75rem;
-				.search-head__card_filters__col {
+				.search-head__card_filters__inputs {
 					display: flex;
-					flex-direction: column;
-					row-gap: 1.5rem;
-	
-					.search-head__card_filters__col__item {
+					column-gap: 3rem;
+					.search-head__card_filters__inputs__col {
 						display: flex;
-						align-items: center;
-						column-gap: .7rem;
-						.search-head__card_filters__col__item__caption {
-							font-weight: 400;
-							opacity: 0.975;
-						}
-						.search-head__card_filters__col__item__inputs__dash {
-							opacity: 0.8;
-							font-weight: 300;
-						}
-						.search-head__card_filters__col__item__inputs {
+						flex-direction: column;
+						row-gap: 1.5rem;
+		
+						.search-head__card_filters__inputs__col__item {
 							display: flex;
 							align-items: center;
-							column-gap: .5rem;
-	
-							.search-head__card_filters__col__item__inputs__item {
-								&_checkbox, &_radio {
-									&, & * {
-										cursor: pointer;
-									}
-									&_checked {
-										border-width: 2px;
-										border-color: #444;
-									}
-									&:not(&_checked) {
-										margin: 1px 0;
+							column-gap: .7rem;
+							.search-head__card_filters__inputs__col__item__caption {
+								font-weight: 400;
+								opacity: 0.975;
+							}
+							.search-head__card_filters__inputs__col__item__inputs__dash {
+								opacity: 0.8;
+								font-weight: 300;
+							}
+							.search-head__card_filters__inputs__col__item__inputs {
+								display: flex;
+								align-items: center;
+								column-gap: .5rem;
+		
+								.search-head__card_filters__inputs__col__item__inputs__item {
+									&_checkbox, &_radio {
+										&, & * {
+											cursor: pointer;
+										}
+										&_checked {
+											border-width: 2px;
+											border-color: #444;
+										}
+										&:not(&_checked) {
+											margin: 1px 0;
+										}
 									}
 								}
 							}

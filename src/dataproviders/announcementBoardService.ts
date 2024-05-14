@@ -11,9 +11,9 @@ import { RentRules } from "../domain/deals/types/rent/rentRules";
 
 @injectable()
 export class AnnouncementBoardService implements IAnnouncementBoardService {
+	private readonly _mapper: Mapper = new Mapper()
 
-    public constructor(@inject("IHTTPClient") private readonly _httpClient: IHTTPClient,
-        private readonly _mapper: Mapper) { }
+    public constructor(@inject("IHTTPClient") private readonly _httpClient: IHTTPClient) { }
 
     async getAnnouncementById(id: string): Promise<Announcement> {
         let url = "/Announcement/" + id;

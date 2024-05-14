@@ -22,6 +22,7 @@
     "vuex": "^4.1.0"
   },
   "devDependencies": {
+    "@types/lodash": "^4.17.1",
     "@types/node": "^20.12.3",
     "@vitejs/plugin-vue": "^5.0.4",
     "@vue-leaflet/vue-leaflet": "^0.10.1",

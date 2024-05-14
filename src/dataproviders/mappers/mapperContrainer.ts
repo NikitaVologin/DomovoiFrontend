@@ -1,6 +1,5 @@
 import { injectable, singleton } from "tsyringe";
-
-const _ = require("lodash"); 
+import { isEqual } from "lodash";
 
 // @singleton()
 // export class MapperContainer {
@@ -58,11 +57,12 @@ export class Mapper {
         let propertyNames = Object.getOwnPropertyNames(object);
         let propertyNamesClass = Object.getOwnPropertyNames(dest);
 
-        if(!_.isEqual(propertyNames, propertyNamesClass)){
-            throw new Error("The object can`t be map to this type");
-        }
+        // if(!isEqual(propertyNames, propertyNamesClass)){
+        //     throw new Error("The object can`t be map to this type");
+        // }
         
         for(let i = 0; i < propertyNamesClass.length; i++) {
+			if ((object as any)[propertyNamesClass[i]] === undefined) continue;
             if(typeof (dest as any)[propertyNamesClass[i]] !== "string" 
                     && typeof (dest as any)[propertyNamesClass[i]] !== "number"
                     && typeof (dest as any)[propertyNamesClass[i]] !== "boolean") {

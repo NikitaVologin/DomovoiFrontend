@@ -20,7 +20,7 @@ export class AnnouncementBoard implements IAnnouncementBoard {
     async getAnnouncements(count: number): Promise<AnnouncementViewModel[]> {
         let announcements = await this._AnnouncementBoardSerivce.getAnnouncements(count);
         let list: AnnouncementViewModel[] = [];
-        for(let announcement in announcements) {
+        for(let announcement of announcements) {
             let viewModel = new AnnouncementViewModel();
             list.push(viewModel);
         }
