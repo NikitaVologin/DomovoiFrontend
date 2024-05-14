@@ -18,12 +18,13 @@ export class ReceptionService implements IReceptionService {
             email: mail,
             password: password
         };
-
+		
         let response = await this._httpClient.post<CounterAgentResponse>(url, data).catch((error) => {
-            throw (error);
+			throw (error);
         });
 
         if (response.status == 200) {
+			// console.log(response.status)
             return response.data;
         }
 

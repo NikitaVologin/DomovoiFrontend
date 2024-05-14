@@ -11,11 +11,12 @@ type CounterAgentResponse = PhysicalCounterAgent | LegalCounterAgent;
 @injectable()
 export class Reception implements IReception {
 
-    public constructor(@inject("ReceptionService") private _service: IReceptionService) { }
+    public constructor(@inject("IReceptionService") private _service: IReceptionService) { }
 
     async registration(userType: string, mail: string, password: string): Promise<CounteragentViewModel> {
         let userDto = await this._service.registration(userType, mail, password);
         let viewModel = this.getCounterAgentViewModel(userDto);    
+		console.log('vm', viewModel)
         return viewModel;
     }
 

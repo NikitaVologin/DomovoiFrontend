@@ -6,7 +6,7 @@ import { inject, singleton } from "tsyringe";
 export class HTTPClient implements HTTPClient {
     private _axios!: AxiosInstance;
 
-    constructor(@inject("baseURL") baseURL: string) {
+    constructor(@inject("baseURL") private baseURL: string) {
         this._axios = axios.create({
             baseURL: baseURL,
         });

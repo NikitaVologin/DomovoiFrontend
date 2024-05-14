@@ -12,7 +12,7 @@
 	<div class="inputs-container" v-if="mode==1">
 		<input type="email" name="email" placeholder="E-mail" v-model="signupData.email" @input="checkUserExists" required autocomplete="off">
 		<input type="password" placeholder="Пароль" v-model="signupData.password" required readonly onfocus="this.removeAttribute('readonly')">
-		<input type="submit" value="Зарегистрироваться" :disabled="submitButtonDisabled">
+		<input type="submit"  value="Зарегистрироваться" :disabled="submitButtonDisabled">
 		<span class="error-message" v-if="userExists===true">Пользователь с этой почтой уже существует</span>
 		<span class="error-message" v-else-if="error">Произошла ошибка</span>
 	</div>
@@ -30,10 +30,14 @@
 	
 	
 <script lang="ts">
+import "reflect-metadata";
 import axios from 'axios';
+import { container } from 'tsyringe';
+import { Reception } from '../application/useCases/reception';
+import { ReceptionController } from '../controllers/receptionController';
 import { defineComponent } from 'vue';
 import { router } from '../router';
-import store from '../store';
+import store from '../store';	
 
 export default defineComponent({
 	components: { },
@@ -75,7 +79,7 @@ export default defineComponent({
 		},
 
 		checkUserExists() {
-			this.userExists = true;
+			// this.userExists = true;
 			// this.userExists = "unchecked";
 			// if (!this.emailValid) return;
 			// axios.get(store.state.apiRoot+"api/auth/checkUserExists.php", { params: {email: this.signupData.email} })
@@ -87,29 +91,20 @@ export default defineComponent({
 			// })
 		},
 
-		submit() {
-			if (this.mode == 0) this.submitLogin()
-			else this.submitSignup()
+		async submit() {
+			console.log("hehehe")
+			if (this.mode == 0) await this.submitLogin()
+			else await this.submitSignup()
 		},
-		submitLogin() {
+		async submitLogin() {
 			this.error = false;
-
-			axios.post(store.state.apiRoot+`api/auth/login.php`, this.loginData)
-			.then(res => {
-				
-			})
-			.catch(err => console.log(JSON.stringify(err)));;
+			let rc = container.resolve(ReceptionController);
+			console.log('data', this.loginData)
+			console.log(await rc.registration("Physical", this.loginData.email, this.loginData.password))
 		},
-		submitSignup() {
-			if (!this.signupDataValid()) return;
+		async submitSignup() {
+			// if (!this.signupDataValid()) return;	
 			this.error = false;
-
-			// axios.post(store.state.apiRoot+`api/auth/signup.php`, {
-				
-			// })
-			// .then(res => {
-				
-			// });
 		},
 		
 		switchMode(mode:0|1) {

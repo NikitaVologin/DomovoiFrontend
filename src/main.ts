@@ -31,10 +31,8 @@ container.register("IAnnouncementBoard", {
     useClass: AnnouncementBoard
 })
 container.register("baseURL", {
-    useValue: "http://localhost:8080"
+    useValue: "http://olegsanders.ru"
 });
 
 const receptionController = container.resolve(ReceptionController);
 const announcementController = container.resolve(AnnouncementController);
-
-receptionController.registration(CounteragentType.Legal.toString(), "", "");
