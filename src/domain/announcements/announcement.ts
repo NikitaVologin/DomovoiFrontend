@@ -1,6 +1,8 @@
-namespace Domain {
-    
-    export class Announcement {
+import { CounterAgent } from "../counteragents/counteragent";
+import { Deal } from "../deals/deal";
+import { Reality } from "../realities/reality";
+
+export class Announcement {
         private _id!: number;
 
         public get id(): number {
@@ -72,4 +74,3 @@ namespace Domain {
                 this.connectionType = connectionType;
         }
     }
-}

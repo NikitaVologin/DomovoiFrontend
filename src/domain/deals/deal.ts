@@ -1,17 +1,28 @@
-namespace Domain {
-    export class Deal {
-        private _id!: number;
+import { Rent } from "./types/rent/rent";
+import { Sell } from "./types/sell/sell";
 
-        public get id(): number {
-            return this._id;
-        }
+export class Deal {
+    private _id!: number;
 
-        public set id(value: number) {
-            this._id = value;
-        }
+    private _dealInfo!: Sell | Rent; 
 
-        public constructor(id: number) {
-            this.id = id;
-        }
+    public get id(): number {
+        return this._id;
+    }
+
+    public set id(value: number) {
+        this._id = value;
+    }
+
+    public get dealInfo(): Sell | Rent {
+        return this._dealInfo;
+    }
+
+    public set dealInfo(value: Sell | Rent) {
+        this._dealInfo = value;
+    }
+
+    public constructor(id: number) {
+        this.id = id;
     }
 }
