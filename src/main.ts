@@ -31,7 +31,7 @@ container.register("IAnnouncementBoard", {
     useClass: AnnouncementBoard
 })
 container.register("baseURL", {
-    useValue: "http://olegsanders.ru:8181"
+    useValue: "http://http://olegsanders.ru:8181"
 });
 
 const receptionController = container.resolve(ReceptionController);

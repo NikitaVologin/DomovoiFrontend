@@ -7,7 +7,7 @@ import { rejects } from "assert";
 export class HTTPClient implements HTTPClient {
     private _axios!: AxiosInstance;
 
-    constructor(@inject("baseURL") private baseURL: string) {
+    constructor(@inject("baseURL") baseURL: string) {
         this._axios = axios.create({
             baseURL: baseURL,
         });
