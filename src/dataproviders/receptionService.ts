@@ -20,11 +20,11 @@ export class ReceptionService implements IReceptionService {
         };
 		
         let response = await this._httpClient.post<CounterAgentResponse>(url, data).catch((error) => {
+			console.log('status', error)
 			throw (error);
         });
 
         if (response.status == 200) {
-			// console.log(response.status)
             return response.data;
         }
 
