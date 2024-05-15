@@ -2,7 +2,7 @@ import { injectable, inject} from "tsyringe";
 import { IAnnouncementBoardService } from "../application/interfaces/announcementBoadService";
 import { Announcement } from "../domain/announcements/announcement";
 import { IHTTPClient } from "./interfaces/HTTPClient";
-import { Mapper } from "./mappers/mapperContrainer";
+import { IMapper, Mapper } from "./mappers/mapperContrainer";
 import { Reality } from "../domain/realities/reality";
 import { CounterAgent } from "../domain/counteragents/counteragent";
 import { Rent } from "../domain/deals/types/rent/rent";
@@ -13,7 +13,7 @@ import { RentRules } from "../domain/deals/types/rent/rentRules";
 export class AnnouncementBoardService implements IAnnouncementBoardService {
 
     public constructor(@inject("IHTTPClient") private readonly _httpClient: IHTTPClient,
-        private readonly _mapper: Mapper) { }
+       @inject("IMapper") private readonly _mapper: IMapper) { }
 
     async getAnnouncementById(id: string): Promise<Announcement> {
         let url = "/Announcement/" + id;

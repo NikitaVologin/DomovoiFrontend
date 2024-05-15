@@ -8,10 +8,9 @@ import {container} from "tsyringe";
 import { HTTPClient } from './httpConnection/httpCommon';
 import { ReceptionService } from './dataproviders/receptionService';
 import { Reception } from './application/useCases/reception';
-import { ReceptionController } from './controllers/receptionController';
 import { AnnouncementBoardService } from './dataproviders/announcementBoardService';
 import { AnnouncementBoard } from './application/useCases/announcementBoard';
-import { AnnouncementController } from './controllers/announcementContoller';
+import { Mapper } from './dataproviders/mappers/mapperContrainer';
 
 createApp(App).provide("$store", store).use(router).use(store).mount('#app');
 
@@ -29,10 +28,10 @@ container.register("IAnnouncementBoardService", {
 });
 container.register("IAnnouncementBoard", {
     useClass: AnnouncementBoard
-})
-container.register("baseURL", {
-    useValue: "http://http://olegsanders.ru:8181"
 });
-
-const receptionController = container.resolve(ReceptionController);
-const announcementController = container.resolve(AnnouncementController);
+container.register("IMapper", {
+    useClass: Mapper
+});
+container.register("baseURL", {
+    useValue: "http://olegsanders.ru:8181"
+});
