@@ -1,7 +1,7 @@
-import { AnnouncementViewModel } from "../../viewModel/AnnouncementViewModel.ts";
-import { Announcement } from "../../domain/announcements/announcement.ts";
-import { RealityType } from "../../domain/realities/realityType.ts";
-import { DealType } from "../../domain/deals/dealType.ts";
+import { AnnouncementViewModel } from "../../viewModel/AnnouncementViewModel";
+import { Announcement } from "../../domain/announcements/announcement";
+import { RealityType } from "../../domain/realities/realityType";
+import { DealType } from "../../domain/deals/dealType";
 
 export interface IAnnouncementBoard {
     getAnnouncementById(id: string): Promise<AnnouncementViewModel>;

@@ -11,6 +11,7 @@ import { RentRules } from "../domain/deals/types/rent/rentRules";
 
 @injectable()
 export class AnnouncementBoardService implements IAnnouncementBoardService {
+	private readonly _mapper: Mapper = new Mapper()
 
     public constructor(@inject("IHTTPClient") private readonly _httpClient: IHTTPClient,
        @inject("IMapper") private readonly _mapper: IMapper) { }
