@@ -12,7 +12,7 @@ export class LivingBuilding extends Reality {
         this._floor = value;
     }
 
-    public constructor(id: number, area: number, floor: number, type?: string | undefined) {
+    public constructor(id: string, area: number, floor: number, type?: string | undefined) {
         super(id, area, type);
         this.floor = floor;
     }

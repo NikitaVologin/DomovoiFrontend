@@ -1,9 +1,9 @@
-/// <reference path = "../domain/commonDomain.ts" />
 import { injectable, inject } from "tsyringe";
 import { IReceptionService } from "../application/interfaces/receptionService";
 import { IHTTPClient } from "../dataproviders/interfaces/HTTPClient";
 import { PhysicalCounterAgent } from "../domain/counteragents/physicalCounteragent";
 import { LegalCounterAgent } from "../domain/counteragents/legalCounteragent";
+import { CounterAgent } from "../domain/counteragents/counteragent";
 
 
 type CounterAgentResponse = PhysicalCounterAgent | LegalCounterAgent;
@@ -11,6 +11,18 @@ type CounterAgentResponse = PhysicalCounterAgent | LegalCounterAgent;
 export class ReceptionService implements IReceptionService {
 
     public constructor(@inject("IHTTPClient") private readonly _httpClient: IHTTPClient) { }
+
+    async getUserInformation(id: string): Promise<CounterAgentResponse> {
+        throw new Error("Method not implemented.");
+    }
+
+    async changeUserInformation(idOldUser: string, newUserInformation: CounterAgent): Promise<void> {
+        throw new Error("Method not implemented.");
+    }
+
+    async checkOut(id: string): Promise<void> {
+        throw new Error("Method not implemented.");
+    }
 
     async registration(userType: string, mail: string, password: string): Promise<CounterAgentResponse> {
         let url = "/CounterAgent/" + userType;

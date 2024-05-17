@@ -2,16 +2,27 @@ import { injectable, inject } from "tsyringe";
 import { IReceptionService } from "../interfaces/receptionService";
 import { CounteragentViewModel } from "../../viewModel/CounteragentViewModel";
 import { IReception } from "../../controllers/controllersInterfaces/receptionInterface";
-import { CounterAgentLegal } from "../../dataproviders/models/counteragents/counteragentLegal";
-import { CounterAgentPhysical } from "../../dataproviders/models/counteragents/counteragentPhysical";
 import { PhysicalCounterAgent } from "../../domain/counteragents/physicalCounteragent";
 import { LegalCounterAgent } from "../../domain/counteragents/legalCounteragent";
+import { CounterAgent } from "../../domain/counteragents/counteragent";
+import { CounterAgentResponse } from "../../domain/types";
 
-type CounterAgentResponse = PhysicalCounterAgent | LegalCounterAgent;
 @injectable()
 export class Reception implements IReception {
 
     public constructor(@inject("IReceptionService") private _service: IReceptionService) { }
+
+    async getUserInformation(id: string): Promise<CounteragentViewModel> {
+        throw new Error("Method not implemented.");
+    }
+
+    async changeUserInformation(idOldUser: string, newUserInformation: CounterAgent): Promise<void> {
+        throw new Error("Method not implemented.");
+    }
+
+    async checkOut(id: string): Promise<void> {
+        throw new Error("Method not implemented.");
+    }
 
     async registration(userType: string, mail: string, password: string): Promise<CounteragentViewModel> {
         let userDto = await this._service.registration(userType, mail, password);
@@ -28,13 +39,11 @@ export class Reception implements IReception {
 
     getCounterAgentViewModel(counteragent: CounterAgentResponse) : CounteragentViewModel {
         let viewModel = new CounteragentViewModel();    
-        if (counteragent instanceof CounterAgentLegal) {
-            let user = counteragent as CounterAgentLegal;
-            viewModel.FIO = user.name;
+        if (counteragent instanceof LegalCounterAgent) {
+            let user = counteragent as LegalCounterAgent;
         }
-        else if (counteragent instanceof CounterAgentPhysical) {
-            let user = counteragent as CounterAgentPhysical;
-            viewModel.FIO = user.fio;
+        else if (counteragent instanceof PhysicalCounterAgent) {
+            let user = counteragent as PhysicalCounterAgent;
         }        
         return viewModel;
     }

@@ -1,26 +1,28 @@
 export class CounterAgent {
 
-    private _id!: string;
-    private _mail!: string;
+    private _id!: string | undefined;
 
-    public get id(): string {
+    private _mail!: string | undefined;
+
+    public get id(): string | undefined {
         return this._id;
     }
 
-    public set id(value: string) {
+    public set id(value: string | undefined) {
         this._id = value;
     }
 
-    public get mail(): string {
+    public get mail(): string | undefined {
         return this._mail;
     }
 
-    public set mail(value: string) {
+    public set mail(value: string | undefined) {
         this._mail = value;
     }
 
-    public constructor(id: string, mail: string) {
-        this.id = id;
-        this.mail = mail;
-    }
+    public constructor() { }
+    // public constructor(id: string, mail: string) {
+    //     this.id = id;
+    //     this.mail = mail;
+    // }
 }

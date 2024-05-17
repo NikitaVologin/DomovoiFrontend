@@ -1,11 +1,11 @@
 export class ApartmentHouse {
-    private _id!: number;
+    private _id!: string;
 
-    public get id(): number {
+    public get id(): string {
         return this._id;
     }
 
-    public set id(value: number) {
+    public set id(value: string) {
         this._id = value;
     }
 
@@ -101,7 +101,7 @@ export class ApartmentHouse {
 
     public readonly _elevators: Array<string> = [];
 
-    public constructor(id: number, buildingYear: number, ceilingHeight: number, isGas: boolean,
+    public constructor(id: string, buildingYear: number, ceilingHeight: number, isGas: boolean,
         haveGarbageChute: boolean, isSecurity: boolean, haveParking: boolean,
         isInfrastructure: boolean, isLandscaping: boolean) {
         this.id = id;

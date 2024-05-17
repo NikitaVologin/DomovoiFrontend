@@ -1,10 +1,10 @@
-import axios, { Axios, AxiosInstance, AxiosResponse } from "axios";
+import axios, { AxiosInstance, AxiosResponse } from "axios";
 import {Response} from "../../src/dataproviders/models/response";
 import { inject, singleton } from "tsyringe";
-import { rejects } from "assert";
+import { IHTTPClient } from "../dataproviders/interfaces/HTTPClient";
 
 @singleton()
-export class HTTPClient implements HTTPClient {
+export class HTTPClient implements IHTTPClient {
     private _axios!: AxiosInstance;
 
     constructor(@inject("baseURL") baseURL: string) {
@@ -31,7 +31,6 @@ export class HTTPClient implements HTTPClient {
 					let mappedResponse = this.map<T>(response);
 					resolve(mappedResponse);
 				}).catch(error => {
-					console.log('err in http-c')
 					reject(error)
 				})
 			// }

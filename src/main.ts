@@ -10,7 +10,6 @@ import { ReceptionService } from './dataproviders/receptionService';
 import { Reception } from './application/useCases/reception';
 import { AnnouncementBoardService } from './dataproviders/announcementBoardService';
 import { AnnouncementBoard } from './application/useCases/announcementBoard';
-import { Mapper } from './dataproviders/mappers/mapperContrainer';
 
 createApp(App).provide("$store", store).use(router).use(store).mount('#app');
 
@@ -29,9 +28,8 @@ container.register("IAnnouncementBoardService", {
 container.register("IAnnouncementBoard", {
     useClass: AnnouncementBoard
 });
-container.register("IMapper", {
-    useClass: Mapper
-});
 container.register("baseURL", {
     useValue: "http://olegsanders.ru:8181"
 });
+//http://localhost:8080
+//http://olegsanders.ru:8181
