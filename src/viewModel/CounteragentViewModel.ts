@@ -2,6 +2,7 @@ import { AnnouncementViewModel } from "./AnnouncementViewModel";
 import { ReviewViewModel } from "./ReviewViewModel";
 
 export class CounteragentViewModel {
+	id:number = 1;
 	FIO: string = "Иванов Иван Иванович";
 	announcements: Array<AnnouncementViewModel>;
 	reviews: Array<ReviewViewModel>;

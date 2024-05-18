@@ -1,5 +1,5 @@
 <template>
-<div class="ann-card card">
+<div class="ann-card card" @click="$router.push(`/announcement/${announcement.id}`)">
 	<div class="ann-card__img-wrapper">
 		<div class="ann-card__img" :style="`background-image: url('${announcement.images[0]}');`"></div>
 	</div>
