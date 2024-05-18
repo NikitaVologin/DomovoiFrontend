@@ -1,14 +1,4 @@
 export class ApartmentHouse {
-    private _id!: string;
-
-    public get id(): string {
-        return this._id;
-    }
-
-    public set id(value: string) {
-        this._id = value;
-    }
-
     private _buildingYear!: number;
 
     public get buildingYear(): number {
@@ -101,17 +91,17 @@ export class ApartmentHouse {
 
     public readonly _elevators: Array<string> = [];
 
-    public constructor(id: string, buildingYear: number, ceilingHeight: number, isGas: boolean,
-        haveGarbageChute: boolean, isSecurity: boolean, haveParking: boolean,
-        isInfrastructure: boolean, isLandscaping: boolean) {
-        this.id = id;
-        this.buildingYear = buildingYear;
-        this.ceilingHeight = ceilingHeight;
-        this.isGas = isGas;
-        this.haveGarbageChute = haveGarbageChute;
-        this.isSecurity = isSecurity;
-        this.haveParking = haveParking;
-        this.isInfrastructure = isInfrastructure;
-        this.isLandscaping = isLandscaping;
-    }
+    // public constructor(id: string, buildingYear: number, ceilingHeight: number, isGas: boolean,
+    //     haveGarbageChute: boolean, isSecurity: boolean, haveParking: boolean,
+    //     isInfrastructure: boolean, isLandscaping: boolean) {
+    //     this.id = id;
+    //     this.buildingYear = buildingYear;
+    //     this.ceilingHeight = ceilingHeight;
+    //     this.isGas = isGas;
+    //     this.haveGarbageChute = haveGarbageChute;
+    //     this.isSecurity = isSecurity;
+    //     this.haveParking = haveParking;
+    //     this.isInfrastructure = isInfrastructure;
+    //     this.isLandscaping = isLandscaping;
+    // }
 }

@@ -27,7 +27,6 @@ export class Reception implements IReception {
     async registration(userType: string, mail: string, password: string): Promise<CounteragentViewModel> {
         let userDto = await this._service.registration(userType, mail, password);
         let viewModel = this.getCounterAgentViewModel(userDto);    
-		console.log('vm', viewModel)
         return viewModel;
     }
 
