@@ -72,19 +72,19 @@ export class Flat extends LivingBuilding {
         this._apartmentHouse = value;
     }
 
-    public constructor(id: number, area: number, floor: number, roomsCount: number, isRepaired: boolean,
-        isFresh: boolean, kitchenArea: number,
-        balconyType?: string | undefined,
-        viewFromBalcony?: string | undefined,
-        apartmentHouse?: ApartmentHouse | undefined,
-        type?: string | undefined) {
-        super(id, area, floor, type);
-        this.roomsCount = roomsCount;
-        this.isRepaired = isRepaired;
-        this.isFresh = isFresh;
-        this.kitchenArea = kitchenArea;
-        this.balconyType = balconyType;
-        this.viewFromBalcony = viewFromBalcony;
-        this.apartmentHouse = apartmentHouse;
-    }
+    // public constructor(id: number, area: number, floor: number, roomsCount: number, isRepaired: boolean,
+    //     isFresh: boolean, kitchenArea: number,
+    //     balconyType?: string | undefined,
+    //     viewFromBalcony?: string | undefined,
+    //     apartmentHouse?: ApartmentHouse | undefined,
+    //     type?: string | undefined) {
+    //     super(id, area, floor, type);
+    //     this.roomsCount = roomsCount;
+    //     this.isRepaired = isRepaired;
+    //     this.isFresh = isFresh;
+    //     this.kitchenArea = kitchenArea;
+    //     this.balconyType = balconyType;
+    //     this.viewFromBalcony = viewFromBalcony;
+    //     this.apartmentHouse = apartmentHouse;
+    // }
 }

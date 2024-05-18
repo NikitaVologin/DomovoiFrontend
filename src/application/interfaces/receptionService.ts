@@ -1,8 +1,10 @@
-import { LegalCounterAgent } from "../../domain/counteragents/legalCounteragent";
-import { PhysicalCounterAgent } from "../../domain/counteragents/physicalCounteragent";
+import { CounterAgent } from "../../domain/counteragents/counteragent";
+import { CounterAgentResponse } from "../../domain/types";
 
-type CounterAgentResponse = PhysicalCounterAgent | LegalCounterAgent;
 export interface IReceptionService {
     registration(userType: string, mail: string, password: string): Promise<CounterAgentResponse>;
     authorize(mail: string, password: string): Promise<CounterAgentResponse>;
+    getUserInformation(id: string): Promise<CounterAgentResponse>;
+    changeUserInformation(idOldUser: string, newUserInformation: CounterAgent): Promise<void>;
+    checkOut(id: string): Promise<void>;
 }

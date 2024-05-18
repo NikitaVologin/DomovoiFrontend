@@ -3,22 +3,22 @@ import { IAnnouncementBoard } from "../../controllers/controllersInterfaces/anno
 import { Announcement } from "../../domain/announcements/announcement";
 import { AnnouncementViewModel } from "../../viewModel/AnnouncementViewModel";
 import { IAnnouncementBoardService } from "../interfaces/announcementBoadService";
-import { RealityType } from "../../domain/realities/realityType";
-import { DealType } from "../../domain/deals/dealType";
+import { RealityType } from "../../domain/enums/realityType";
+import { DealType } from "../../domain/enums/dealType";
 
 @injectable()
 export class AnnouncementBoard implements IAnnouncementBoard {
 
-    public constructor(@inject("IAnnouncementBoardService") private readonly _AnnouncementBoardSerivce: IAnnouncementBoardService) { }
+    public constructor(@inject("IAnnouncementBoardService") private readonly _announcementBoardSerivce: IAnnouncementBoardService) { }
 
     async getAnnouncementById(id: string): Promise<AnnouncementViewModel> {
-        let announcement = await this._AnnouncementBoardSerivce.getAnnouncementById(id);
+        let announcement = await this._announcementBoardSerivce.getAnnouncementById(id);
         let viewModel = new AnnouncementViewModel();
         return viewModel;
     }
 
     async getAnnouncements(count: number): Promise<AnnouncementViewModel[]> {
-        let announcements = await this._AnnouncementBoardSerivce.getAnnouncements(count);
+        let announcements = await this._announcementBoardSerivce.getAnnouncements(count);
         let list: AnnouncementViewModel[] = [];
         for(let announcement of announcements) {
             let viewModel = new AnnouncementViewModel();
@@ -28,7 +28,7 @@ export class AnnouncementBoard implements IAnnouncementBoard {
     }
 
     async postAnnouncement(announcement: Announcement, realityType: RealityType, dealType: DealType): Promise<string> {
-        let id = await this._AnnouncementBoardSerivce.postAnnouncement(announcement,
+        let id = await this._announcementBoardSerivce.postAnnouncement(announcement,
              realityType.toString(), dealType.toString());
         return id;
     }

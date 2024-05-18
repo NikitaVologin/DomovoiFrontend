@@ -1,21 +1,21 @@
 export class Reality {
-    private _id!: number;
+    private _id!: string | undefined;
 
-    public get id(): number {
+    public get id(): string | undefined {
         return this._id;
     }
 
-    public set id(value: number) {
+    public set id(value: string | undefined) {
         this._id = value;
     }
 
-    private _area!: number;
+    private _area!: number | undefined;
 
-    public get area(): number {
+    public get area(): number | undefined {
         return this._area;
     }
 
-    public set area(value: number) {
+    public set area(value: number | undefined) {
         this._area = value;
     }
 
@@ -29,9 +29,13 @@ export class Reality {
         this._type = value;
     }
 
-    public constructor(id: number, area: number, type?: string | undefined) {
-        this.id = id;
-        this.area = area;
-        this.type = type;
-    }
+    // public getInstance(id: string, area: number, type?: string | undefined): Reality {
+    //     let object = new Reality();
+    //     object.id = id;
+    //     object.area = area;
+    //     object.type = type;
+    //     return object;
+    // }
+
+    public constructor() {}
 }

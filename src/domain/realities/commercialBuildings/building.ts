@@ -1,13 +1,12 @@
-
 export class Building {
 
-    private _id!: number;
+    private _id!: string;
 
-    public get id(): number {
+    public get id(): string {
         return this._id;
     }
 
-    public set id(value: number) {
+    public set id(value: string) {
         this._id = value;
     }
 
@@ -61,12 +60,13 @@ export class Building {
         this._isEquipment = value;
     }
 
-    public constructor(id: number, classBuilding: string, haveParking: boolean,
-        isEquipment: boolean, centerName?: string | undefined) {
-        this.id = id;
-        this.classBuilding = classBuilding;
-        this.haveParking = haveParking;
-        this.isEquipment = isEquipment;
-        this.centerName = centerName;
-    }
+    // public constructor(id: string, classBuilding: string, haveParking: boolean,
+    //     isEquipment: boolean, centerName?: string | undefined) {
+    //     this.id = id;
+    //     this.classBuilding = classBuilding;
+    //     this.haveParking = haveParking;
+    //     this.isEquipment = isEquipment;
+    //     this.centerName = centerName;
+    // }
+    public constructor() { }
 }

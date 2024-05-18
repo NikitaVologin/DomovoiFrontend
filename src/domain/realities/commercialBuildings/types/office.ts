@@ -12,24 +12,28 @@ export class Office extends CommercialBuilding {
         this._name = value;
     }
 
-    private _roomsCount!: number;
+    private _roomsCount?: number | undefined;
 
-    public get roomsCount(): number {
-        return this._roomsCount;
+    public get roomsCount(): number | undefined {
+        return this._roomsCount!;
     }
 
-    public set roomsCount(value: number) {
+    public set roomsCount(value: number | undefined) {
         this._roomsCount = value;
     }
 
-    public constructor(id: number, area: number, floorsCount: number,
-        entry: boolean, adress: string, isUse: boolean, isAcces: boolean,
-        roomsCount: number,
-        name?: string | undefined,
-        building?: Building | undefined,
-        type?: string | undefined) {
-        super(id, area, floorsCount, entry, adress, isUse, isAcces, building, type);
-        this.roomsCount = roomsCount;
-        this.name = name;
+    // public constructor(id: string, area: number, floorsCount: number,
+    //     entry: boolean, adress: string, isUse: boolean, isAcces: boolean,
+    //     roomsCount: number,
+    //     name?: string | undefined,
+    //     building?: Building | undefined,
+    //     type?: string | undefined) {
+    //     super(id, area, floorsCount, entry, adress, isUse, isAcces, building, type);
+    //     this.roomsCount = roomsCount;
+    //     this.name = name;
+    // }
+
+    public constructor(){
+        super();    
     }
 }

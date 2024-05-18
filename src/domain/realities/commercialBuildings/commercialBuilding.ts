@@ -63,17 +63,7 @@ export class CommercialBuilding extends Reality {
         this._building = value;
     }
 
-    public constructor(id: number, area: number, floorsCount: number,
-        entry: boolean, adress: string, isUse: boolean, isAcces: boolean,
-        building?: Building | undefined,
-        type?: string | undefined) {
-        super(id, area, type);
-
-        this.floorsCount = floorsCount;
-        this.entry = entry;
-        this.adress = adress;
-        this.isUse = isUse;
-        this.isAcces = isAcces;
-        this.building = building;
+    public constructor() {
+        super();
     }
 }

@@ -2,8 +2,8 @@ import { injectable, inject } from "tsyringe";
 import { IAnnouncementBoard } from "./controllersInterfaces/announcementBoard";
 import { Announcement } from "../domain/announcements/announcement";
 import { AnnouncementViewModel } from "../viewModel/AnnouncementViewModel";
-import { RealityType } from "../domain/realities/realityType";
-import { DealType } from "../domain/deals/dealType";
+import { RealityType } from "../domain/enums/realityType";
+import { DealType } from "../domain/enums/dealType";
 
 @injectable()
 export class AnnouncementController {

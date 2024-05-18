@@ -1,15 +1,16 @@
 import { CounterAgent } from "../counteragents/counteragent";
-import { Deal } from "../deals/deal";
+import { Deal } from "../types" ;
 import { Reality } from "../realities/reality";
 
 export class Announcement {
-        private _id!: number;
+    
+        private _id!: string;
 
-        public get id(): number {
+        public get id(): string {
             return this._id;
         }
 
-        public set id(value: number) {
+        public set id(value: string) {
             this._id = value;
         }
 
@@ -63,14 +64,18 @@ export class Announcement {
             this._counteragent = value;
         }
 
-        public constructor(id: number, reality: Reality, deal: Deal, counteraget: CounterAgent,
+        public static getInstance(id: string, reality: Reality, deal: Deal, counteraget: CounterAgent,
             description?: string | undefined, 
-            connectionType?: string | undefined) {
-                this.id = id;
-                this.reality = reality;
-                this.deal = deal;
-                this.counteragent = counteraget;
-                this.description = description;
-                this.connectionType = connectionType;
+            connectionType?: string | undefined): Announcement {
+                let instance = new Announcement();
+                instance.id = id;
+                instance.reality = reality;
+                instance.deal = deal;
+                instance.counteragent = counteraget;
+                instance.description = description;
+                instance.connectionType = connectionType;
+                return instance;
         }
-    }
+
+        public constructor() { }
+}

@@ -32,8 +32,11 @@ export class LegalCounterAgent extends CounterAgent {
         this._trc = value;
     }
 
-    public constructor(id: string, mail: string, name?: string, _tin?: string, _trc?: string) {
-        super(id, mail);
+    public constructor() {
+        super();
     }
+    // public constructor(id: string, mail: string, name?: string, _tin?: string, _trc?: string) {
+    //     super(id, mail);
+    // }
 }
 
