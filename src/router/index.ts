@@ -1,4 +1,5 @@
 import { createRouter, createWebHistory, createWebHashHistory, RouteRecordRaw } from 'vue-router'
+import LandingView from '../views/LandingView.vue';
 import SearchView from '../views/SearchView.vue';
 import ProfileView from '../views/ProfileView.vue';
 import AnnouncementEditView from '../views/AnnouncementEditView.vue';
@@ -7,7 +8,7 @@ const routes = [
 	{
 		path: '/',
 		name: 'landing',
-		redirect: () => { return { name: 'search' } }
+		component: LandingView,
 	},
 	{
 		path: '/search',
