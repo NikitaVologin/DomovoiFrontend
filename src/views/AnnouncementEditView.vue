@@ -53,7 +53,7 @@
 			</div>
 		</div>
 		<div class="submit-button-wrapper">
-			<button class="submit-button">Опубликовать</button>
+			<button class="submit-button" @click="submit">Опубликовать</button>
 		</div>
 	</main>
 </div>
@@ -68,8 +68,11 @@ import { LMap, LTileLayer } from "@vue-leaflet/vue-leaflet";
 import Header from "../components/Header.vue"
 import Picker from "../components/Picker.vue"
 import EstateTypePicker from "../components/EstateTypePicker.vue"
-
-type DealType = "buy"|"lease";
+import { container } from 'tsyringe';
+import { Announcement } from '../domain/announcements/announcement';
+import { AnnouncementController } from '../controllers/announcementContoller';
+import { RealityType } from '../domain/enums/realityType';
+import { DealType } from '../domain/enums/dealType';
 
 export default defineComponent({
 	components: { Header, Picker, EstateTypePicker, LMap, LTileLayer },
@@ -77,7 +80,7 @@ export default defineComponent({
 		return {
 			store: store,
 			params: {
-				dealType: "buy" as DealType,
+				dealType: DealType.Sell,
 			}
 		}
 	},
@@ -86,6 +89,11 @@ export default defineComponent({
 	mounted() {
 	},
 	methods: {
+		async submit() {
+			let ac = container.resolve(AnnouncementController);
+			let response = await ac.postAnnouncement(Announcement.getInstance(), RealityType.Office, DealType.Sell);
+			console.log(response);
+		}
 	},
 })
 </script>
