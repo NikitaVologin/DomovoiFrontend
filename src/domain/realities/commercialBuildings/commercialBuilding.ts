@@ -23,16 +23,6 @@ export class CommercialBuilding extends Reality {
         this._entry = value;
     }
 
-    private _adress!: string;
-
-    public get adress(): string {
-        return this._adress;
-    }
-
-    public set adress(value: string) {
-        this._adress = value;
-    }
-
     private _isUse!: boolean;
 
     public get isUse(): boolean {
@@ -62,6 +52,8 @@ export class CommercialBuilding extends Reality {
     public set building(value: Building | undefined) {
         this._building = value;
     }
+
+
 
     public constructor() {
         super();
