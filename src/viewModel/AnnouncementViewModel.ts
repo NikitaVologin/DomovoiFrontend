@@ -1,13 +1,19 @@
 import { CounteragentViewModel } from "./CounteragentViewModel";
+import { DealType } from "../domain/enums/dealType";
+import { RealityType } from "../domain/enums/realityType";
 
 export class AnnouncementViewModel {
 	// тут значения по умолчанию пока для наполнения висят
 	id:number = 1;
+	dealType: DealType = DealType.Rell;
+	buildingType: RealityType = RealityType.Office;
 	counteragent: CounteragentViewModel = new CounteragentViewModel();
 	price: number = 16000;
 	address: string = "Муравленко, 9";
 	roomCount?: number = 2;
 	floor?: number = 4;
+	totalFloorsInBuilding?: number = 9;
+	haveParking?: boolean;
 	isSingleRoom: boolean = false;
 	area: number = 26;
 	destrict: string = "1-й Заречный";

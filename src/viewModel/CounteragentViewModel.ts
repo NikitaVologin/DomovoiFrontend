@@ -4,6 +4,8 @@ import { ReviewViewModel } from "./ReviewViewModel";
 export class CounteragentViewModel {
 	id:number = 1;
 	FIO: string = "Иванов Иван Иванович";
+	email: string = "email@mail.ru";
+	phone?: string = "+79503217645";
 	announcements: Array<AnnouncementViewModel>;
 	reviews: Array<ReviewViewModel>;
 	private _avatar?: string;
