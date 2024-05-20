@@ -1,9 +1,11 @@
 export class CounterAgent {
 
-    private _id!: string | undefined;
+    private _id: string | undefined;
 
     private _mail!: string | undefined;
 
+    private _contactNumber: string | undefined;
+    
     public get id(): string | undefined {
         return this._id;
     }
@@ -20,7 +22,16 @@ export class CounterAgent {
         this._mail = value;
     }
 
+    public get contactNumber(): string | undefined {
+        return this._mail;
+    }
+
+    public set contactNumber(value: string | undefined) {
+        this._mail = value;
+    }
+
     public constructor() { }
+    
     // public constructor(id: string, mail: string) {
     //     this.id = id;
     //     this.mail = mail;

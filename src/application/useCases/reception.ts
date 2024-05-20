@@ -40,9 +40,15 @@ export class Reception implements IReception {
         let viewModel = new CounteragentViewModel();    
         if (counteragent instanceof LegalCounterAgent) {
             let user = counteragent as LegalCounterAgent;
+            viewModel.FIO = user.name!;
+            viewModel.email = user.mail!;
+            viewModel.phone = user.contactNumber;
         }
         else if (counteragent instanceof PhysicalCounterAgent) {
             let user = counteragent as PhysicalCounterAgent;
+            viewModel.FIO = user.FIO;
+            viewModel.email = user.mail!;
+            viewModel.phone = user.contactNumber;
         }        
         return viewModel;
     }

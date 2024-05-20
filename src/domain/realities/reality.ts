@@ -29,6 +29,16 @@ export class Reality {
         this._type = value;
     }
 
+    private _adress?: string 
+
+    public get adress(): string | undefined {
+        return this._type;
+    }
+
+    public set adress(value: string | undefined) {
+        this._type = value;
+    }
+
     // public getInstance(id: string, area: number, type?: string | undefined): Reality {
     //     let object = new Reality();
     //     object.id = id;
