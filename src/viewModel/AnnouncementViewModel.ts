@@ -5,9 +5,30 @@ import { RealityType } from "../domain/enums/realityType";
 export class AnnouncementViewModel {
 	// тут значения по умолчанию пока для наполнения висят
 	id:number = 1;
+
 	dealType: DealType = DealType.Rell;
 	buildingType: RealityType = RealityType.Office;
 	counteragent: CounteragentViewModel = new CounteragentViewModel();
+
+	sellConditions?: {
+		yearInOwn: number,
+		ownersCount: number,
+		prescribersCount: number,
+		haveChildOwners: boolean,
+		haveChildPrescribers: boolean,
+	};
+
+	rentConditions?: {
+		period: string,
+		deposit: number,
+		communalPays: number,
+		prepay: number,
+		facilities: string,
+		withKids: boolean,
+		withAnimals: boolean,
+		canSmoke: boolean,
+	}
+
 	price: number = 16000;
 	address: string = "Муравленко, 9";
 	roomCount?: number = 2;
@@ -17,6 +38,7 @@ export class AnnouncementViewModel {
 	isSingleRoom: boolean = false;
 	area: number = 26;
 	destrict: string = "1-й Заречный";
+
 	images: string[] = [
 		"https://floorcarpet.ru/wp-content/uploads/e/b/1/eb17cb192181ae999fbd54b4437f18e9.jpeg",
 		"https://mykaleidoscope.ru/uploads/posts/2022-08/1660701747_9-mykaleidoscope-ru-p-solnechnii-svet-v-komnate-dizain-krasivo-f-9.jpg",
