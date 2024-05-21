@@ -1,18 +1,18 @@
 <template>
 <div class="ann-card card" @click="$router.push(`/announcement/${announcement.id}`)">
 	<div class="ann-card__img-wrapper">
-		<div class="ann-card__img" :style="`background-image: url('${announcement.images[0]}');`"></div>
+		<div class="ann-card__img" :style="`background-image: url('${announcement.reality.images[0]}');`"></div>
 	</div>
 	<div class="ann-card__body">
 		<div class="ann-card__body__head">
-			<div class="ann-card__body__head__address">{{ announcement.address }}</div>
-			<div class="ann-card__body__head__price" v-if="!minimized">{{ announcement.price }}₽</div>
+			<div class="ann-card__body__head__address">{{ announcement.reality.address }}</div>
+			<div class="ann-card__body__head__price" v-if="!minimized">{{ announcement.deal.price }}₽</div>
 		</div>
 		<div class="ann-card__body__numbers" v-if="!minimized">
 			<span class="ann-card__body__numbers__item" v-if="roomsStr.trim() != ''">{{ roomsStr }}</span>
-			<span class="ann-card__body__numbers__item" v-if="roomsStr.trim() != ''">{{ announcement.area }} м2</span>
+			<span class="ann-card__body__numbers__item" v-if="roomsStr.trim() != ''">{{ announcement.reality.area }} м2</span>
 		</div>
-		<div class="ann-card__body__district" v-if="!minimized">Район {{ announcement.destrict }}</div>
+		<div class="ann-card__body__district" v-if="!minimized">Район {{ announcement.reality.destrict }}</div>
 	</div>
 </div>
 </template>
@@ -32,8 +32,8 @@ export default defineComponent({
 	},
 	computed: {
 		roomsStr() : string {
-			if (this.announcement.roomCount !== undefined) return `${this.announcement.roomCount} ком.`;
-			else if (this.announcement.isSingleRoom) return 'комната';
+			if (this.announcement.reality.roomCount !== undefined) return `${this.announcement.reality.roomCount} ком.`;
+			else if (this.announcement.reality.isSingleRoom) return 'комната';
 			return '';
 		}
 	}
