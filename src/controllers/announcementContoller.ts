@@ -20,8 +20,8 @@ export class AnnouncementController {
         return viewModels;
     } 
 
-    async postAnnouncement(announcement: Announcement, realityType: RealityType, dealType: DealType): Promise<string> {
-        let id = await this._AnnouncementBoard.postAnnouncement(announcement, realityType, dealType);
+    async postAnnouncement(viewModel: AnnouncementViewModel, realityType: RealityType, dealType: DealType): Promise<string> {
+        let id = await this._AnnouncementBoard.postAnnouncement(viewModel, realityType, dealType);
         return id;    
     }
 }

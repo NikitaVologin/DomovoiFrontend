@@ -73,6 +73,9 @@ import { Announcement } from '../domain/announcements/announcement';
 import { AnnouncementController } from '../controllers/announcementContoller';
 import { RealityType } from '../domain/enums/realityType';
 import { DealType } from '../domain/enums/dealType';
+import { Office } from '../domain/realities/commercialBuildings/types/office';
+import { Rent } from '../domain/deals/rent/rent';
+import { CounterAgent } from '../domain/counteragents/counteragent';
 
 export default defineComponent({
 	components: { Header, Picker, EstateTypePicker, LMap, LTileLayer },
@@ -91,8 +94,11 @@ export default defineComponent({
 	methods: {
 		async submit() {
 			let ac = container.resolve(AnnouncementController);
-			let response = await ac.postAnnouncement(Announcement.getInstance(), RealityType.Office, DealType.Sell);
-			console.log(response);
+			//let counteragent = new CounterAgent();
+			//counteragent.id = "";
+			//let response = await ac.postAnnouncement(
+			//	Announcement.getInstance("", new Office(), new Rent(), counteragent, "", ""), RealityType.Office, DealType.Sell);
+			//console.log(response);
 		}
 	},
 })

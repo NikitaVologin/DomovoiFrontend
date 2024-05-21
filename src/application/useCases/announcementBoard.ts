@@ -33,7 +33,8 @@ export class AnnouncementBoard implements IAnnouncementBoard {
         return list;
     }
 
-    async postAnnouncement(announcement: Announcement, realityType: RealityType, dealType: DealType): Promise<string> {
+    async postAnnouncement(viewModel: AnnouncementViewModel, realityType: RealityType, dealType: DealType): Promise<string> {
+        let announcement = new Announcement();
         let id = await this._announcementBoardSerivce.postAnnouncement(announcement,
              realityType.toString(), dealType.toString());
         return id;

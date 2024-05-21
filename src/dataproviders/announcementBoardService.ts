@@ -27,9 +27,9 @@ export class AnnouncementBoardService implements IAnnouncementBoardService {
 
         if (response.status == 200) {
             console.log(response.data);
-            let announcement = new Announcement();
+            let announcement = this.mapToAnnoucement(response.data);
             return announcement;
-        }
+        }   
 
         return new Promise((resolve, reject) => {
             reject(response);
@@ -46,8 +46,7 @@ export class AnnouncementBoardService implements IAnnouncementBoardService {
         if (response.status == 200) {
             let list: Announcement[] = [];
             for (let object in response.data) {
-                list.push(new Announcement());
-                
+                list.push(this.mapToAnnoucement(object));
             }
             return list;
         }
