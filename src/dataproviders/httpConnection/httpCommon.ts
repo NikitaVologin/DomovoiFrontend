@@ -1,7 +1,7 @@
 import axios, { AxiosInstance, AxiosResponse } from "axios";
-import {Response} from "../../src/dataproviders/models/response";
+import {Response} from "../models/response";
 import { inject, singleton } from "tsyringe";
-import { IHTTPClient } from "../dataproviders/interfaces/HTTPClient";
+import { IHTTPClient } from "../interfaces/HTTPClient";
 
 @singleton()
 export class HTTPClient implements IHTTPClient {

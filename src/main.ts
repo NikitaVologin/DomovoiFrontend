@@ -5,7 +5,7 @@ import { router } from './router';
 import store from './store';
 import "reflect-metadata";
 import {container} from "tsyringe";
-import { HTTPClient } from './httpConnection/httpCommon';
+import { HTTPClient } from '../src/dataproviders/httpConnection/httpCommon';
 import { ReceptionService } from './dataproviders/receptionService';
 import { Reception } from './application/useCases/reception';
 import { AnnouncementBoardService } from './dataproviders/announcementBoardService';

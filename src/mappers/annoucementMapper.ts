@@ -36,8 +36,8 @@ export class AnnoucementMapper implements IAnnoucementMapper {
     mapViewModelToAnnoucement(viewModel: AnnouncementViewModel): Announcement {
         let announcement = new Announcement();
         announcement.id = viewModel.id;
-        //announcement.description = viewModel.description;
-        //announcement.connectionType = viewModel.connectionType;
+        announcement.description = viewModel.description;
+        announcement.connectionType = viewModel.connectionType;
         announcement.deal = this._dealMapper.mapViewModelToDeal(viewModel.deal);
         announcement.reality = this._realityMapper.mapViewModelToRealirt(viewModel.reality);
         announcement.counteragent = this._userMapper.mapViewModelToCouterAget(viewModel.counteragent);
