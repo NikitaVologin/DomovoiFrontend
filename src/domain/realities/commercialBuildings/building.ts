@@ -10,27 +10,27 @@ export class Building {
         this._id = value;
     }
 
-    private _class!: string;
+    private _class?: string;
 
-    public get classBuilding(): string {
+    public get classBuilding(): string | undefined{
         return this._class;
     }
 
-    public set classBuilding(value: string) {
+    public set classBuilding(value: string | undefined) {
         this._class = value;
     }
 
-    private _buildingYear!: number;
+    private _buildingYear?: number | undefined;
 
-    public get buildingYear(): number {
+    public get buildingYear(): number | undefined {
         return this._buildingYear;
     }
 
-    public set buildingYear(value: number) {
+    public set buildingYear(value: number | undefined) {
         this._buildingYear = value;
     }
 
-    private _centerName?: string | undefined;
+    private _centerName?: string;
 
     public get centerName(): string | undefined {
         return this._centerName;
@@ -40,23 +40,23 @@ export class Building {
         this._centerName = value;
     }
 
-    private _haveParking!: boolean;
+    private _haveParking?: boolean | undefined;
 
-    public get haveParking(): boolean {
+    public get haveParking(): boolean | undefined {
         return this._haveParking;
     }
 
-    public set haveParking(value: boolean) {
+    public set haveParking(value: boolean | undefined) {
         this._haveParking = value;
     }
 
-    private _isEquipment!: boolean;
+    private _isEquipment?: boolean;
 
-    public get isEquipment(): boolean {
+    public get isEquipment(): boolean | undefined {
         return this._isEquipment;
     }
 
-    public set isEquipment(value: boolean) {
+    public set isEquipment(value: boolean | undefined) {
         this._isEquipment = value;
     }
 

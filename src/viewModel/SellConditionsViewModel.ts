@@ -1,4 +1,4 @@
-export class SellConditions {
+export class SellConditionsViewModel {
     yearInOwn?: number;
     ownersCount?: number;
     prescribersCount?: number;

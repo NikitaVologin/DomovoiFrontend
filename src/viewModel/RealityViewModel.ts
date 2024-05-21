@@ -1,7 +1,7 @@
 import { RealityType } from "../domain/enums/realityType";
 
 export class RealityViewModel {
-	id:number = 1;
+	id:string = "";
 	realityType: RealityType = RealityType.Office;
 	address: string = "Муравленко, 9";
 	destrict: string = "1-й Заречный";

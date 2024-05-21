@@ -5,8 +5,6 @@ import { IAnnoucementMapper } from "./interfaces/annoucementMapperInterface";
 import { IRealityMapper } from "./interfaces/realityMapperInterface";
 import { IDealMapper } from "./interfaces/dealMapperInterface";
 import { ICouterAgentMapper } from "./interfaces/couteragentMapperInterface";
-import { RealityType } from "../domain/enums/realityType";
-import { Office } from "../domain/realities/commercialBuildings/types/office";
 
 @injectable()
 export class AnnoucementMapper implements IAnnoucementMapper {
@@ -28,21 +26,21 @@ export class AnnoucementMapper implements IAnnoucementMapper {
 
     public mapAnnoucementToViewModel(announcement: Announcement): AnnouncementViewModel {
         let viewModel = new AnnouncementViewModel();
-        viewModel.address = announcement.reality.adress!;
-        viewModel.area = announcement.reality.area!;
-        viewModel.buildingType = RealityType[announcement.reality.type! as keyof typeof RealityType];
+        viewModel.id = announcement.id;
+        viewModel.reality = this._realityMapper.mapRealityToModelView(announcement.reality);
+        viewModel.deal = this._dealMapper.mapDealToViewModel(announcement.deal);
         viewModel.counteragent = this._userMapper.mapCouterAgentToViewModel(announcement.counteragent);
-        viewModel.dealType = announcement.deal.dealType;
-
-        switch(RealityType[announcement.reality.type! as keyof typeof RealityType]){
-            case(RealityType.Office): {
-                viewModel.haveParking = (announcement.reality as Office).building?.haveParking;
-            }
-        }
         return viewModel;
     }
 
     mapViewModelToAnnoucement(viewModel: AnnouncementViewModel): Announcement {
-        throw new Error("Method not implemented.");
+        let announcement = new Announcement();
+        announcement.id = viewModel.id;
+        //announcement.description = viewModel.description;
+        //announcement.connectionType = viewModel.connectionType;
+        announcement.deal = this._dealMapper.mapViewModelToDeal(viewModel.deal);
+        announcement.reality = this._realityMapper.mapViewModelToRealirt(viewModel.reality);
+        announcement.counteragent = this._userMapper.mapViewModelToCouterAget(viewModel.counteragent);
+        return announcement;
     }
 }
