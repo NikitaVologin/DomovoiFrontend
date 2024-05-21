@@ -1,4 +1,4 @@
-export class RentConditions {
+export class RentConditionsViewModel {
     period?: string;
     deposit?: number;
     communalPays?: number;

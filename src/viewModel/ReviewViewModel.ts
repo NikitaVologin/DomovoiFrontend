@@ -1,7 +1,7 @@
 import { CounteragentViewModel } from "./CounteragentViewModel";
 
 export class ReviewViewModel {
-	id:number = 1;
+	id:string = "";
 	author: CounteragentViewModel = new CounteragentViewModel();
 	rate: number = Math.round(Math.random() * 4 + 1);
 	header: string = "Всё супер";

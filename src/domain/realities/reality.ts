@@ -1,11 +1,11 @@
 export class Reality {
-    private _id!: string | undefined;
+    private _id!: string;
 
-    public get id(): string | undefined {
+    public get id(): string {
         return this._id;
     }
 
-    public set id(value: string | undefined) {
+    public set id(value: string) {
         this._id = value;
     }
 

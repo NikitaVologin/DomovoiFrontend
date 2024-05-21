@@ -2,21 +2,19 @@ import { injectable, inject } from "tsyringe";
 import { IReceptionService } from "../interfaces/receptionService";
 import { CounteragentViewModel } from "../../viewModel/CounteragentViewModel";
 import { IReception } from "../../controllers/controllersInterfaces/receptionInterface";
-import { PhysicalCounterAgent } from "../../domain/counteragents/physicalCounteragent";
-import { LegalCounterAgent } from "../../domain/counteragents/legalCounteragent";
-import { CounterAgent } from "../../domain/counteragents/counteragent";
-import { CounterAgentResponse } from "../../domain/types";
+import { ICouterAgentMapper } from "../../mappers/interfaces/couteragentMapperInterface";
 
 @injectable()
 export class Reception implements IReception {
 
-    public constructor(@inject("IReceptionService") private _service: IReceptionService) { }
+    public constructor(@inject("IReceptionService") private readonly _service: IReceptionService,
+        @inject("ICouterAgentMapper") private readonly _userMapper: ICouterAgentMapper) { }
 
     async getUserInformation(id: string): Promise<CounteragentViewModel> {
         throw new Error("Method not implemented.");
     }
 
-    async changeUserInformation(idOldUser: string, newUserInformation: CounterAgent): Promise<void> {
+    async changeUserInformation(idOldUser: string, newUserInformation: CounteragentViewModel): Promise<void> {
         throw new Error("Method not implemented.");
     }
 
@@ -26,30 +24,13 @@ export class Reception implements IReception {
 
     async registration(userType: string, mail: string, password: string): Promise<CounteragentViewModel> {
         let userDto = await this._service.registration(userType, mail, password);
-        let viewModel = this.getCounterAgentViewModel(userDto);    
+        let viewModel = this._userMapper.mapCouterAgentToViewModel(userDto);    
         return viewModel;
     }
 
     async authorize(mail: string, password: string): Promise<CounteragentViewModel> {
         let userDto = await this._service.authorize(mail, password);
-        let viewModel = this.getCounterAgentViewModel(userDto);    
+        let viewModel = this._userMapper.mapCouterAgentToViewModel(userDto);    
         return viewModel;
     } 
-
-    getCounterAgentViewModel(counteragent: CounterAgentResponse) : CounteragentViewModel {
-        let viewModel = new CounteragentViewModel();    
-        if (counteragent instanceof LegalCounterAgent) {
-            let user = counteragent as LegalCounterAgent;
-            viewModel.FIO = user.name!;
-            viewModel.email = user.mail!;
-            viewModel.phone = user.contactNumber;
-        }
-        else if (counteragent instanceof PhysicalCounterAgent) {
-            let user = counteragent as PhysicalCounterAgent;
-            viewModel.FIO = user.FIO;
-            viewModel.email = user.mail!;
-            viewModel.phone = user.contactNumber;
-        }        
-        return viewModel;
-    }
 }

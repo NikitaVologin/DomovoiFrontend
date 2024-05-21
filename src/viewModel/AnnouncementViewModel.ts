@@ -1,11 +1,9 @@
 import { CounteragentViewModel } from "./CounteragentViewModel";
-import { DealType } from "../domain/enums/dealType";
-import { RealityType } from "../domain/enums/realityType";
 import { DealViewModel } from "./DealViewModel";
 import { RealityViewModel } from "./RealityViewModel";
 
 export class AnnouncementViewModel {
-	id:number = 1;
+	id:string = "";
 	counteragent: CounteragentViewModel = new CounteragentViewModel();
 	deal: DealViewModel = new DealViewModel();
 	reality: RealityViewModel = new RealityViewModel();

@@ -1,13 +1,15 @@
+import { CounteragentType } from "../domain/enums/counteragentEnum";
 import { AnnouncementViewModel } from "./AnnouncementViewModel";
 import { ReviewViewModel } from "./ReviewViewModel";
 
 export class CounteragentViewModel {
-	id:number = 1;
+	id:string = "";
 	FIO: string = "Иванов Иван Иванович";
 	email: string = "email@mail.ru";
 	phone?: string = "+79503217645";
 	announcements: Array<AnnouncementViewModel>;
 	reviews: Array<ReviewViewModel>;
+	type: CounteragentType = CounteragentType.Physical;
 	private _avatar?: string;
 
 	get avatar() {
