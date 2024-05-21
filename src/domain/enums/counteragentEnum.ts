@@ -1,1 +1,1 @@
-export enum CounteragentType { Physical, Legal};
+export enum CounteragentType { Physical="Physical", Legal="Legal"};

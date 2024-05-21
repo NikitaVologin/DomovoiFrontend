@@ -1,1 +1,1 @@
-export enum DealType { Rell, Sell };
+export enum DealType { Rell="Rent", Sell="Sell" };

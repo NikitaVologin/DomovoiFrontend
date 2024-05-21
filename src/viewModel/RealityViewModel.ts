@@ -8,7 +8,7 @@ export class RealityViewModel {
 	roomCount?: number = 2;
 	floor?: number = 4;
 	totalFloorsInBuilding?: number = 9;
-	haveParking?: boolean;
+	haveParking?: boolean = false;
 	isSingleRoom: boolean = false;
 	area: number = 26;
 

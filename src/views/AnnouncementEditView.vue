@@ -104,7 +104,7 @@ export default defineComponent({
 			// обращаться к созданному объекту AnnouncementViewModel через this.announcement
 
 			let ac = container.resolve(AnnouncementController);
-			this.announcement.counteragent.id = ''
+			this.announcement.counteragent.id = "485154bb-a246-4924-8d17-533083f32bc0";
 			let response = await ac.postAnnouncement(this.announcement, RealityType.Office, DealType.Sell);
 			console.log(response);
 			// router.push('/profile');   // раскомментить когда всё заработает

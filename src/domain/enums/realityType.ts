@@ -1,1 +1,1 @@
-export enum RealityType { Office } 
+export enum RealityType { Office="Office" } 

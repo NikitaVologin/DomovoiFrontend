@@ -2,8 +2,6 @@ import { injectable, inject } from "tsyringe";
 import { IAnnouncementBoard } from "../../controllers/controllersInterfaces/announcementBoard";
 import { AnnouncementViewModel } from "../../viewModel/AnnouncementViewModel";
 import { IAnnouncementBoardService } from "../interfaces/announcementBoadService";
-import { RealityType } from "../../domain/enums/realityType";
-import { DealType } from "../../domain/enums/dealType";
 import { IAnnoucementMapper } from "../../mappers/interfaces/annoucementMapperInterface";
 import { ICouterAgentMapper } from "../../mappers/interfaces/couteragentMapperInterface";
 
@@ -30,10 +28,9 @@ export class AnnouncementBoard implements IAnnouncementBoard {
         return list;
     }
 
-    async postAnnouncement(viewModel: AnnouncementViewModel, realityType: RealityType, dealType: DealType): Promise<string> {
+    async postAnnouncement(viewModel: AnnouncementViewModel): Promise<string> {
         let announcement = this._annoucementMapper.mapViewModelToAnnoucement(viewModel);
-        let id = await this._announcementBoardSerivce.postAnnouncement(announcement,
-             realityType.toString(), dealType.toString());
+        let id = await this._announcementBoardSerivce.postAnnouncement(announcement);
         return id;
     }
 }

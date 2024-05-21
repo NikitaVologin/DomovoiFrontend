@@ -3,7 +3,7 @@ import { SellConditions } from "./sellConditions";
 
 export class Sell {
 
-    public readonly dealType: DealType = DealType.Sell;
+    public readonly type: DealType = DealType.Sell;
 
     private _conditions!: SellConditions;
 

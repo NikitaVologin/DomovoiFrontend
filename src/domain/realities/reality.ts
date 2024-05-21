@@ -1,3 +1,5 @@
+import { RealityType } from "../enums/realityType";
+
 export class Reality {
     private _id!: string;
 
@@ -19,24 +21,24 @@ export class Reality {
         this._area = value;
     }
 
-    private _type?: string | undefined;
+    private _type?: RealityType | undefined;
 
-    public get type(): string | undefined {
+    public get type(): RealityType | undefined {
         return this._type;
     }
 
-    public set type(value: string | undefined) {
+    public set type(value: RealityType | undefined) {
         this._type = value;
     }
 
-    private _adress?: string 
+    private _address?: string 
 
-    public get adress(): string | undefined {
-        return this._type;
+    public get address(): string | undefined {
+        return this._address;
     }
 
     public set adress(value: string | undefined) {
-        this._type = value;
+        this._address = value;
     }
 
     // public getInstance(id: string, area: number, type?: string | undefined): Reality {

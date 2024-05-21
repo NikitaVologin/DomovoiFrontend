@@ -47,19 +47,17 @@ export class AnnouncementBoardService implements IAnnouncementBoardService {
         });
     }
 
-    async postAnnouncement(announcement: Announcement, realityType: string, dealType: string): Promise<string> {
-        let url = "/Announcement/" + realityType + "/" + dealType;
-        
+    async postAnnouncement(announcement: Announcement): Promise<string> {
+        let url = "/Announcement"
+
         let data = {
             description: announcement.description,
             connectionType: announcement.connectionType,
-            dealInfo: announcement.deal,
-            realityInfo: announcement.reality,
-            counterAgentInfo: {
-                counterAgentId: announcement.counteragent.id 
-            }
+            dealInfo: this.dsads(this.toJsonString(announcement.deal)),
+            realityInfo: this.dsads(this.toJsonString(announcement.reality)),
+            counterAgentId: announcement.counteragent.id
         };
-
+        
         let response = await this._httpClient.post<string>(url, data).catch((error) => {
             throw (error);
         });
@@ -71,5 +69,18 @@ export class AnnouncementBoardService implements IAnnouncementBoardService {
         return new Promise((resolve, reject) => {
             reject(response);
         });
+    }
+
+    dsads(json: string) : any {
+        json = json.replace("_", "");
+        return JSON.parse(json);
+    }
+
+    toJsonString(data: any): string {
+        let json = JSON.stringify(data);
+        Object.keys(data).filter(key => key[0] === "_").forEach(key => {
+            json = json.replace(key, key.substring(1));
+        });
+        return json;
     }
 }

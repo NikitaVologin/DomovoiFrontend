@@ -3,7 +3,7 @@ import { AnnouncementViewModel } from "./AnnouncementViewModel";
 import { ReviewViewModel } from "./ReviewViewModel";
 
 export class CounteragentViewModel {
-	id:string = "";
+	id:string = "39e47bdd-7650-4a1c-bba3-24fcda780e3b";
 	FIO: string = "Иванов Иван Иванович";
 	email: string = "email@mail.ru";
 	phone?: string = "+79503217645";

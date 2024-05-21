@@ -7,8 +7,8 @@ export class AnnouncementViewModel {
 	counteragent: CounteragentViewModel = new CounteragentViewModel();
 	deal: DealViewModel = new DealViewModel();
 	reality: RealityViewModel = new RealityViewModel();
-	description?: string;
-	connectionType?: string;
+	description?: string = "ПРОДАМ ГЫ";
+	connectionType?: string = "По телефону давайте";
 
 	constructor(/* obj:Announcement */) {
 		// todo присвоение значений. либо можно в геттерах всё прописать,
