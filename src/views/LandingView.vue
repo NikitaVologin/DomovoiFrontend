@@ -5,7 +5,7 @@
 	<div class="title-inner content-width">
 		<div class="title__top-block">
 			<div class="title__top-block__account">
-				<a class="title__top-block__account__login" @click="loginFormShown=true">Войти</a>
+				<ProfileHeaderBlock @loginClick="loginFormShown=true"></ProfileHeaderBlock>
 			</div>
 		</div>
 		<div class="title__center">
@@ -25,9 +25,10 @@
 <script lang="ts">
 import { defineComponent } from 'vue';
 import LoginFormFullscreen from '../components/LoginFormFullscreen.vue';
+import ProfileHeaderBlock from '../components/ProfileHeaderBlock.vue';
 
 export default defineComponent({
-	components: { LoginFormFullscreen },
+	components: { LoginFormFullscreen, ProfileHeaderBlock },
 	data() {
 		return {
 			loginFormShown: false,

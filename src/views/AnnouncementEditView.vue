@@ -105,6 +105,7 @@ export default defineComponent({
 
 			let ac = container.resolve(AnnouncementController);
 			this.announcement.counteragent.id = ''
+			if (store.state.user) this.announcement.counteragent = store.state.user;
 			let response = await ac.postAnnouncement(this.announcement, RealityType.Office, DealType.Sell);
 			console.log(response);
 			// router.push('/profile');   // раскомментить когда всё заработает

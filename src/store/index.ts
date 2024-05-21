@@ -1,9 +1,11 @@
 import { InjectionKey } from 'vue'
 import { createStore, useStore as baseUseStore, Store } from 'vuex'
+import { CounteragentViewModel } from '../viewModel/CounteragentViewModel';
 
 export interface IRootState {
 	apiRoot: String,
-	realEstateParameterPickers: { [key: string]: Array<{caption:string,value:string|number|boolean}> }
+	realEstateParameterPickers: { [key: string]: Array<{caption:string,value:string|number|boolean}> },
+	user?: CounteragentViewModel,
 }
 
 export const key: InjectionKey<Store<IRootState>> = Symbol()
@@ -38,7 +40,7 @@ export default createStore<IRootState>({
 				{ value: 3, caption: '3'},
 				{ value: 4, caption: '4+'},
 			]
-		}
+		},
 	},
 	getters: {
 		

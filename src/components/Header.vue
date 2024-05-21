@@ -9,7 +9,7 @@
 			</div>
 		</div>
 		<div class="header__secondary">
-			<button @click="loginFormShown=true">Войти</button>
+			<ProfileHeaderBlock loginIsButton @loginClick="loginFormShown=true"></ProfileHeaderBlock>
 		</div>
 	</div>
 
@@ -21,9 +21,10 @@
 <script lang="ts">
 import { defineComponent } from 'vue';
 import LoginFormFullscreen from './LoginFormFullscreen.vue';
+import ProfileHeaderBlock from '../components/ProfileHeaderBlock.vue';
 
 export default defineComponent({
-	components: { LoginFormFullscreen },
+	components: { LoginFormFullscreen, ProfileHeaderBlock },
 	data() {
 		return {
 			loginFormShown: false,
