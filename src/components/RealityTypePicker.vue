@@ -2,7 +2,7 @@
 <div>
 	
 	<select>
-		<option value="">Квартира</option>
+		<option value="">Офис</option>
 	</select>
 </div>
 </template>

@@ -13,7 +13,7 @@
 			</div>
 			<div class="primary-parameters__item">
 				<div class="primary-parameters__item__caption">Тип недвижимости:</div>
-				<EstateTypePicker></EstateTypePicker>
+				<RealityTypePicker></RealityTypePicker>
 			</div>
 		</div>
 		<div class="address-picker card">
@@ -75,7 +75,7 @@ import "leaflet/dist/leaflet.css";
 import { LMap, LTileLayer } from "@vue-leaflet/vue-leaflet";
 import Header from "../components/Header.vue"
 import Picker from "../components/Picker.vue"
-import EstateTypePicker from "../components/EstateTypePicker.vue"
+import RealityTypePicker from "../components/RealityTypePicker.vue"
 import { container } from 'tsyringe';
 import { Announcement } from '../domain/announcements/announcement';
 import { AnnouncementController } from '../controllers/announcementContoller';
@@ -85,9 +85,10 @@ import { Office } from '../domain/realities/commercialBuildings/types/office';
 import { Rent } from '../domain/deals/rent/rent';
 import { CounterAgent } from '../domain/counteragents/counteragent';
 import { AnnouncementViewModel } from '../viewModel/AnnouncementViewModel';
+import { router } from '../router';
 
 export default defineComponent({
-	components: { Header, Picker, EstateTypePicker, LMap, LTileLayer },
+	components: { Header, Picker, RealityTypePicker, LMap, LTileLayer },
 	data() {
 		return {
 			store: store,
@@ -103,11 +104,10 @@ export default defineComponent({
 			// обращаться к созданному объекту AnnouncementViewModel через this.announcement
 
 			let ac = container.resolve(AnnouncementController);
-			//let counteragent = new CounterAgent();
-			//counteragent.id = "";
-			//let response = await ac.postAnnouncement(
-			//	Announcement.getInstance("", new Office(), new Rent(), counteragent, "", ""), RealityType.Office, DealType.Sell);
-			//console.log(response);
+			this.announcement.counteragent.id = ''
+			let response = await ac.postAnnouncement(this.announcement, RealityType.Office, DealType.Sell);
+			console.log(response);
+			// router.push('/profile');   // раскомментить когда всё заработает
 		}
 	},
 })

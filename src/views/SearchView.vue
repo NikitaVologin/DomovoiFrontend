@@ -40,7 +40,7 @@
 							<div class="search-head__card_filters__inputs__col__item">
 								<div class="search-head__card_filters__inputs__col__item__caption">Тип недвижимости:</div>
 								<div class="search-head__card_filters__inputs__col__item__inputs">
-									<EstateTypePicker></EstateTypePicker>
+									<RealityTypePicker></RealityTypePicker>
 								</div>
 							</div>
 						</div>
@@ -111,7 +111,7 @@ import "leaflet/dist/leaflet.css";
 import { LMap, LTileLayer } from "@vue-leaflet/vue-leaflet";
 import Header from "../components/Header.vue"
 import Picker from "../components/Picker.vue"
-import EstateTypePicker from "../components/EstateTypePicker.vue" 
+import RealityTypePicker from "../components/RealityTypePicker.vue" 
 import AnnouncementCard from "../components/AnnouncementCard.vue"
 import { AnnouncementViewModel } from "../viewModel/AnnouncementViewModel"
 import { container } from 'tsyringe';
@@ -127,7 +127,7 @@ interface FilterRange {
 }
 
 export default defineComponent({
-	components: { Header, Picker, EstateTypePicker, AnnouncementCard, LMap, LTileLayer },
+	components: { Header, Picker, RealityTypePicker, AnnouncementCard, LMap, LTileLayer },
 	data() {
 		return {
 			store: store,

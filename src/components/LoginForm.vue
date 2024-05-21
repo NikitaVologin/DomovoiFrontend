@@ -98,12 +98,12 @@ export default defineComponent({
 			console.log('submitLogin');
 			this.error = false;
 			let rc = container.resolve(ReceptionController);
-			console.log(await rc.authorize(this.loginData.email, this.loginData.password))
+			await rc.authorize(this.loginData.email, this.loginData.password)
 		},
 		async submitSignup() {
 			this.error = false;
 			let rc = container.resolve(ReceptionController);
-			console.log(await rc.registration("Physical", this.signupData.email, this.signupData.password))
+			await rc.registration("Physical", this.signupData.email, this.signupData.password)
 		},
 		
 		switchMode(mode:0|1) {
