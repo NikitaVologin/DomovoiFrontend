@@ -14,21 +14,21 @@ export default createStore<IRootState>({
 		realEstateParameterPickers: {
 			dealTypeForBusiness: [
 				{
-					value: 'buy',
+					value: 'Sell',
 					caption: 'Продажа'
 				},
 				{
-					value: 'lease',
+					value: 'Rent',
 					caption: 'Сдача в аренду'
 				},
 			],
 			dealTypeForCustomer: [
 				{
-					value: 'buy',
+					value: 'Sell',
 					caption: 'Покупка'
 				},
 				{
-					value: 'lease',
+					value: 'Rent',
 					caption: 'Аренда'
 				},
 			],

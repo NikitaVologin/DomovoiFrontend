@@ -8,7 +8,7 @@
 				<div class="primary-parameters__item__caption">Тип сделки:</div>
 				<Picker
 					:items="store.state.realEstateParameterPickers.dealTypeForBusiness"
-					@change="(val: any) => params.dealType = val"
+					@change="(val: any) => announcement.deal.dealType = val"
 				></Picker>
 			</div>
 			<div class="primary-parameters__item">
@@ -17,7 +17,7 @@
 			</div>
 		</div>
 		<div class="address-picker card">
-			<input type="text" class="address-picker__input" placeholder="Укажите адрес">
+			<input type="text" v-model="announcement.reality.address" class="address-picker__input" placeholder="Укажите адрес">
 			<div class="address-picker__map-wrapper">
 				<LMap
 					class="address-picker__map"
@@ -39,16 +39,24 @@
 				<div class="secondary-parameters__item__caption">Кол-во комнат:</div>
 				<Picker
 					:items="store.state.realEstateParameterPickers.roomsCount"
-					multiple=""
-					@change="{}"
+					@change="(val:number) => announcement.reality.roomsCount = val"
 				></Picker>
 			</div>
 			<div class="secondary-parameters__item">
 				<div class="secondary-parameters__item__caption">Площадь:</div>
 				<div class="secondary-parameters__item__inputs-row">
-					<input type="text" placeholder="Общая">
-					<input type="text" placeholder="Жилая">
-					<input type="text" placeholder="Кухня">
+					<div class="secondary-parameters__item__inputs-row__item">
+						<input type="text" placeholder="Общая" v-model="announcement.reality.area">
+						<span>м<sup>2</sup></span>
+					</div>
+					<div class="secondary-parameters__item__inputs-row__item" v-if="false">
+						<input type="text" placeholder="Жилая">
+						<span>м<sup>2</sup></span>
+					</div>
+					<div class="secondary-parameters__item__inputs-row__item" v-if="false">
+						<input type="text" placeholder="Кухня">
+						<span>м<sup>2</sup></span>
+					</div>
 				</div>
 			</div>
 		</div>
@@ -76,15 +84,18 @@ import { DealType } from '../domain/enums/dealType';
 import { Office } from '../domain/realities/commercialBuildings/types/office';
 import { Rent } from '../domain/deals/rent/rent';
 import { CounterAgent } from '../domain/counteragents/counteragent';
+import { AnnouncementViewModel } from '../viewModel/AnnouncementViewModel';
 
 export default defineComponent({
 	components: { Header, Picker, EstateTypePicker, LMap, LTileLayer },
 	data() {
 		return {
 			store: store,
-			params: {
-				dealType: DealType.Sell,
-			}
+			// params: {
+				
+			// 	dealType: DealType.Sell,
+			// }
+			announcement: new AnnouncementViewModel(),
 		}
 	},
 	computed: {
@@ -93,6 +104,8 @@ export default defineComponent({
 	},
 	methods: {
 		async submit() {
+			// обращаться к созданному объекту AnnouncementViewModel через this.announcement
+
 			let ac = container.resolve(AnnouncementController);
 			//let counteragent = new CounterAgent();
 			//counteragent.id = "";
@@ -164,10 +177,11 @@ main {
 	}
 	.secondary-parameters__item__inputs-row {
 		display: flex;
-		column-gap: .5rem;
+		column-gap: .7rem;
 		input {
 			width: 100px;
 			text-align: right;
+			margin-right: 2px;
 		}
 	}
 }
