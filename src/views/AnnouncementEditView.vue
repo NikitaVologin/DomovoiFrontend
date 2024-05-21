@@ -91,10 +91,6 @@ export default defineComponent({
 	data() {
 		return {
 			store: store,
-			// params: {
-				
-			// 	dealType: DealType.Sell,
-			// }
 			announcement: new AnnouncementViewModel(),
 		}
 	},
