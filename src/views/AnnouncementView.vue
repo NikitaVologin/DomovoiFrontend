@@ -6,23 +6,23 @@
 			<div class="info__gallery">
 				<div
 					class="info__gallery__shown-img"
-					:style="`background-image: url(${announcement.images[shownImageIndex]});`"
+					:style="`background-image: url(${announcement.reality.images[shownImageIndex]});`"
 				></div>
 				<Swiper
 					class="info__gallery__swiper"
-					@swiper="sw => swiper = sw"
+					@swiper="(sw:SwiperRef) => swiper = sw"
 					:modules="[ Scrollbar ]"
     				:scrollbar="{ draggable: true }"
 					slidesPerView="4"
 					spaceBetween="16"
 				>
 					<SwiperSlide
-						v-for="img,i in announcement.images"
+						v-for="img,i in announcement.reality.images"
 					>
 						<div
 							class="info__gallery__swiper__img"
 							:class="i == shownImageIndex ? 'info__gallery__swiper__img_shown' : ''"
-							:style="`background-image: url(${announcement.images[i]});`"
+							:style="`background-image: url(${announcement.reality.images[i]});`"
 							@click="showImage(i)"
 						></div>
 					</SwiperSlide>
@@ -38,13 +38,13 @@
 				</div>
 				<div class="info__text__props">
 					<div class="info__text__props-col">
-						<div class="info__text__props-col__item">{{ announcement.address }}</div>
-						<div class="info__text__props-col__item">{{ announcement.price }}₽</div>
+						<div class="info__text__props-col__item">{{ announcement.reality.address }}</div>
+						<div class="info__text__props-col__item">{{ announcement.deal.price }}₽</div>
 					</div>
 					<div class="info__text__props-col">
-						<div class="info__text__props-col__item" v-if="announcement.floor !== undefined">Этаж: {{ announcement.floor }}</div>
-						<div class="info__text__props-col__item" v-if="announcement.roomCount !== undefined">Комнат: {{ announcement.roomCount }}</div>
-						<div class="info__text__props-col__item">{{ announcement.area }} м2</div>
+						<div class="info__text__props-col__item" v-if="announcement.reality.floor !== undefined">Этаж: {{ announcement.reality.floor }}</div>
+						<div class="info__text__props-col__item" v-if="announcement.reality.roomCount !== undefined">Комнат: {{ announcement.reality.roomCount }}</div>
+						<div class="info__text__props-col__item">{{ announcement.reality.area }} м2</div>
 					</div>
 					
 				</div>

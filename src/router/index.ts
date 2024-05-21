@@ -27,6 +27,11 @@ const routes = [
 		component: AnnouncementEditView
 	},
 	{
+		path: '/editAnnouncement',
+		name: 'editAnnouncementNew',
+		redirect: { path: '/editAnnouncement/0' }
+	},
+	{
 		path: '/announcement/:id',
 		name: 'announcement',
 		component: AnnouncementView
