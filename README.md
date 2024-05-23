@@ -22,5 +22,5 @@ Legal "0715a242-e05a-4906-a508-b28cd96ac474"
 Пароль: 123456
 
 Physical "31518932-1c49-4397-8b2d-63bab308fd12"
-124@mail.ru
-Pudge
+Почта: 124@mail.ru
+Пароль: Pudge
