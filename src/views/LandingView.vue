@@ -12,7 +12,7 @@
 			<h1 class="title__center__header">ДОМОВОЙ</h1>
 			<div class="title__center__subheader">Аренда и продажа недвижимости</div>
 			<div class="title__center__buttons">
-				<button class="title__center__buttons__item" @click="loginFormShown=true">Хочу продать / сдать</button>
+				<button class="title__center__buttons__item" @click="sellerButtonClick">Хочу продать / сдать</button>
 				<button class="title__center__buttons__item" @click="$router.push('search')">Хочу купить / снять</button>
 			</div>
 		</div>
@@ -26,6 +26,8 @@
 import { defineComponent } from 'vue';
 import LoginFormFullscreen from '../components/LoginFormFullscreen.vue';
 import ProfileHeaderBlock from '../components/ProfileHeaderBlock.vue';
+import { router } from '../router';
+import store from '../store';
 
 export default defineComponent({
 	components: { LoginFormFullscreen, ProfileHeaderBlock },
@@ -39,6 +41,10 @@ export default defineComponent({
 	mounted() {
 	},
 	methods: {
+		sellerButtonClick() {
+			if (!store.state.user) this.loginFormShown=true;
+			else router.push('/profile');
+		}
 	},
 })
 </script>

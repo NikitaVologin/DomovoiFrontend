@@ -20,7 +20,7 @@ export default createStore<IRootState>({
 					caption: 'Продажа'
 				},
 				{
-					value: 'Rent',
+					value: 'Rell',
 					caption: 'Сдача в аренду'
 				},
 			],
@@ -30,7 +30,7 @@ export default createStore<IRootState>({
 					caption: 'Покупка'
 				},
 				{
-					value: 'Rent',
+					value: 'Rell',
 					caption: 'Аренда'
 				},
 			],

@@ -3,20 +3,20 @@
     <div
         class="profile-block__logged-out"
         :class="loginIsButton ? 'button-style' : ''"
-        v-if="!$store.state.user"
+        v-if="!store.state.user"
         @click="$emit('loginClick')"
     >
         Войти
     </div>
-    <div class="profile-block__logged-in" v-if="$store.state.user">
+    <div class="profile-block__logged-in" v-if="store.state.user">
         <div class="profile-block__logged-in__title" @click="popupShown = !popupShown">
-            <div class="profile-block__logged-in__title__name">{{$store.state.user.FIO}}</div>
-            <div class="profile-block__logged-in__title__avatar" :style="`background-image: url('${$store.state.user.avatar}'`"></div>
+            <div class="profile-block__logged-in__title__name">{{store.state.user.FIO}}</div>
+            <div class="profile-block__logged-in__title__avatar" :style="`background-image: url('${store.state.user.avatar}'`"></div>
         </div>
         <transition name="popup-transition">
             <div class="profile-block__logged-in__popup" v-if="popupShown">
                 <div class="profile-block__logged-in__popup__list-item" @click="router.push('/profile')">Профиль</div>
-                <div class="profile-block__logged-in__popup__list-item" @click="$store.state.user = undefined">Выйти</div>
+                <div class="profile-block__logged-in__popup__list-item" @click="store.state.user = undefined">Выйти</div>
             </div>
         </transition>
     </div>
@@ -26,6 +26,7 @@
 <script lang="ts">
 import { defineComponent } from 'vue';
 import { router } from '../router';
+import store from '../store';
 
 export default defineComponent({
     components: {
@@ -38,6 +39,7 @@ export default defineComponent({
     data() {
         return {
             router: router,
+            store: store,
             popupShown: false,
         }
     },
@@ -88,6 +90,7 @@ export default defineComponent({
         display: flex;
         flex-direction: column;
         background: #fff;
+		z-index: 10;
         .profile-block__logged-in__popup__list-item {
             cursor: pointer;
             padding: .5rem;

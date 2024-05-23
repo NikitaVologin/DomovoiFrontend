@@ -34,25 +34,26 @@
 								<div class="search-head__card_filters__inputs__col__item__caption">Тип сделки:</div>
 								<Picker
 									:items="store.state.realEstateParameterPickers.dealTypeForCustomer"
+									:defaultValue="'Sell'"
 									@change="(val:any) => head.filters.dealType = val"
 								></Picker>
 							</div>
 							<div class="search-head__card_filters__inputs__col__item">
 								<div class="search-head__card_filters__inputs__col__item__caption">Тип недвижимости:</div>
 								<div class="search-head__card_filters__inputs__col__item__inputs">
-									<RealityTypePicker></RealityTypePicker>
+									<RealityTypePicker @change="(val:string) => {head.filters.realityType = val;console.log(head.filters.realityType);}"></RealityTypePicker>
 								</div>
 							</div>
 						</div>
 						<div class="search-head__card_filters__inputs__col">
-							<div class="search-head__card_filters__inputs__col__item">
-								<div class="search-head__card_filters__inputs__col__item__caption">Цена, рублей:</div>
-								<div class="search-head__card_filters__inputs__col__item__inputs">
-									<input type="number" v-model="head.filters.price.from" class="input-number_medium search-head__card_filters__inputs__col__item__inputs__item" placeholder="от">
-									<div class="search-head__card_filters__inputs__col__item__inputs__dash">—</div>
-									<input type="number" v-model="head.filters.price.to" class="input-number_medium search-head__card_filters__inputs__col__item__inputs__item" placeholder="до">
-								</div>
-							</div>
+							<RangeFilter class="search-head__card_filters__inputs__col__item"
+								caption="Цена, рублей" fieldsSize="medium"
+								@change="(obj:FilterRange) => head.filters.price = obj"
+							/>
+							<RangeFilter class="search-head__card_filters__inputs__col__item"
+								caption="Площадь, м2" fieldsSize="short"
+								@change="(obj:FilterRange) => head.filters.area = obj"
+							/>
 							<div class="search-head__card_filters__inputs__col__item">
 								<div class="search-head__card_filters__inputs__col__item__caption">Кол-во комнат:</div>
 								<Picker
@@ -61,17 +62,68 @@
 									@change="(val:any) => head.filters.roomsCount = val"
 								></Picker>
 							</div>
-							<div class="search-head__card_filters__inputs__col__item">
-								<div class="search-head__card_filters__inputs__col__item__caption">Площадь, м2:</div>
-								<div class="search-head__card_filters__inputs__col__item__inputs">
-									<input type="number" v-model="head.filters.area.from" class="input-number_short search-head__card_filters__inputs__col__item__inputs__item" placeholder="от">
-									<div class="search-head__card_filters__inputs__col__item__inputs__dash">—</div>
-									<input type="number" v-model="head.filters.area.to" class="input-number_short search-head__card_filters__inputs__col__item__inputs__item" placeholder="до">
-								</div>
-							</div>
+						</div>
+						<div v-if="head.filters.dealType == ('Rell' as DealType) && head.filters.realityType == 'Flat'"
+							class="search-head__card_filters__inputs__col search-head__card_filters__inputs__col_with-checkboxes"
+						>
+							<label class="search-head__card_filters__inputs__col__item search-head__card_filters__inputs__col__item_with-checkbox" for="with-animals-checkbox">
+								<input type="checkbox" id="with-animals-checkbox" v-model="head.filters.withAnimals">
+								<span>Можно с животными</span>
+							</label>
+							<label class="search-head__card_filters__inputs__col__item search-head__card_filters__inputs__col__item_with-checkbox" for="with-kids-checkbox">
+								<input type="checkbox" id="with-kids-checkbox" v-model="head.filters.withChildren">
+								<span>Можно с детьми</span>
+							</label>
+							<label class="search-head__card_filters__inputs__col__item search-head__card_filters__inputs__col__item_with-checkbox" for="can-smoke-checkbox">
+								<input type="checkbox" id="can-smoke-checkbox" v-model="head.filters.canSmoke">
+								<span>Можно курить</span>
+							</label>
+						</div>
+						<div v-if="head.filters.realityType == 'CommercialBuilding'"
+							class="search-head__card_filters__inputs__col search-head__card_filters__inputs__col_with-checkboxes"
+						>
+							<label class="search-head__card_filters__inputs__col__item search-head__card_filters__inputs__col__item_with-checkbox" for="with-animals-checkbox">
+								<input type="checkbox" id="with-animals-checkbox" v-model="head.filters.haveParking">
+								<span>Есть парковка</span>
+							</label>
+							<label class="search-head__card_filters__inputs__col__item search-head__card_filters__inputs__col__item_with-checkbox" for="with-kids-checkbox">
+								<input type="checkbox" id="with-kids-checkbox" v-model="head.filters.entry">
+								<span>entry</span>
+							</label>
+							<label class="search-head__card_filters__inputs__col__item search-head__card_filters__inputs__col__item_with-checkbox" for="can-smoke-checkbox">
+								<input type="checkbox" id="can-smoke-checkbox" v-model="head.filters.isUse">
+								<span>isUse</span>
+							</label>
+							<label class="search-head__card_filters__inputs__col__item search-head__card_filters__inputs__col__item_with-checkbox" for="can-smoke-checkbox">
+								<input type="checkbox" id="can-smoke-checkbox" v-model="head.filters.isAccess">
+								<span>isAccess</span>
+							</label>
 						</div>
 					</div>
-					<input type="submit" value="Найти" @click="submitSearch">
+					<div class="search-head__card_filters__more-filters"
+						@click="head.moreFiltersShown=!head.moreFiltersShown"
+						v-if="head.filters.realityType != 'CommercialBuilding'"
+					>
+						<div class="search-head__card_filters__more-filters__inner">
+							{{ head.moreFiltersShown ? 'Меньше' : 'Больше' }} фильтров
+						</div>
+					</div>
+					<div class="search-head__card_filters__inputs search-head__card_filters__inputs_more" v-if="head.moreFiltersShown">
+						<div class="search-head__card_filters__inputs__col">
+							<RangeFilter class="search-head__card_filters__inputs__col__item"
+								caption="Жилая площадь, м2" fieldsSize="medium"
+								@change="(obj:FilterRange) => head.filters.livingArea = obj"
+							/>
+							<RangeFilter class="search-head__card_filters__inputs__col__item"
+								caption="Кухня, м2" fieldsSize="medium"
+								@change="(obj:FilterRange) => head.filters.kitchenArea = obj"
+							/>
+						</div>
+						<div class="search-head__card_filters__inputs__col search-head__card_filters__inputs__col_with-checkboxes">
+							
+						</div>
+					</div>
+					<input type="submit" class="search-head__card_filters__submit" value="Найти" @click="submitSearch">
 				</div>
 				<div class="search-head__card search-head__card_map card" v-if="head.mapShown">
 					<keep-alive>
@@ -94,7 +146,7 @@
 		</div>
 
 		<div class="search-announcements">
-			<h2 class="search-announcements__header">Все объявления</h2>
+			<h2 class="search-announcements__header" v-if="announcementCards.length > 0">Все объявления</h2>
 			<div class="search-announcements__list">
 				<AnnouncementCard v-for="annCard in announcementCards" :announcement="annCard"></AnnouncementCard>
 			</div>
@@ -111,13 +163,14 @@ import "leaflet/dist/leaflet.css";
 import { LMap, LTileLayer } from "@vue-leaflet/vue-leaflet";
 import Header from "../components/Header.vue"
 import Picker from "../components/Picker.vue"
+import RangeFilter from "../components/RangeFilter.vue"
 import RealityTypePicker from "../components/RealityTypePicker.vue" 
 import AnnouncementCard from "../components/AnnouncementCard.vue"
 import { AnnouncementViewModel } from "../viewModel/AnnouncementViewModel"
 import { container } from 'tsyringe';
 import { AnnouncementController } from '../controllers/announcementContoller';
-
-type DealType = "buy"|"lease";
+import { DealType } from '../domain/enums/dealType';
+import { filter, head } from 'lodash';
 
 type TabName = "filters"|"map";
 
@@ -127,24 +180,36 @@ interface FilterRange {
 }
 
 export default defineComponent({
-	components: { Header, Picker, RealityTypePicker, AnnouncementCard, LMap, LTileLayer },
+	components: { Header, Picker, RangeFilter, RealityTypePicker, AnnouncementCard, LMap, LTileLayer },
 	data() {
 		return {
 			store: store,
+			DealType: DealType,
 			head: {
 				filtersShown: true,
-				mapShown: true,
+				mapShown: false,
+				moreFiltersShown: false,
 				filters: {
-					dealType: "buy" as DealType,
+					dealType: DealType.Sell,
+					realityType: "Flat" as "Flat"|"CommercialBuilding",
 					price: {} as FilterRange,
 					roomsCount: [] as number[],
 					area: {} as FilterRange,
+					withAnimals: false,
+					withChildren: false,
+					canSmoke: false,
+					haveParking: false,
+					entry: false,
+					isUse: false,
+					isAccess: false,
+					livingArea: {} as FilterRange,
+					kitchenArea: {} as FilterRange,
 				}
 			},
 			map: {
 				zoom: 13.5,
 			},
-			announcementCards: [] as Array<AnnouncementViewModel>
+			announcementCards: [] as Array<AnnouncementViewModel>,
 		}
 	},
 	methods: {
@@ -212,10 +277,11 @@ export default defineComponent({
 				.search-head__card_filters__inputs {
 					display: flex;
 					column-gap: 3rem;
+
 					.search-head__card_filters__inputs__col {
 						display: flex;
 						flex-direction: column;
-						row-gap: 1.5rem;
+						row-gap: 1rem;
 		
 						.search-head__card_filters__inputs__col__item {
 							display: flex;
@@ -249,8 +315,44 @@ export default defineComponent({
 									}
 								}
 							}
+
+							&.search-head__card_filters__inputs__col__item_with-checkbox {
+								display: flex;
+								align-items: center;
+								column-gap: .4rem;
+								font-size: 0.95rem;
+								&, & * {
+									cursor: pointer;
+								}
+							}
+						}
+
+						&.search-head__card_filters__inputs__col_with-checkboxes {
+							row-gap: 1rem;
 						}
 					}
+
+					&.search-head__card_filters__inputs_more {
+						margin-top: 1.5rem;
+					}
+				}
+
+				.search-head__card_filters__more-filters {
+					cursor: pointer;
+					font-size: 0.95em;
+					color: #555;
+					margin-bottom: 0.5rem;
+					.search-head__card_filters__more-filters__inner {
+						display: inline-block;
+						text-decoration: underline;
+						// padding: 0.3rem .6rem;
+						// background: #eee;
+						// border-radius: 10px;
+					}
+				}
+
+				.search-head__card_filters__submit {
+					margin-top: 1rem;
 				}
 			}
 	

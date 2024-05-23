@@ -6,15 +6,15 @@
 		<input type="email" placeholder="E-mail" v-model="loginData.email" @input="error=false" required name="loginName">
 		<input type="password" placeholder="Пароль" v-model="loginData.password" @input="error=false" required name="loginPass">
 		<input type="submit" value="Войти" :disabled="submitButtonDisabled">
-		<span class="error-message" v-if="error">Неверные данные!</span>
+		<span class="error-message" v-if="error">Ошибка авторизации</span>
 	</div>
 
 	<div class="inputs-container" v-if="mode==1">
-		<input type="email" placeholder="E-mail" v-model="signupData.email" @input="checkUserExists" required autocomplete="off">
-		<input type="password" placeholder="Пароль" v-model="signupData.password" required readonly onfocus="this.removeAttribute('readonly')">
+		<input type="email" placeholder="E-mail" v-model="signupData.email" @input="error=false; checkUserExists()" required autocomplete="off">
+		<input type="password" placeholder="Пароль" v-model="signupData.password" @input="error=false" required>
 		<input type="submit" value="Зарегистрироваться" :disabled="submitButtonDisabled">
 		<span class="error-message" v-if="userExists===true">Пользователь с этой почтой уже существует</span>
-		<span class="error-message" v-else-if="error">Произошла ошибка</span>
+		<span class="error-message" v-else-if="error">Ошибка регистрации</span>
 	</div>
 
 	<div class="tip" v-if="mode==0">
@@ -41,9 +41,10 @@ import store from '../store';
 
 export default defineComponent({
 	components: { },
+	emits: [ 'success' ],
 	data() {
 		return {
-			mode: 1 as 0|1, // 0 - login, 1 - signup
+			mode: 0 as 0|1, // 0 - login, 1 - signup
 			loginData: { email: "", password: "" },
 			signupData: { email: "", password: "" },
 			userExists: "unchecked" as Boolean|"unchecked",
@@ -100,7 +101,10 @@ export default defineComponent({
 			let rc = container.resolve(ReceptionController);
 			rc.authorize(this.loginData.email, this.loginData.password).then(res => {
 				store.state.user = res;
+				this.$emit('success');
 				router.push('/profile')
+			}).catch(err => {
+				this.error = true;
 			})
 		},
 		async submitSignup() {
@@ -108,7 +112,10 @@ export default defineComponent({
 			let rc = container.resolve(ReceptionController);
 			rc.registration("Physical", this.signupData.email, this.signupData.password).then(res => {
 				store.state.user = res;
+				this.$emit('success');
 				router.push('/profile')
+			}).catch(err => {
+				this.error = true;
 			})
 		},
 		
@@ -174,6 +181,7 @@ option {
 .error-message {
 	margin-bottom: 10px;
 	font-size: 0.85rem;
+	color: #f22;
 }
 
 @media screen and (max-width: 480px) {
