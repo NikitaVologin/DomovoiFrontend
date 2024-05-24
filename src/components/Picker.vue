@@ -40,6 +40,9 @@ export default defineComponent({
 			required: true
 		},
 		multiple: Boolean,
+		defaultValue: {
+			type: [String, Number, Boolean],
+		}
 	},
 	emits: [ 'change' ],
 	data() {
@@ -53,6 +56,9 @@ export default defineComponent({
 	},
 	mounted() {
 		this.rnd = Math.random();
+		if (this.defaultValue) {
+			this.pickedValue = this.defaultValue;
+		}
 	},
 	methods: {
 		pickedStyleOn(i:number) {
@@ -82,7 +88,7 @@ export default defineComponent({
 			border-color: #444;
 		}
 		&:not(&_checked) {
-			margin: 1px 0;
+			margin: 1px 1px;
 		}
 	}
 }

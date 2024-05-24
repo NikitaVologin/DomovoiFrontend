@@ -2,7 +2,7 @@
 <teleport to='body'>
 	<transition name="login-form-transition">
 		<div class="login-form-bg" v-if="shown" @click.self="$emit('close')">
-			<LoginForm></LoginForm>
+			<LoginForm @success="$emit('close')"></LoginForm>
 		</div>
 	</transition>
 </teleport>

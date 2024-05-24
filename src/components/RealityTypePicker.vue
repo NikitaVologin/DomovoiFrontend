@@ -1,8 +1,8 @@
 <template>
 <div>
-	
-	<select>
-		<option value="">Офис</option>
+	<select v-model="value">
+		<option :value="'Flat'">Квартира</option>
+		<option :value="'CommercialBuilding'">Коммерческая</option>
 	</select>
 </div>
 </template>
@@ -15,6 +15,13 @@ export default defineComponent({
 	components: { },
 	data() {
 		return {
+			value: 'Flat'
+		}
+	},
+	emits: [ 'change' ],
+	watch: {
+		value(newValue) {
+			this.$emit('change', newValue);
 		}
 	},
 	computed: {
@@ -22,6 +29,9 @@ export default defineComponent({
 	mounted() {
 	},
 	methods: {
+		changeEvent(evt:Event) {
+			
+		}
 	},
 })
 </script>
