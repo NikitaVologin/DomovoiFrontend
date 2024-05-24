@@ -8,12 +8,18 @@
 				<div class="primary-parameters__item__caption">Тип сделки:</div>
 				<Picker
 					:items="store.state.realEstateParameterPickers.dealTypeForBusiness"
-					@change="(val: any) => announcement.deal.dealType = val"
+					:defaultValue="(announcement.deal.dealType as String)"
+					@change="dealTypeChange"
 				></Picker>
 			</div>
 			<div class="primary-parameters__item">
 				<div class="primary-parameters__item__caption">Тип недвижимости:</div>
-				<RealityTypePicker></RealityTypePicker>
+				<RealityTypePicker @change=""></RealityTypePicker>
+			</div>
+			<div class="primary-parameters__item">
+				<div class="primary-parameters__item__caption">Цена:</div>
+				<input type="number" class="input-number_medium" v-model="announcement.deal.price">
+				<span>₽</span>
 			</div>
 		</div>
 		<div class="address-picker card">
@@ -35,28 +41,149 @@
 			</div>
 		</div>
 		<div class="secondary-parameters card">
-			<div class="secondary-parameters__item">
-				<div class="secondary-parameters__item__caption">Кол-во комнат:</div>
-				<Picker
-					:items="store.state.realEstateParameterPickers.roomsCount"
-					@change="(val:number) => announcement.reality.roomsCount = val"
-				></Picker>
+			<div class="secondary-parameters__block">
+				<div class="secondary-parameters__block__col">
+					<div class="secondary-parameters__block__col__item">
+						<div class="secondary-parameters__block__col__item__caption">Площадь:</div>
+						<div class="secondary-parameters__block__col__item__inputs-row">
+							<div class="secondary-parameters__block__col__item__inputs-row__item">
+								<input type="text" placeholder="Общая" v-model="announcement.reality.area">
+								<span>м<sup>2</sup></span>
+							</div>
+							<div class="secondary-parameters__block__col__item__inputs-row__item" v-if="additionalAreasShown">
+								<input type="text" placeholder="Жилая">
+								<span>м<sup>2</sup></span>
+							</div>
+							<div class="secondary-parameters__block__col__item__inputs-row__item" v-if="additionalAreasShown">
+								<input type="text" placeholder="Кухня">
+								<span>м<sup>2</sup></span>
+							</div>
+						</div>
+					</div>
+				</div>
 			</div>
-			<div class="secondary-parameters__item">
-				<div class="secondary-parameters__item__caption">Площадь:</div>
-				<div class="secondary-parameters__item__inputs-row">
-					<div class="secondary-parameters__item__inputs-row__item">
-						<input type="text" placeholder="Общая" v-model="announcement.reality.area">
-						<span>м<sup>2</sup></span>
+			<div class="secondary-parameters__block">
+				<div class="secondary-parameters__block__col">
+					<div class="secondary-parameters__block__col__item">
+						<div class="secondary-parameters__block__col__item__caption">Кол-во комнат:</div>
+						<Picker
+							:items="store.state.realEstateParameterPickers.roomsCount"
+							@change="(val:number) => announcement.reality.roomsCount = val"
+						></Picker>
 					</div>
-					<div class="secondary-parameters__item__inputs-row__item" v-if="false">
-						<input type="text" placeholder="Жилая">
-						<span>м<sup>2</sup></span>
+					<div class="secondary-parameters__block__col__item">
+						<div class="secondary-parameters__block__col__item__caption">Этаж:</div>
+						<div class="secondary-parameters__block__col__item__inputs-row">
+							<div class="secondary-parameters__block__col__item__inputs-row__item">
+								<input type="number" class="input-number_tiny" v-model="announcement.reality.floor">
+								<span>из</span>
+								<input type="number" class="input-number_tiny" v-model="announcement.reality.totalFloorsInBuilding">
+							</div>
+						</div>
 					</div>
-					<div class="secondary-parameters__item__inputs-row__item" v-if="false">
-						<input type="text" placeholder="Кухня">
-						<span>м<sup>2</sup></span>
+					<div class="secondary-parameters__block__col__item" v-if="announcement.deal.dealType == 'Rell'">
+						<div class="secondary-parameters__block__col__item__caption">Период:</div>
+						<div class="secondary-parameters__block__col__item__inputs-row">
+							<div class="secondary-parameters__block__col__item__inputs-row__item">
+								<input type="number" class="input-number_tiny" v-model="announcement.deal.rentConditions.period">
+								<span>месяцев</span>
+							</div>
+						</div>
 					</div>
+				</div>
+				<div class="secondary-parameters__block__col" v-if="announcement.deal.dealType == 'Rell'">
+					<div class="secondary-parameters__block__col__item">
+						<div class="secondary-parameters__block__col__item__caption">Коммунальные платежи:</div>
+						<div class="secondary-parameters__block__col__item__inputs-row">
+							<div class="secondary-parameters__block__col__item__inputs-row__item">
+								<input type="number" class="input-number_short" placeholder="0" v-model="announcement.deal.rentConditions.communalPays">
+								<span>₽</span>
+							</div>
+						</div>
+					</div>
+					<div class="secondary-parameters__block__col__item">
+						<div class="secondary-parameters__block__col__item__caption">Залог:</div>
+						<div class="secondary-parameters__block__col__item__inputs-row">
+							<div class="secondary-parameters__block__col__item__inputs-row__item">
+								<input type="number" class="input-number_short" placeholder="0" v-model="announcement.deal.rentConditions.deposit">
+								<span>₽</span>
+							</div>
+						</div>
+					</div>
+					<div class="secondary-parameters__block__col__item">
+						<div class="secondary-parameters__block__col__item__caption">Предоплата:</div>
+						<div class="secondary-parameters__block__col__item__inputs-row">
+							<div class="secondary-parameters__block__col__item__inputs-row__item">
+								<input type="number" class="input-number_short" placeholder="0" v-model="announcement.deal.rentConditions.prepay">
+								<span>₽</span>
+							</div>
+						</div>
+					</div>
+				</div>
+				<div class="secondary-parameters__block__col" v-if="announcement.deal.dealType == 'Sell'">
+					<div class="secondary-parameters__block__col__item">
+						<div class="secondary-parameters__block__col__item__caption">Предыдущих владельцев:</div>
+						<div class="secondary-parameters__block__col__item__inputs-row">
+							<div class="secondary-parameters__block__col__item__inputs-row__item">
+								<input type="number" class="input-number_short" placeholder="0" v-model="announcement.deal.sellConditions.ownersCount">
+								<span>чел.</span>
+							</div>
+						</div>
+					</div>
+					<div class="secondary-parameters__block__col__item">
+						<div class="secondary-parameters__block__col__item__caption">В моём владении:</div>
+						<div class="secondary-parameters__block__col__item__inputs-row">
+							<div class="secondary-parameters__block__col__item__inputs-row__item">
+								<input type="number" class="input-number_short" placeholder="0" v-model="announcement.deal.sellConditions.yearInOwn">
+								<span>лет</span>
+							</div>
+						</div>
+					</div>
+					<div class="secondary-parameters__block__col__item">
+						<div class="secondary-parameters__block__col__item__caption">prescribersCount:</div>
+						<div class="secondary-parameters__block__col__item__inputs-row">
+							<div class="secondary-parameters__block__col__item__inputs-row__item">
+								<input type="number" class="input-number_short" placeholder="0" v-model="announcement.deal.sellConditions.prescribersCount">
+								<span></span>
+							</div>
+						</div>
+					</div>
+				</div>
+				<div class="secondary-parameters__block__col secondary-parameters__block__col_with-checkboxes"
+					v-if="announcement.deal.dealType == ('Rell' as DealType) && announcement.reality.realityType == 'Flat'"
+				>
+					<label class="secondary-parameters__block__col__item secondary-parameters__block__col__item_with-checkbox" for="with-animals-checkbox">
+						<input type="checkbox" id="with-animals-checkbox" v-model="announcement.deal.rentConditions.withAnimals">
+						<span>Можно с животными</span>
+					</label>
+					<label class="secondary-parameters__block__col__item secondary-parameters__block__col__item_with-checkbox" for="with-kids-checkbox">
+						<input type="checkbox" id="with-kids-checkbox" v-model="announcement.deal.rentConditions.withChildren">
+						<span>Можно с детьми</span>
+					</label>
+					<label class="secondary-parameters__block__col__item secondary-parameters__block__col__item_with-checkbox" for="can-smoke-checkbox">
+						<input type="checkbox" id="can-smoke-checkbox" v-model="announcement.deal.rentConditions.canSmoke">
+						<span>Можно курить</span>
+					</label>
+				</div>
+				<div v-if="announcement.reality.realityType == 'Office'"
+					class="secondary-parameters__block__col secondary-parameters__block__col_with-checkboxes"
+				>
+					<label class="secondary-parameters__block__col__item secondary-parameters__block__col__item_with-checkbox" for="with-animals-checkbox">
+						<input type="checkbox" id="with-animals-checkbox" v-model="announcement.reality.haveParking">
+						<span>Есть парковка</span>
+					</label>
+					<label class="secondary-parameters__block__col__item secondary-parameters__block__col__item_with-checkbox" for="with-kids-checkbox">
+						<input type="checkbox" id="with-kids-checkbox" v-model="announcement.reality.entry">
+						<span>entry</span>
+					</label>
+					<label class="secondary-parameters__block__col__item secondary-parameters__block__col__item_with-checkbox" for="can-smoke-checkbox">
+						<input type="checkbox" id="can-smoke-checkbox" v-model="announcement.reality.isUse">
+						<span>isUse</span>
+					</label>
+					<label class="secondary-parameters__block__col__item secondary-parameters__block__col__item_with-checkbox" for="can-smoke-checkbox">
+						<input type="checkbox" id="can-smoke-checkbox" v-model="announcement.reality.isAccess">
+						<span>isAccess</span>
+					</label>
 				</div>
 			</div>
 		</div>
@@ -86,26 +213,46 @@ import { Rent } from '../domain/deals/rent/rent';
 import { CounterAgent } from '../domain/counteragents/counteragent';
 import { AnnouncementViewModel } from '../viewModel/AnnouncementViewModel';
 import { router } from '../router';
+import { RentConditionsViewModel } from '../viewModel/RentConditionsViewModel';
+import { SellConditionsViewModel } from '../viewModel/SellConditionsViewModel';
 
 export default defineComponent({
 	components: { Header, Picker, RealityTypePicker, LMap, LTileLayer },
 	data() {
 		return {
 			store: store,
+			DealType: DealType,
 			announcement: new AnnouncementViewModel(),
 		}
 	},
 	computed: {
+		additionalAreasShown() {
+			return this.announcement.reality.realityType != 'Office'
+		}
 	},
-	mounted() {
+	beforeMount() {
+		if (this.announcement.deal.dealType == DealType.Rell)
+			 this.announcement.deal.rentConditions = new RentConditionsViewModel();
+		else this.announcement.deal.sellConditions = new SellConditionsViewModel();
 	},
 	methods: {
+		dealTypeChange(val:String) {
+			this.announcement.deal.dealType = val as DealType;
+			if (this.announcement.deal.dealType == DealType.Rell) {
+				this.announcement.deal.rentConditions = new RentConditionsViewModel();
+				this.announcement.deal.sellConditions = undefined;
+			}
+			else {
+				this.announcement.deal.rentConditions = undefined;
+				this.announcement.deal.sellConditions = new SellConditionsViewModel();
+			}
+		},
 		async submit() {
 			// обращаться к созданному объекту AnnouncementViewModel через this.announcement
 
 			let ac = container.resolve(AnnouncementController);
 			this.announcement.counteragent.id = "485154bb-a246-4924-8d17-533083f32bc0";
-			let response = await ac.postAnnouncement(this.announcement, RealityType.Office, DealType.Sell);
+			let response = await ac.postAnnouncement(this.announcement/* , RealityType.Office, DealType.Sell */);
 			console.log(response);
 			// router.push('/profile');   // раскомментить когда всё заработает
 		}
@@ -132,6 +279,9 @@ main {
 			font-weight: 400;
 			opacity: 0.975;
 			margin-bottom: 0.5rem;
+		}
+		input {
+			text-align: right;
 		}
 	}
 }
@@ -163,21 +313,52 @@ main {
 .secondary-parameters {
 	display: flex;
 	flex-direction: column;
-	row-gap: 2rem;
-	.secondary-parameters__item {
-		.secondary-parameters__item__caption {
-			font-weight: 400;
-			opacity: 0.975;
-			margin-bottom: 0.5rem;
-		}
-	}
-	.secondary-parameters__item__inputs-row {
+	row-gap: 1.5rem;
+
+	.secondary-parameters__block {
 		display: flex;
-		column-gap: .7rem;
-		input {
-			width: 100px;
-			text-align: right;
-			margin-right: 2px;
+		align-items: flex-start;
+		column-gap: 5rem;
+
+		.secondary-parameters__block__col {
+			display: flex;
+			flex-direction: column;
+			row-gap: 1rem;
+
+			&.secondary-parameters__block__col_with-checkboxes {
+				padding-top: 1rem;
+				row-gap: .75rem;
+			}
+			
+			.secondary-parameters__block__col__item {
+				.secondary-parameters__block__col__item__caption {
+					font-weight: 400;
+					opacity: 0.975;
+					margin-bottom: 0.25rem;
+				}
+				&.secondary-parameters__block__col__item_with-checkbox {
+					display: flex;
+					align-items: center;
+					column-gap: .4rem;
+					font-size: 0.95rem;
+					&, & * {
+						cursor: pointer;
+					}
+				}
+			}
+			.secondary-parameters__block__col__item__inputs-row {
+				display: flex;
+				column-gap: .7rem;
+				input {
+					width: 100px;
+					text-align: right;
+				}
+				.secondary-parameters__block__col__item__inputs-row__item {
+					display: flex;
+					align-items: baseline;
+					column-gap: 5px;
+				}
+			}
 		}
 	}
 }

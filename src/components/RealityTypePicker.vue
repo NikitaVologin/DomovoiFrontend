@@ -1,8 +1,8 @@
 <template>
 <div>
 	<select v-model="value">
-		<option :value="'Flat'">Квартира</option>
 		<option :value="'CommercialBuilding'">Коммерческая</option>
+		<!-- <option :value="'Flat'">Квартира</option> -->
 	</select>
 </div>
 </template>
@@ -15,7 +15,7 @@ export default defineComponent({
 	components: { },
 	data() {
 		return {
-			value: 'Flat'
+			value: 'CommercialBuilding'
 		}
 	},
 	emits: [ 'change' ],

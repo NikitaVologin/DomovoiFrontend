@@ -34,14 +34,14 @@
 								<div class="search-head__card_filters__inputs__col__item__caption">Тип сделки:</div>
 								<Picker
 									:items="store.state.realEstateParameterPickers.dealTypeForCustomer"
-									:defaultValue="'Sell'"
+									:defaultValue="(announcement.deal.dealType as String)"
 									@change="(val:any) => head.filters.dealType = val"
 								></Picker>
 							</div>
 							<div class="search-head__card_filters__inputs__col__item">
 								<div class="search-head__card_filters__inputs__col__item__caption">Тип недвижимости:</div>
 								<div class="search-head__card_filters__inputs__col__item__inputs">
-									<RealityTypePicker @change="(val:string) => {head.filters.realityType = val;console.log(head.filters.realityType);}"></RealityTypePicker>
+									<RealityTypePicker @change="(val : 'Flat'|'CommercialBuilding') => head.filters.realityType = val"></RealityTypePicker>
 								</div>
 							</div>
 						</div>
@@ -58,7 +58,7 @@
 								<div class="search-head__card_filters__inputs__col__item__caption">Кол-во комнат:</div>
 								<Picker
 									:items="store.state.realEstateParameterPickers.roomsCount"
-									multiple=""
+									multiple
 									@change="(val:any) => head.filters.roomsCount = val"
 								></Picker>
 							</div>
@@ -172,8 +172,6 @@ import { AnnouncementController } from '../controllers/announcementContoller';
 import { DealType } from '../domain/enums/dealType';
 import { filter, head } from 'lodash';
 
-type TabName = "filters"|"map";
-
 interface FilterRange {
 	from: number|undefined,
 	to: number|undefined,
@@ -209,6 +207,7 @@ export default defineComponent({
 			map: {
 				zoom: 13.5,
 			},
+			ann: {} as AnnouncementViewModel,
 			announcementCards: [] as Array<AnnouncementViewModel>,
 		}
 	},
@@ -216,8 +215,9 @@ export default defineComponent({
 		async submitSearch() {
 			let ac = container.resolve(AnnouncementController);
 			let announcements = await ac.getAnnouncements(10);
-			console.log(announcements)
 			this.announcementCards = announcements as Array<AnnouncementViewModel>;
+
+			this.head.filters.canSmoke  // works
 		}
 	}
 })
