@@ -5,6 +5,6 @@ export interface IReceptionService {
     registration(userType: string, mail: string, password: string): Promise<CounterAgentResponse>;
     authorize(mail: string, password: string): Promise<CounterAgentResponse>;
     getUserInformation(id: string): Promise<CounterAgentResponse>;
-    changeUserInformation(idOldUser: string, newUserInformation: CounterAgent): Promise<void>;
+    changeUserInformation(idOldUser: string, newUserInformation: CounterAgent): Promise<CounterAgentResponse>;
     checkOut(id: string): Promise<void>;
 }
