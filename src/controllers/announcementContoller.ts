@@ -1,9 +1,6 @@
 import { injectable, inject } from "tsyringe";
 import { IAnnouncementBoard } from "./controllersInterfaces/announcementBoard";
-import { Announcement } from "../domain/announcements/announcement";
 import { AnnouncementViewModel } from "../viewModel/AnnouncementViewModel";
-import { RealityType } from "../domain/enums/realityType";
-import { DealType } from "../domain/enums/dealType";
 
 @injectable()
 export class AnnouncementController {
@@ -20,8 +17,8 @@ export class AnnouncementController {
         return viewModels;
     } 
 
-    async postAnnouncement(viewModel: AnnouncementViewModel, realityType: RealityType, dealType: DealType): Promise<string> {
-        let id = await this._AnnouncementBoard.postAnnouncement(viewModel, realityType, dealType);
+    async postAnnouncement(viewModel: AnnouncementViewModel): Promise<string> {
+        let id = await this._AnnouncementBoard.postAnnouncement(viewModel);
         return id;    
     }
 }

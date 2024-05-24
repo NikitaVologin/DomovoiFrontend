@@ -22,16 +22,6 @@ export class LegalCounterAgent extends CounterAgent {
         this._tin = value;
     }
 
-    private _trc?: string | undefined;
-
-    public get trc(): string | undefined {
-        return this._trc;
-    }
-
-    public set trc(value: string | undefined) {
-        this._trc = value;
-    }
-
     public constructor() {
         super();
     }

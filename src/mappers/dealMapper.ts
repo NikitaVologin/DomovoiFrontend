@@ -18,7 +18,7 @@ export class DealMapper implements IDealMapper {
                 let rent = new Rent();
                 let conditions = new RentConditions();
                 let objectCon = object.conditions;
-                conditions.price = objectCon.cprice;
+                rent.price = objectCon.cprice;
                 conditions.period = objectCon.period;
                 conditions.deposit = objectCon.deposit;
                 conditions.communalPays = objectCon.communalPays;
@@ -34,7 +34,7 @@ export class DealMapper implements IDealMapper {
                 let sell = new Sell(); 
                 let conditions = new SellConditions();
                 let objCon = object.conditions;
-                conditions.price = objCon.price;
+                sell.price = objCon.price;
                 conditions.type = objCon.type;
                 conditions.yearInOwn = objCon.yearInOwn;
                 conditions.ownersCount = objCon.ownersCount;
@@ -52,10 +52,10 @@ export class DealMapper implements IDealMapper {
 
     public mapDealToViewModel(deal: Deal): DealViewModel {
         let viewModel = new DealViewModel();
-        viewModel.dealType = deal.dealType;
-        viewModel.price = deal.conditions.price!;
+        viewModel.dealType = deal.type;
+        viewModel.price = deal.price!;
 
-        switch(deal.dealType){
+        switch(deal.type){
             case(DealType.Rell):{
                 let rent = new RentConditionsViewModel();
                 rent.canSmoke = (deal.conditions as RentConditions).canSmoke;
@@ -92,7 +92,7 @@ export class DealMapper implements IDealMapper {
                 let rent = new Rent();
                 let conditions = new RentConditions();
                 let objectCon = viewModel.rentConditions;
-                conditions.price = viewModel.price;
+                rent.price = viewModel.price;
                 conditions.period = objectCon?.period;
                 conditions.deposit = objectCon?.deposit;
                 conditions.communalPays = objectCon?.communalPays;
@@ -108,7 +108,7 @@ export class DealMapper implements IDealMapper {
                 let sell = new Sell(); 
                 let conditions = new SellConditions();
                 let objCon = viewModel.sellConditions;
-                conditions.price = viewModel.price;
+                sell.price = viewModel.price;
                 //conditions.type = objCon?.type;
                 conditions.yearInOwn = objCon?.yearInOwn;
                 conditions.ownersCount = objCon?.ownersCount;

@@ -4,6 +4,17 @@ import { RentConditions } from "./rentConditions";
 export class Rent {
     public readonly type: DealType = DealType.Rell;
 
+    private _price!: number | undefined;
+
+    public get price(): number | undefined {
+        return this._price;
+    }
+
+    public set price(value: number | undefined) {
+        this._price = value;
+    }
+
+
     private _conditions!: RentConditions;
 
     public get conditions(): RentConditions {

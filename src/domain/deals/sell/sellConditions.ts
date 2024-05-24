@@ -1,14 +1,4 @@
 export class SellConditions {
-    private _price!: number | undefined;
-
-    public get price(): number | undefined {
-        return this._price;
-    }
-
-    public set price(value: number | undefined) {
-        this._price = value;
-    }
-
     private _type?: string | undefined;
 
     public get type(): string | undefined {

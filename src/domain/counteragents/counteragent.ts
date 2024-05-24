@@ -23,11 +23,11 @@ export class CounterAgent {
     }
 
     public get contactNumber(): string | undefined {
-        return this._mail;
+        return this._contactNumber;
     }
 
     public set contactNumber(value: string | undefined) {
-        this._mail = value;
+        this._contactNumber = value;
     }
 
     public constructor() { }

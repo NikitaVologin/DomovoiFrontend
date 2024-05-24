@@ -22,6 +22,16 @@ export class Office extends CommercialBuilding {
         this._roomsCount = value;
     }
 
+    private _floor?: number;
+
+    public get floor(): number | undefined {
+        return this._roomsCount!;
+    }
+
+    public set floor(value: number | undefined) {
+        this._roomsCount = value;
+    }
+
     // public constructor(id: string, area: number, floorsCount: number,
     //     entry: boolean, adress: string, isUse: boolean, isAcces: boolean,
     //     roomsCount: number,

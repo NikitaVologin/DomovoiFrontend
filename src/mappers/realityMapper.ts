@@ -16,6 +16,7 @@ export class RealityMapper implements IRealityMapper {
                 reality.type = type;
                 (reality as Office).area = obj.area;
                 (reality as Office).floorsCount = obj.floorsCount;
+                (reality as Office).floor = obj.floor;
                 (reality as Office).entry = obj.entry;
                 (reality as Office).adress = obj.adress;
                 (reality as Office).isUse = obj.isUse;
@@ -43,7 +44,7 @@ export class RealityMapper implements IRealityMapper {
                 viewModel.address = (reality as Office).adress!;
                 viewModel.area = (reality as Office).area!;
                 viewModel.destrict = "";
-                viewModel.floor = -1;
+                viewModel.floor = (reality as Office).floor;
                 viewModel.haveParking = (reality as Office).building?.haveParking;
                 viewModel.id = (reality as Office).id!;
                 viewModel.isSingleRoom = false;
@@ -65,6 +66,7 @@ export class RealityMapper implements IRealityMapper {
                 reality.id = viewModel.id;
                 (reality as Office).area = viewModel.area;
                 (reality as Office).floorsCount = viewModel.totalFloorsInBuilding!;
+                (reality as Office).floor = viewModel.floor;
                 (reality as Office).type = viewModel.realityType;
                 // (reality as Office).entry = viewModel.entry;
                 // (reality as Office).adress = viewModel.adress;
