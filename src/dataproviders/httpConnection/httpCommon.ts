@@ -42,11 +42,25 @@ export class HTTPClient implements IHTTPClient {
     }
 
     async delete<T>(url: string): Promise<Response<T>> {
-        throw new Error("Method not implemented.");
+        try {
+            let axiosResponse = await this._axios.delete<T>(url);
+            let response = this.map<T>(axiosResponse);
+            return response;
+        }
+        catch (error) {
+            throw (error);
+        }
     }
 
     async patch<T>(url: string, data: any): Promise<Response<T>> {
-        throw new Error("Method not implemented.");
+        try {
+            let axiosResponse = await this._axios.patch<T>(url, data);
+            let response = this.map<T>(axiosResponse);
+            return response;
+        }
+        catch (error) {
+            throw (error);
+        }
     }
 
     private map<T>(axiosResponse: AxiosResponse<T, any>): Response<T> {

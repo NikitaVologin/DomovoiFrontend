@@ -1,6 +1,7 @@
 import { injectable, inject } from "tsyringe";
 import { IAnnouncementBoard } from "./controllersInterfaces/announcementBoard";
 import { AnnouncementViewModel } from "../viewModel/AnnouncementViewModel";
+import { filterParameters } from "../domain/types";
 
 @injectable()
 export class AnnouncementController {
@@ -16,6 +17,10 @@ export class AnnouncementController {
         let viewModels = await this._AnnouncementBoard.getAnnouncements(count);
         return viewModels;
     } 
+
+    async getFilteredAnnouncements(parameters: filterParameters): Promise<AnnouncementViewModel[]> {
+        throw new Error("Method not implemented.");
+    }
 
     async postAnnouncement(viewModel: AnnouncementViewModel): Promise<string> {
         let id = await this._AnnouncementBoard.postAnnouncement(viewModel);

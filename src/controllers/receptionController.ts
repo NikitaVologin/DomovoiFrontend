@@ -1,7 +1,6 @@
 import { injectable, inject } from "tsyringe";
 import { IReception } from "../controllers/controllersInterfaces/receptionInterface";
 import { CounteragentViewModel } from "../viewModel/CounteragentViewModel";
-import { CounterAgent } from "../domain/counteragents/counteragent";
 
 @injectable()
 export class ReceptionController {
@@ -17,14 +16,14 @@ export class ReceptionController {
     }
 
     async getUserInformation(id: string): Promise<CounteragentViewModel> {
-        throw new Error("Method not implemented.");
+        return await this._reception.getUserInformation(id);
     }
 
-    async changeUserInformation(idOldUser: string, newUserInformation: CounterAgent): Promise<void> {
-        throw new Error("Method not implemented.");
+    async changeUserInformation(idOldUser: string, newUserInformation: CounteragentViewModel): Promise<CounteragentViewModel> {
+        return await this._reception.changeUserInformation(idOldUser, newUserInformation);
     }
     
     async checkOut(id: string): Promise<void> {
-        throw new Error("Method not implemented.");
+        return await this._reception.checkOut(id);
     }
 }

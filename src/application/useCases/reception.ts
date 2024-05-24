@@ -11,15 +11,21 @@ export class Reception implements IReception {
         @inject("ICouterAgentMapper") private readonly _userMapper: ICouterAgentMapper) { }
 
     async getUserInformation(id: string): Promise<CounteragentViewModel> {
-        throw new Error("Method not implemented.");
+        let user = await this._service.getUserInformation(id);
+        let viewModel = this._userMapper.mapCouterAgentToViewModel(user);
+        return viewModel;
     }
 
-    async changeUserInformation(idOldUser: string, newUserInformation: CounteragentViewModel): Promise<void> {
-        throw new Error("Method not implemented.");
+    async changeUserInformation(idOldUser: string, newUserInformation: CounteragentViewModel): Promise<CounteragentViewModel> {
+        let newUser = this._userMapper.mapViewModelToCouterAget(newUserInformation);
+        let updateUser = await this._service.changeUserInformation(idOldUser, newUser);
+        let viewModel = this._userMapper.mapCouterAgentToViewModel(updateUser);
+        return viewModel;
     }
 
     async checkOut(id: string): Promise<void> {
-        throw new Error("Method not implemented.");
+        let responseId = await this._service.checkOut(id);
+        return responseId;
     }
 
     async registration(userType: string, mail: string, password: string): Promise<CounteragentViewModel> {
