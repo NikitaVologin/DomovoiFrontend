@@ -12,7 +12,6 @@ export class RealityMapper implements IRealityMapper {
         switch(type) {
             case (RealityType.Office): {
                 let reality = new Office();
-                reality.id = obj.id;
                 reality.type = type;
                 (reality as Office).area = obj.area;
                 (reality as Office).floorsCount = obj.floorsCount;
@@ -46,7 +45,6 @@ export class RealityMapper implements IRealityMapper {
                 viewModel.destrict = "";
                 viewModel.floor = (reality as Office).floor;
                 viewModel.haveParking = (reality as Office).building?.haveParking;
-                viewModel.id = (reality as Office).id!;
                 viewModel.isSingleRoom = false;
                 viewModel.realityType = reality.type;
                 viewModel.roomCount = (reality as Office).roomsCount;
@@ -63,7 +61,6 @@ export class RealityMapper implements IRealityMapper {
         switch(viewModel.realityType) {
             case (RealityType.Office): {
                 let reality = new Office();
-                reality.id = viewModel.id;
                 (reality as Office).area = viewModel.area;
                 (reality as Office).floorsCount = viewModel.totalFloorsInBuilding!;
                 (reality as Office).floor = viewModel.floor;

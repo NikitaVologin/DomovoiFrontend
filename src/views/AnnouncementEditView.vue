@@ -81,7 +81,7 @@
 							</div>
 						</div>
 					</div>
-					<div class="secondary-parameters__block__col__item" v-if="announcement.deal.dealType == 'Rell'">
+					<div class="secondary-parameters__block__col__item" v-if="announcement.deal.dealType == 'Rent'">
 						<div class="secondary-parameters__block__col__item__caption">Период:</div>
 						<div class="secondary-parameters__block__col__item__inputs-row">
 							<div class="secondary-parameters__block__col__item__inputs-row__item">
@@ -91,7 +91,7 @@
 						</div>
 					</div>
 				</div>
-				<div class="secondary-parameters__block__col" v-if="announcement.deal.dealType == 'Rell'">
+				<div class="secondary-parameters__block__col" v-if="announcement.deal.dealType == 'Rent'">
 					<div class="secondary-parameters__block__col__item">
 						<div class="secondary-parameters__block__col__item__caption">Коммунальные платежи:</div>
 						<div class="secondary-parameters__block__col__item__inputs-row">
@@ -150,7 +150,7 @@
 					</div>
 				</div>
 				<div class="secondary-parameters__block__col secondary-parameters__block__col_with-checkboxes"
-					v-if="announcement.deal.dealType == ('Rell' as DealType) && announcement.reality.realityType == 'Flat'"
+					v-if="announcement.deal.dealType == ('Rent' as DealType) && announcement.reality.realityType == 'Flat'"
 				>
 					<label class="secondary-parameters__block__col__item secondary-parameters__block__col__item_with-checkbox" for="with-animals-checkbox">
 						<input type="checkbox" id="with-animals-checkbox" v-model="announcement.deal.rentConditions.withAnimals">
@@ -231,14 +231,14 @@ export default defineComponent({
 		}
 	},
 	beforeMount() {
-		if (this.announcement.deal.dealType == DealType.Rell)
+		if (this.announcement.deal.dealType == DealType.Rent)
 			 this.announcement.deal.rentConditions = new RentConditionsViewModel();
 		else this.announcement.deal.sellConditions = new SellConditionsViewModel();
 	},
 	methods: {
 		dealTypeChange(val:String) {
 			this.announcement.deal.dealType = val as DealType;
-			if (this.announcement.deal.dealType == DealType.Rell) {
+			if (this.announcement.deal.dealType == DealType.Rent) {
 				this.announcement.deal.rentConditions = new RentConditionsViewModel();
 				this.announcement.deal.sellConditions = undefined;
 			}
@@ -249,14 +249,13 @@ export default defineComponent({
 		},
 		async submit() {
 			// обращаться к созданному объекту AnnouncementViewModel через this.announcement
-
 			let ac = container.resolve(AnnouncementController);
-			this.announcement.counteragent.id = "485154bb-a246-4924-8d17-533083f32bc0";
-			let response = await ac.postAnnouncement(this.announcement/* , RealityType.Office, DealType.Sell */);
+			this.announcement.counteragent = this.store.state.user!;
+			let response = await ac.postAnnouncement(this.announcement);
 			console.log(response);
 			// router.push('/profile');   // раскомментить когда всё заработает
 		}
-	},
+	},	
 })
 </script>
 	

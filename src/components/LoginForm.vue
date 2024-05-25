@@ -100,6 +100,7 @@ export default defineComponent({
 			this.error = false;
 			let rc = container.resolve(ReceptionController);
 			rc.authorize(this.loginData.email, this.loginData.password).then(res => {
+				res.email = this.loginData.email;
 				store.state.user = res;
 				this.$emit('success');
 				router.push('/profile')
@@ -111,6 +112,7 @@ export default defineComponent({
 			this.error = false;
 			let rc = container.resolve(ReceptionController);
 			rc.registration("Physical", this.signupData.email, this.signupData.password).then(res => {
+				res.email = this.signupData.email;
 				store.state.user = res;
 				this.$emit('success');
 				router.push('/profile')

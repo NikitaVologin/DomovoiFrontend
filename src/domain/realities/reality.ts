@@ -1,16 +1,6 @@
 import { RealityType } from "../enums/realityType";
 
 export class Reality {
-    private _id!: string;
-
-    public get id(): string {
-        return this._id;
-    }
-
-    public set id(value: string) {
-        this._id = value;
-    }
-
     private _area!: number | undefined;
 
     public get area(): number | undefined {

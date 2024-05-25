@@ -63,7 +63,7 @@
 								></Picker>
 							</div>
 						</div>
-						<div v-if="head.filters.dealType == ('Rell' as DealType) && head.filters.realityType == 'Flat'"
+						<div v-if="head.filters.dealType == ('Rent' as DealType) && head.filters.realityType == 'Flat'"
 							class="search-head__card_filters__inputs__col search-head__card_filters__inputs__col_with-checkboxes"
 						>
 							<label class="search-head__card_filters__inputs__col__item search-head__card_filters__inputs__col__item_with-checkbox" for="with-animals-checkbox">

@@ -1,7 +1,7 @@
 import { injectable, inject} from "tsyringe";
 import { IAnnouncementBoardService } from "../application/interfaces/announcementBoadService";
 import { Announcement } from "../domain/announcements/announcement";
-import { IHTTPClient } from "./interfaces/HTTPClient";
+import  { IHTTPClient } from "./interfaces/HTTPClient";
 import { IAnnoucementMapper } from "../mappers/interfaces/annoucementMapperInterface";
 
 @injectable()
@@ -13,7 +13,7 @@ export class AnnouncementBoardService implements IAnnouncementBoardService {
         let url = "/Announcement/" + id;
 
         let response = await this._httpClient.get<any>(url).catch((error) => {
-            throw (error);
+            throw (error);      
         });
 
         if (response.status == 200) {
@@ -53,7 +53,11 @@ export class AnnouncementBoardService implements IAnnouncementBoardService {
         let data = {
             description: announcement.description,
             connectionType: announcement.connectionType,
-            dealInfo: this.dsads(this.toJsonString(announcement.deal)),
+            dealInfo: {
+                price: announcement.deal.price,
+                conditions: this.dsads(this.toJsonString(announcement.deal.conditions)),
+                type: announcement.deal.type.toString()
+            },
             realityInfo: this.dsads(this.toJsonString(announcement.reality)),
             counterAgentId: announcement.counteragent.id
         };

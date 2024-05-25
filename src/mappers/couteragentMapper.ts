@@ -8,7 +8,24 @@ import { ICouterAgentMapper } from "./interfaces/couteragentMapperInterface";
 export class CounterAgentMapper implements ICouterAgentMapper{
 
     public mapObjectToCouterAgent(object: any): CounterAgent {
-        throw new Error("Method not implemented.");
+        let type: CounteragentType = CounteragentType[object.type as keyof typeof CounteragentType];
+        switch(type){
+            case(CounteragentType.Legal): {
+                let user = new LegalCounterAgent();
+                user.id = object.id;
+                user.contactNumber = object.contactNumber;
+                user.name = object.name;
+                user.tin = object.tin;
+                return user;
+            }
+            case(CounteragentType.Physical): {
+                let user = new PhysicalCounterAgent();
+                user.id = object.id;
+                user.contactNumber = object.contactNumber;
+                user.FIO = object.fio;
+                return user;
+            }
+        }
     }
 
     public mapCouterAgentToViewModel(counteragent: CounterAgent): CounteragentViewModel {

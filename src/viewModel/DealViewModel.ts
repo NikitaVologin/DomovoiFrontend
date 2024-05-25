@@ -3,7 +3,7 @@ import { RentConditionsViewModel } from "./RentConditionsViewModel";
 import { SellConditionsViewModel } from "./SellConditionsViewModel";
 
 export class DealViewModel {
-	dealType: DealType = DealType.Rell;
+	dealType: DealType = DealType.Rent;
 	price: number = 22000;
 	sellConditions?: SellConditionsViewModel;
 	rentConditions?: RentConditionsViewModel;

@@ -14,7 +14,7 @@ export class DealMapper implements IDealMapper {
     public mapObjectToDeal(object: any): Deal {
         let type: DealType = DealType[object.Type as keyof typeof DealType];
         switch(type){
-            case (DealType.Rell): {
+            case (DealType.Rent): {
                 let rent = new Rent();
                 let conditions = new RentConditions();
                 let objectCon = object.conditions;
@@ -56,7 +56,7 @@ export class DealMapper implements IDealMapper {
         viewModel.price = deal.price!;
 
         switch(deal.type){
-            case(DealType.Rell):{
+            case(DealType.Rent):{
                 let rent = new RentConditionsViewModel();
                 rent.canSmoke = (deal.conditions as RentConditions).canSmoke;
                 rent.communalPays = (deal.conditions as RentConditions).communalPays;
@@ -88,7 +88,7 @@ export class DealMapper implements IDealMapper {
 
     mapViewModelToDeal(viewModel: DealViewModel): Deal {
         switch(viewModel.dealType){
-            case (DealType.Rell): {
+            case (DealType.Rent): {
                 let rent = new Rent();
                 let conditions = new RentConditions();
                 let objectCon = viewModel.rentConditions;

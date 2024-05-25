@@ -2,7 +2,7 @@ import { DealType } from "../../enums/dealType";
 import { RentConditions } from "./rentConditions";
 
 export class Rent {
-    public readonly type: DealType = DealType.Rell;
+    public readonly type: DealType = DealType.Rent;
 
     private _price!: number | undefined;
 

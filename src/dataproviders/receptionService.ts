@@ -3,13 +3,15 @@ import { IReceptionService } from "../application/interfaces/receptionService";
 import { IHTTPClient } from "../dataproviders/interfaces/HTTPClient";
 import { CounterAgent } from "../domain/counteragents/counteragent";
 import { CounterAgentResponse } from "../domain/types";
+import { ICouterAgentMapper } from "../mappers/interfaces/couteragentMapperInterface";
 
 @injectable()
 export class ReceptionService implements IReceptionService {
 
-    public constructor(@inject("IHTTPClient") private readonly _httpClient: IHTTPClient) { }
+    public constructor(@inject("IHTTPClient") private readonly _httpClient: IHTTPClient,
+        @inject("ICouterAgentMapper") private readonly _userMapper: ICouterAgentMapper) { }
 
-    async getUserInformation(id: string): Promise<CounterAgentResponse> {
+    async getUserInformation(id: string): Promise<CounterAgent> {
         throw new Error("Method not implemented.");
         let url = "";
 
@@ -22,7 +24,7 @@ export class ReceptionService implements IReceptionService {
         });
     }
 
-    async changeUserInformation(idOldUser: string, newUserInformation: CounterAgent): Promise<CounterAgentResponse> {
+    async changeUserInformation(idOldUser: string, newUserInformation: CounterAgent): Promise<CounterAgent> {
         throw new Error("Method not implemented.");
         let url = "";
         let data = {
@@ -52,19 +54,20 @@ export class ReceptionService implements IReceptionService {
         });
     }
 
-    async registration(userType: string, mail: string, password: string): Promise<CounterAgentResponse> {
+    async registration(userType: string, mail: string, password: string): Promise<CounterAgent> {
         let url = "/CounterAgent/" + userType;
         let data = {
             email: mail,
             password: password
         };
 		
-        let response = await this._httpClient.post<CounterAgentResponse>(url, data).catch((error) => {
+        let response = await this._httpClient.post<any>(url, data).catch((error) => {
 			throw (error);
         });
 
         if (response.status == 200) {
-            return response.data;
+            let user = this._userMapper.mapObjectToCouterAgent(response.data);
+            return user;
         }
 
         return new Promise((resolve, reject) => {
@@ -72,19 +75,20 @@ export class ReceptionService implements IReceptionService {
         });
     }
 
-    async authorize(mail: string, password: string): Promise<CounterAgentResponse> {
+    async authorize(mail: string, password: string): Promise<CounterAgent> {
         let url = "/CounterAgent/Login";
         let data = {
             email: mail,
             password: password
         };
 
-        let response = await this._httpClient.post<CounterAgentResponse>(url, data).catch((error) => {
+        let response = await this._httpClient.post<any>(url, data).catch((error) => {
             throw (error);
         });
 
         if (response.status == 200) {
-            return response.data;
+            let user = this._userMapper.mapObjectToCouterAgent(response.data);
+            return user;
         }
 
         return new Promise((resolve, reject) => {
