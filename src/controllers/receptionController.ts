@@ -19,8 +19,8 @@ export class ReceptionController {
         return await this._reception.getUserInformation(id);
     }
 
-    async changeUserInformation(idOldUser: string, newUserInformation: CounteragentViewModel): Promise<CounteragentViewModel> {
-        return await this._reception.changeUserInformation(idOldUser, newUserInformation);
+    async changeUserInformation(idOldUser: string, newUserInformation: CounteragentViewModel, newPassword?: string): Promise<void> {
+        return await this._reception.changeUserInformation(idOldUser, newUserInformation, newPassword);
     }
     
     async checkOut(id: string): Promise<void> {

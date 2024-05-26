@@ -16,15 +16,15 @@ export class Reception implements IReception {
         return viewModel;
     }
 
-    async changeUserInformation(idOldUser: string, newUserInformation: CounteragentViewModel): Promise<CounteragentViewModel> {
+    async changeUserInformation(idOldUser: string, newUserInformation: CounteragentViewModel, new_password?: string): Promise<void> {
         let newUser = this._userMapper.mapViewModelToCouterAget(newUserInformation);
-        let updateUser = await this._service.changeUserInformation(idOldUser, newUser);
-        let viewModel = this._userMapper.mapCouterAgentToViewModel(updateUser);
-        return viewModel;
+        let userInformation = newUser.getInformationObject();
+        userInformation.password = new_password;
+        await this._service.putUserInformation(idOldUser, userInformation);
     }
 
     async checkOut(id: string): Promise<void> {
-        let responseId = await this._service.checkOut(id);
+        let responseId = await this._service.deleteUser(id);
         return responseId;
     }
 

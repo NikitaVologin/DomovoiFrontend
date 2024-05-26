@@ -12,6 +12,12 @@ export class PhysicalCounterAgent extends CounterAgent {
         this._FIO = value;
     }
 
+    public override getInformationObject(): any {
+        let object = super.getInformationObject();
+        object.fio = this.FIO;
+        return object;
+    }
+
     public constructor(){
         super();
     }

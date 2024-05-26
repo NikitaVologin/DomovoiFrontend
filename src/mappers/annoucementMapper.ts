@@ -13,6 +13,15 @@ export class AnnoucementMapper implements IAnnoucementMapper {
         @inject("IDealMapper") private readonly _dealMapper: IDealMapper,
         @inject("ICouterAgentMapper") private readonly _userMapper: ICouterAgentMapper) { }
 
+    public mapAnnoucementsToViewModels(announcements: Announcement[]): AnnouncementViewModel[] {
+        let viewModels: AnnouncementViewModel[] = [];
+        for(let announcement of announcements) {
+            let viewModel = this.mapAnnoucementToViewModel(announcement);
+            viewModels.push(viewModel);
+        }
+        return viewModels;
+    }
+
     public mapObjectToAnnoucement(obj: any): Announcement {
         let announcement = new Announcement();
         announcement.id = obj.id;

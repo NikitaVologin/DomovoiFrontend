@@ -13,9 +13,12 @@ export class HTTPClient implements IHTTPClient {
         });
     }
 
-    async get<T>(url: string): Promise<Response<T>> {
+    async get<T>(url: string, params?: any): Promise<Response<T>> {
         try {
-            let axiosResponse = await this._axios.get<T>(url);
+            let axiosResponse = await this._axios.get<T>(url, {
+                params: params
+            });
+            
             let response = this.map<T>(axiosResponse);
             return response;
         }
@@ -39,6 +42,17 @@ export class HTTPClient implements IHTTPClient {
 			// 	throw (error);
 			// }
 		})
+    }
+
+    async put<T>(url: string, data: any): Promise<Response<T>> {
+        try {
+            let axiosResponse = await this._axios.put<T>(url, data);
+            let response = this.map<T>(axiosResponse);
+            return response;
+        }
+        catch (error) {
+            throw (error);
+        }
     }
 
     async delete<T>(url: string): Promise<Response<T>> {

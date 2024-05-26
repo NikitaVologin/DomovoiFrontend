@@ -24,15 +24,12 @@ export class ReceptionService implements IReceptionService {
         });
     }
 
-    async changeUserInformation(idOldUser: string, newUserInformation: CounterAgent): Promise<CounterAgent> {
-        throw new Error("Method not implemented.");
-        let url = "";
-        let data = {
-            id: idOldUser,
-            CounterAgent: newUserInformation
-        };
+    async putUserInformation(idOldUser: string, newUserInformation: any): Promise<void> {
+        let url = "/CounterAgent/"+ idOldUser;
 
-        let response = await this._httpClient.patch<CounterAgentResponse>(url, data).catch((error) => {
+        let data = newUserInformation;
+
+        let response = await this._httpClient.put<any>(url, data).catch((error) => {
             throw (error);
         });
 
@@ -41,9 +38,8 @@ export class ReceptionService implements IReceptionService {
         });
     }
 
-    async checkOut(id: string): Promise<void> {
-        throw new Error("Method not implemented.");
-        let url = "";
+    async deleteUser(id: string): Promise<void> {
+        let url = "/CounterAgent/" + id;
 
         let response = await this._httpClient.delete<string>(url).catch((error) => {
             throw (error);

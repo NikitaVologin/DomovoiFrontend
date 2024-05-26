@@ -30,6 +30,16 @@ export class CounterAgent {
         this._contactNumber = value;
     }
 
+    public getInformationObject(): any {
+        let object = {
+            contactNumber: this.contactNumber,
+            email: this.mail,
+            password: "",
+            type: "",
+        }
+        return object;
+    }
+
     public constructor() { }
     
     // public constructor(id: string, mail: string) {

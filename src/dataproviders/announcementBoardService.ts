@@ -3,11 +3,72 @@ import { IAnnouncementBoardService } from "../application/interfaces/announcemen
 import { Announcement } from "../domain/announcements/announcement";
 import  { IHTTPClient } from "./interfaces/HTTPClient";
 import { IAnnoucementMapper } from "../mappers/interfaces/annoucementMapperInterface";
+import { filterParameters } from "../domain/types";
 
 @injectable()
 export class AnnouncementBoardService implements IAnnouncementBoardService {
     public constructor(@inject("IHTTPClient") private readonly _httpClient: IHTTPClient,
         @inject("IAnnoucementMapper") private readonly _annoucementMapper: IAnnoucementMapper) { }
+
+    async deleteAnnouncement(idUser: string, idAnnouncement: string): Promise<void> {
+        let url = "/Announcement/" + idUser + "/" + idAnnouncement;
+
+        let response = await this._httpClient.delete<any[]>(url).catch((error) => {
+            throw (error);
+        });
+
+        return new Promise((resolve, reject) => {
+            reject(response);
+        });
+    }
+
+    async changeAnnouncement(userId: string, announcement: Announcement): Promise<void> {
+        let url = "/Announcement/" + announcement.id;
+
+        let data = {
+            description: announcement.description,
+            connectionType: announcement.connectionType,
+            dealInfo: {
+                price: announcement.deal.price,
+                conditions: this.dsads(this.toJsonString(announcement.deal.conditions)),
+                type: announcement.deal.type.toString()
+            },
+            realityInfo: this.dsads(this.toJsonString(announcement.reality)),
+            counterAgentId: announcement.counteragent.id
+        };
+
+        let response = await this._httpClient.put<any[]>(url, data).catch((error) => {
+            throw (error);
+        });
+
+        return new Promise((resolve, reject) => {
+            reject(response);
+        });
+    }
+    
+    async getAnnouncementsFromTo(from: number, to: number): Promise<Announcement[]> {
+        let url = "/Announcement/Take";
+        let params = {
+            fromIndex: from,
+            toIndex: to,
+        }
+
+        let response = await this._httpClient.get<any[]>(url, params).catch((error) => {
+            throw (error);
+        });
+
+        if (response.status == 200) {
+            let list: Announcement[] = [];
+            for (let object in response.data) {
+                list.push(this._annoucementMapper.mapObjectToAnnoucement(object));
+            }
+            return list;
+        }
+
+        return new Promise((resolve, reject) => {
+            reject(response);
+        });
+    }
 
     async getAnnouncementById(id: string): Promise<Announcement> {
         let url = "/Announcement/" + id;
@@ -31,6 +92,26 @@ export class AnnouncementBoardService implements IAnnouncementBoardService {
         let url = "/Announcement/take/" + count;
 
         let response = await this._httpClient.get<any[]>(url).catch((error) => {
+            throw (error);
+        });
+
+        if (response.status == 200) {
+            let list: Announcement[] = [];
+            for (let object in response.data) {
+                list.push(this._annoucementMapper.mapObjectToAnnoucement(object));
+            }
+            return list;
+        }
+
+        return new Promise((resolve, reject) => {
+            reject(response);
+        });
+    }
+
+    async getFilteredAnnouncements(params: filterParameters): Promise<Announcement[]> {
+        let url = "/Announcement/Filtered";
+
+        let response = await this._httpClient.get<any[]>(url, (params as any)).catch((error) => {
             throw (error);
         });
 

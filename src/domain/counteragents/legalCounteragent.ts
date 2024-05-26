@@ -22,6 +22,13 @@ export class LegalCounterAgent extends CounterAgent {
         this._tin = value;
     }
 
+    public override getInformationObject(): any {
+        let object = super.getInformationObject();
+        object.name = this.name;
+        object.tin = this.tin;
+        return object;
+    }
+
     public constructor() {
         super();
     }
