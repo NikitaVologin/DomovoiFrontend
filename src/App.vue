@@ -8,6 +8,8 @@
 <script lang="ts">
 import { defineComponent } from 'vue';
 import axios from 'axios'
+import store from './store';
+import { CounteragentViewModel } from './viewModel/CounteragentViewModel';
 
 export default defineComponent({
 	components: {  },
@@ -15,7 +17,7 @@ export default defineComponent({
 		return {}
 	},
 	mounted() {
-		
+		if (localStorage.getItem('user')) store.state.user = JSON.parse(localStorage.getItem('user')!) as CounteragentViewModel
 	},
 	computed: {
 	},
