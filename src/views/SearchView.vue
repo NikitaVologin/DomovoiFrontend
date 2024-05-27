@@ -34,7 +34,7 @@
 								<div class="search-head__card_filters__inputs__col__item__caption">Тип сделки:</div>
 								<Picker
 									:items="store.state.realEstateParameterPickers.dealTypeForCustomer"
-									:defaultValue="(announcement.deal.dealType as String)"
+									defaultValue="Rent"
 									@change="(val:any) => head.filters.dealType = val"
 								></Picker>
 							</div>
