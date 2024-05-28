@@ -1,0 +1,1 @@
+export enum SortType { Up=0, Down=1 };

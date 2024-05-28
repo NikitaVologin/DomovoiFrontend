@@ -3,7 +3,7 @@ import { IAnnouncementBoardService } from "../application/interfaces/announcemen
 import { Announcement } from "../domain/announcements/announcement";
 import  { IHTTPClient } from "./interfaces/HTTPClient";
 import { IAnnoucementMapper } from "../mappers/interfaces/annoucementMapperInterface";
-import { filterParameters } from "../domain/types";
+import { FilterParameters } from "../domain/types";
 
 @injectable()
 export class AnnouncementBoardService implements IAnnouncementBoardService {
@@ -108,7 +108,7 @@ export class AnnouncementBoardService implements IAnnouncementBoardService {
         });
     }
 
-    async getFilteredAnnouncements(params: filterParameters): Promise<Announcement[]> {
+    async getFilteredAnnouncements(params: FilterParameters): Promise<Announcement[]> {
         let url = "/Announcement/Filtered";
 
         let response = await this._httpClient.get<any[]>(url, (params as any)).catch((error) => {

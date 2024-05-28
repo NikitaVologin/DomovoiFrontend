@@ -3,15 +3,33 @@ import { IAnnouncementBoard } from "../../controllers/controllersInterfaces/anno
 import { AnnouncementViewModel } from "../../viewModel/AnnouncementViewModel";
 import { IAnnouncementBoardService } from "../interfaces/announcementBoadService";
 import { IAnnoucementMapper } from "../../mappers/interfaces/annoucementMapperInterface";
-import { ICouterAgentMapper } from "../../mappers/interfaces/couteragentMapperInterface";
-import { filterParameters } from "../../domain/types";
+import { FilterParameters, SortParameters } from "../../domain/types";
+import { SortType } from "../../domain/enums/sortType";
 
 @injectable()
 export class AnnouncementBoard implements IAnnouncementBoard {
 
     public constructor(@inject("IAnnouncementBoardService") private readonly _announcementBoardSerivce: IAnnouncementBoardService,
-        @inject("IAnnoucementMapper") private readonly _annoucementMapper: IAnnoucementMapper,
-        @inject("ICouterAgentMapper") private readonly _userMapper: ICouterAgentMapper) { }
+        @inject("IAnnoucementMapper") private readonly _annoucementMapper: IAnnoucementMapper) { }
+
+    async getSortedAnnouncements(announcementViewModels: AnnouncementViewModel[], sortParameters: SortParameters,
+         direction: SortType): Promise<AnnouncementViewModel[]> {
+        throw new Error("Нереализованный метод");
+        let sortedAnnouncements: AnnouncementViewModel[] = [];
+        switch(direction){
+            case(SortType.Up): {
+                sortedAnnouncements = announcementViewModels.sort( (an1, an2) => an1.deal.price - an2.deal.price);
+                return new Promise((resolve, reject) => {
+                    resolve(sortedAnnouncements);
+                });
+            }
+            case(SortType.Down): {
+                return new Promise((resolve, reject) => {
+                    resolve(sortedAnnouncements);
+                });
+            }
+        }
+    }
 
     async deleteAnnouncement(idUser: string, idAnnouncement: string): Promise<void> {
         await this._announcementBoardSerivce.deleteAnnouncement(idUser, idAnnouncement);
@@ -46,7 +64,7 @@ export class AnnouncementBoard implements IAnnouncementBoard {
         return id;
     }
 
-    async getFilteredAnnouncements(params: filterParameters): Promise<AnnouncementViewModel[]>{
+    async getFilteredAnnouncements(params: FilterParameters): Promise<AnnouncementViewModel[]>{
         let announcements = await this._announcementBoardSerivce.getFilteredAnnouncements(params);
         let list: AnnouncementViewModel[] = this._annoucementMapper.mapAnnoucementsToViewModels(announcements);
         return list;

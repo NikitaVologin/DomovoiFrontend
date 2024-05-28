@@ -1,7 +1,8 @@
 import { injectable, inject } from "tsyringe";
 import { IAnnouncementBoard } from "./controllersInterfaces/announcementBoard";
 import { AnnouncementViewModel } from "../viewModel/AnnouncementViewModel";
-import { filterParameters } from "../domain/types";
+import { FilterParameters, SortParameters } from "../domain/types";
+import { SortType } from "../domain/enums/sortType";
 
 @injectable()
 export class AnnouncementController {
@@ -18,7 +19,7 @@ export class AnnouncementController {
         return viewModels;
     } 
 
-    async getFilteredAnnouncements(parameters: filterParameters): Promise<AnnouncementViewModel[]> {
+    async getFilteredAnnouncements(parameters: FilterParameters): Promise<AnnouncementViewModel[]> {
         let viewModels = await this._announcementBoard.getFilteredAnnouncements(parameters);
         return viewModels;
     }
@@ -38,6 +39,13 @@ export class AnnouncementController {
 
     async getAnnouncementsFromTo(from: number, to: number): Promise<AnnouncementViewModel[]> {
         let viewModels = await this._announcementBoard.getAnnouncementsFromTo(from, to);
+        return viewModels;
+    }
+
+    async getSortedAnnouncements(announcementViewModels: AnnouncementViewModel[], sortParameters: SortParameters,
+            direction: SortType): Promise<AnnouncementViewModel[]> {
+        let viewModels: AnnouncementViewModel[] = 
+            await this._announcementBoard.getSortedAnnouncements(announcementViewModels, sortParameters, direction);
         return viewModels;
     }
 }
