@@ -154,8 +154,8 @@ export default defineComponent({
 		saveEditedInfo() {
 			let rc = container.resolve(ReceptionController);
 			rc.changeUserInformation(this.user.id, this.editedUser).then(() => {
-				this.user = this.editedUser;
-				store.state.user = this.editedUser;
+				this.user = this.editedUser as CounteragentViewModel;
+				store.state.user = this.editedUser as CounteragentViewModel;
 				this.infoEdited = false;
 			}).catch(err => {
 				console.log(err);
