@@ -22,3 +22,8 @@ export type SortParameters = {
     price: number,
     area: number  
 }
+
+export type Period  = {
+    indexFrom: number,
+    indexTo: number
+}

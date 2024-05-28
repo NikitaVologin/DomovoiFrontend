@@ -233,7 +233,7 @@ export default defineComponent({
 	},
 	mounted() {
 		let ac = container.resolve(AnnouncementController);
-		ac.getAnnouncements(20).then((res:Array<AnnouncementViewModel>) => {
+		ac.getAnnouncementsFromTo().then((res:Array<AnnouncementViewModel>) => {
 			this.announcementCards = res;
 		});
 	},
