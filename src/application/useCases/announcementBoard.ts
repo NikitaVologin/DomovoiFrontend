@@ -3,7 +3,7 @@ import { IAnnouncementBoard } from "../../controllers/controllersInterfaces/anno
 import { AnnouncementViewModel } from "../../viewModel/AnnouncementViewModel";
 import { IAnnouncementBoardService } from "../interfaces/announcementBoadService";
 import { IAnnoucementMapper } from "../../mappers/interfaces/annoucementMapperInterface";
-import { FilterParameters, SortParameters } from "../../domain/types";
+import { FilterParameters, Period, SortParameters } from "../../domain/types";
 import { SortType } from "../../domain/enums/sortType";
 
 @injectable()
@@ -40,8 +40,8 @@ export class AnnouncementBoard implements IAnnouncementBoard {
         await this._announcementBoardSerivce.changeAnnouncement(userId, announcement);
     }
 
-    async getAnnouncementsFromTo(from: number, to: number): Promise<AnnouncementViewModel[]> {
-        let announcements = await this._announcementBoardSerivce.getAnnouncementsFromTo(from, to);
+    async getAnnouncementsFromTo(data?: Period): Promise<AnnouncementViewModel[]> {
+        let announcements = await this._announcementBoardSerivce.getAnnouncementsFromTo(data?.indexFrom, data?.indexTo);
         let list: AnnouncementViewModel[] = this._annoucementMapper.mapAnnoucementsToViewModels(announcements);
         return list;
     }

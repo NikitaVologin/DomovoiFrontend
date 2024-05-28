@@ -1,5 +1,5 @@
 import { SortType } from "../../domain/enums/sortType";
-import { FilterParameters, SortParameters} from "../../domain/types";
+import { FilterParameters, Period, SortParameters} from "../../domain/types";
 import { AnnouncementViewModel } from "../../viewModel/AnnouncementViewModel";
 
 export interface IAnnouncementBoard {
@@ -9,7 +9,7 @@ export interface IAnnouncementBoard {
     getFilteredAnnouncements(params: FilterParameters): Promise<AnnouncementViewModel[]>;
     deleteAnnouncement(idUser: string, idAnnouncement: string): Promise<void>;
     changeAnnouncement(userId: string, announcementInformation: AnnouncementViewModel): Promise<void>;
-    getAnnouncementsFromTo(from: number, to: number): Promise<AnnouncementViewModel[]> 
+    getAnnouncementsFromTo(data?: Period): Promise<AnnouncementViewModel[]> 
     getSortedAnnouncements(announcementViewModels: AnnouncementViewModel[], sortParameters: SortParameters, direction: SortType): Promise<AnnouncementViewModel[]>;
     getAnnouncementsByUserId(userId: string): Promise<AnnouncementViewModel[]>;
 }

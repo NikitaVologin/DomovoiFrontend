@@ -1,6 +1,7 @@
 import { RealityType } from "../domain/enums/realityType";
 import { Building } from "../domain/realities/commercialBuildings/building";
 import { Office } from "../domain/realities/commercialBuildings/types/office";
+import { Flat } from "../domain/realities/livingBuildings/types/flat";
 import { Reality } from "../domain/realities/reality";
 import { RealityViewModel } from "../viewModel/RealityViewModel";
 import { IRealityMapper } from "./interfaces/realityMapperInterface";
@@ -30,7 +31,12 @@ export class RealityMapper implements IRealityMapper {
                 building.isEquipment = obj.building.isEquipment;
                 (reality as Office).building = building;
                 return (reality as Office);
-            }   
+            }  
+            case(RealityType.Flat): {
+                let reality = new Flat();
+                reality.type = type;
+                return reality;
+            } 
             default: {
                 throw new Error('Unsupported realty type'); 
             }  
@@ -52,6 +58,9 @@ export class RealityMapper implements IRealityMapper {
                 viewModel.totalFloorsInBuilding = (reality as Office).floorsCount;
                 return viewModel;
             } 
+            case(RealityType.Flat): {
+                return viewModel;
+            } 
             default: {
                 throw new Error('Unsupported realty type'); 
             }  
@@ -62,6 +71,7 @@ export class RealityMapper implements IRealityMapper {
         switch(viewModel.realityType) {
             case (RealityType.Office): {
                 let reality = new Office();
+                reality.address = viewModel.address;
                 (reality as Office).area = viewModel.area;
                 (reality as Office).floorsCount = viewModel.totalFloorsInBuilding!;
                 (reality as Office).floor = viewModel.floor;

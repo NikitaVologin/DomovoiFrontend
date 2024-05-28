@@ -66,7 +66,7 @@ export class AnnouncementBoardService implements IAnnouncementBoardService {
         });
     }
     
-    async getAnnouncementsFromTo(from: number, to: number): Promise<Announcement[]> {
+    async getAnnouncementsFromTo(from?: number, to?: number): Promise<Announcement[]> {
         let url = "/Announcement/Take";
         let params = {
             fromIndex: from,
