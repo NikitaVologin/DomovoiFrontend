@@ -25,7 +25,7 @@ export class ReceptionService implements IReceptionService {
     }
 
     async putUserInformation(idOldUser: string, newUserInformation: any): Promise<void> {
-        let url = "/CounterAgent/"+ idOldUser;
+        let url = "/CounterAgent/"+ idOldUser;  
 
         let data = newUserInformation;
 

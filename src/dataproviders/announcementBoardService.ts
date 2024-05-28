@@ -10,10 +10,30 @@ export class AnnouncementBoardService implements IAnnouncementBoardService {
     public constructor(@inject("IHTTPClient") private readonly _httpClient: IHTTPClient,
         @inject("IAnnoucementMapper") private readonly _annoucementMapper: IAnnoucementMapper) { }
 
+    async getAnnouncementsByUserId(userId: string): Promise<Announcement[]> {
+        let url = "/Announcement/User" + userId;
+
+        let response = await this._httpClient.get<any>(url).catch((error) => {
+            throw (error);      
+        });
+
+        if (response.status == 200) {
+            let list: Announcement[] = [];
+            for (let object of response.data.announcementInformation) {
+                list.push(this._annoucementMapper.mapObjectToAnnoucement(object));
+            }
+            return list;
+        }
+
+        return new Promise((resolve, reject) => {
+            reject(response);
+        });
+    }
+
     async deleteAnnouncement(idUser: string, idAnnouncement: string): Promise<void> {
         let url = "/Announcement/" + idUser + "/" + idAnnouncement;
 
-        let response = await this._httpClient.delete<any[]>(url).catch((error) => {
+        let response = await this._httpClient.delete<any>(url).catch((error) => {
             throw (error);
         });
 
@@ -34,7 +54,7 @@ export class AnnouncementBoardService implements IAnnouncementBoardService {
                 type: announcement.deal.type.toString()
             },
             realityInfo: this.dsads(this.toJsonString(announcement.reality)),
-            counterAgentId: announcement.counteragent.id
+            counterAgentId: userId
         };
 
         let response = await this._httpClient.put<any[]>(url, data).catch((error) => {
@@ -53,13 +73,13 @@ export class AnnouncementBoardService implements IAnnouncementBoardService {
             toIndex: to,
         }
 
-        let response = await this._httpClient.get<any[]>(url, params).catch((error) => {
+        let response = await this._httpClient.get<any>(url, params).catch((error) => {
             throw (error);
         });
 
         if (response.status == 200) {
             let list: Announcement[] = [];
-            for (let object in response.data) {
+            for (let object of response.data.announcementInformation) {
                 list.push(this._annoucementMapper.mapObjectToAnnoucement(object));
             }
             return list;
@@ -91,13 +111,13 @@ export class AnnouncementBoardService implements IAnnouncementBoardService {
     async getAnnouncements(count: number): Promise<Announcement[]> {
         let url = "/Announcement/take/" + count;
 
-        let response = await this._httpClient.get<any[]>(url).catch((error) => {
+        let response = await this._httpClient.get<any>(url).catch((error) => {
             throw (error);
         });
 
         if (response.status == 200) {
             let list: Announcement[] = [];
-            for (let object in response.data) {
+            for (let object of response.data.announcementInformation) {
                 list.push(this._annoucementMapper.mapObjectToAnnoucement(object));
             }
             return list;
@@ -111,13 +131,13 @@ export class AnnouncementBoardService implements IAnnouncementBoardService {
     async getFilteredAnnouncements(params: FilterParameters): Promise<Announcement[]> {
         let url = "/Announcement/Filtered";
 
-        let response = await this._httpClient.get<any[]>(url, (params as any)).catch((error) => {
+        let response = await this._httpClient.get<any>(url, (params as any)).catch((error) => {
             throw (error);
         });
 
         if (response.status == 200) {
             let list: Announcement[] = [];
-            for (let object in response.data) {
+            for (let object of response.data.announcementInformation) {
                 list.push(this._annoucementMapper.mapObjectToAnnoucement(object));
             }
             return list;

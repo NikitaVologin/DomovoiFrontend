@@ -36,6 +36,7 @@ export class CounterAgentMapper implements ICouterAgentMapper{
             viewModel.FIO = user.name!;
             viewModel.email = user.mail!;
             viewModel.phone = user.contactNumber;
+            viewModel.type = CounteragentType.Legal;
         }
         else if (counteragent instanceof PhysicalCounterAgent) {
             let user = counteragent as PhysicalCounterAgent;
@@ -43,6 +44,7 @@ export class CounterAgentMapper implements ICouterAgentMapper{
             viewModel.FIO = user.FIO;
             viewModel.email = user.mail!;
             viewModel.phone = user.contactNumber;
+            viewModel.type = CounteragentType.Physical;
         }        
         return viewModel;
     }

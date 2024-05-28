@@ -8,5 +8,6 @@ export interface IAnnouncementBoardService {
     getFilteredAnnouncements(params: FilterParameters): Promise<Announcement[]>;
     deleteAnnouncement(idUser: string, idAnnouncement: string): Promise<void>;
     changeAnnouncement(userId: string, announcementInformation: Announcement): Promise<void>;
-    getAnnouncementsFromTo(from: number, to: number): Promise<Announcement[]> 
+    getAnnouncementsFromTo(from: number, to: number): Promise<Announcement[]>;
+    getAnnouncementsByUserId(userId: string): Promise<Announcement[]>;
 }

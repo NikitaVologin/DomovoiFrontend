@@ -1,3 +1,4 @@
+import { CounteragentType } from "../enums/counteragentEnum";
 import { CounterAgent } from "./counteragent";
 
 export class LegalCounterAgent extends CounterAgent {
@@ -26,6 +27,7 @@ export class LegalCounterAgent extends CounterAgent {
         let object = super.getInformationObject();
         object.name = this.name;
         object.tin = this.tin;
+        object.type = CounteragentType.Legal;
         return object;
     }
 

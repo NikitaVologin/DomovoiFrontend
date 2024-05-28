@@ -8,25 +8,26 @@ import { IRealityMapper } from "./interfaces/realityMapperInterface";
 export class RealityMapper implements IRealityMapper {
 
     public mapObjectToReality(obj: any): Reality {
-        let type: RealityType = RealityType[obj.Type as keyof typeof RealityType];
+        let type: RealityType = RealityType[obj.type as keyof typeof RealityType];
         switch(type) {
             case (RealityType.Office): {
                 let reality = new Office();
                 reality.type = type;
-                (reality as Office).area = obj.area;
-                (reality as Office).floorsCount = obj.floorsCount;
-                (reality as Office).floor = obj.floor;
-                (reality as Office).entry = obj.entry;
-                (reality as Office).adress = obj.adress;
-                (reality as Office).isUse = obj.isUse;
-                (reality as Office).isAcces = obj.acces;
                 (reality as Office).name = obj.name;
                 (reality as Office).roomsCount = obj.roomsCount;
+                (reality as Office).floor = obj.floor;
+                (reality as Office).floorsCount = obj.floorsCount;
+                (reality as Office).entry = obj.entry;
+                (reality as Office).isUse = obj.isUse;
+                (reality as Office).isAcces = obj.access;
+                (reality as Office).address = obj.address;
+                (reality as Office).area = obj.area;
                 let building = new Building();
-                building.classBuilding = obj.classBuilding;
-                building.buildingYear = obj.buildingYear;
-                building.haveParking = obj.haveParking;
-                building.isEquipment = obj.isEquipment;
+                building.classBuilding = obj.building.class;
+                building.buildingYear = obj.building.buildingYear;
+                building.centerName = obj.building.centerName;
+                building.haveParking = obj.building.haveParking;
+                building.isEquipment = obj.building.isEquipment;
                 (reality as Office).building = building;
                 return (reality as Office);
             }   
@@ -40,7 +41,7 @@ export class RealityMapper implements IRealityMapper {
         let viewModel = new RealityViewModel();
         switch(reality.type) {
             case (RealityType.Office): {
-                viewModel.address = (reality as Office).adress!;
+                viewModel.address = (reality as Office).address!;
                 viewModel.area = (reality as Office).area!;
                 viewModel.destrict = "";
                 viewModel.floor = (reality as Office).floor;

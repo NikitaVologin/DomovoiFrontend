@@ -27,7 +27,7 @@ export class Reality {
         return this._address;
     }
 
-    public set adress(value: string | undefined) {
+    public set address(value: string | undefined) {
         this._address = value;
     }
 

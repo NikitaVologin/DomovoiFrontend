@@ -11,4 +11,5 @@ export interface IAnnouncementBoard {
     changeAnnouncement(userId: string, announcementInformation: AnnouncementViewModel): Promise<void>;
     getAnnouncementsFromTo(from: number, to: number): Promise<AnnouncementViewModel[]> 
     getSortedAnnouncements(announcementViewModels: AnnouncementViewModel[], sortParameters: SortParameters, direction: SortType): Promise<AnnouncementViewModel[]>;
+    getAnnouncementsByUserId(userId: string): Promise<AnnouncementViewModel[]>;
 }

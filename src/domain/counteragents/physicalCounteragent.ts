@@ -1,3 +1,4 @@
+import { CounteragentType } from "../enums/counteragentEnum";
 import { CounterAgent } from "./counteragent";
 
 export class PhysicalCounterAgent extends CounterAgent {
@@ -15,6 +16,7 @@ export class PhysicalCounterAgent extends CounterAgent {
     public override getInformationObject(): any {
         let object = super.getInformationObject();
         object.fio = this.FIO;
+        object.type = CounteragentType.Physical;
         return object;
     }
 

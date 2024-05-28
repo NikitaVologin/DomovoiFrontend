@@ -69,4 +69,10 @@ export class AnnouncementBoard implements IAnnouncementBoard {
         let list: AnnouncementViewModel[] = this._annoucementMapper.mapAnnoucementsToViewModels(announcements);
         return list;
     }
+
+    async getAnnouncementsByUserId(userId: string): Promise<AnnouncementViewModel[]> {
+        let announcements = await this._announcementBoardSerivce.getAnnouncementsByUserId(userId);
+        let list: AnnouncementViewModel[] = this._annoucementMapper.mapAnnoucementsToViewModels(announcements);
+        return list;
+    }
 }

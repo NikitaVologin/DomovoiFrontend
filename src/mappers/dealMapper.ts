@@ -12,13 +12,13 @@ import { IDealMapper } from "./interfaces/dealMapperInterface";
 export class DealMapper implements IDealMapper {
     
     public mapObjectToDeal(object: any): Deal {
-        let type: DealType = DealType[object.Type as keyof typeof DealType];
+        let type: DealType = DealType[object.type as keyof typeof DealType];
         switch(type){
             case (DealType.Rent): {
                 let rent = new Rent();
+                rent.price = object.price;
                 let conditions = new RentConditions();
                 let objectCon = object.conditions;
-                rent.price = objectCon.cprice;
                 conditions.period = objectCon.period;
                 conditions.deposit = objectCon.deposit;
                 conditions.communalPays = objectCon.communalPays;
@@ -32,9 +32,9 @@ export class DealMapper implements IDealMapper {
             }
             case (DealType.Sell): {
                 let sell = new Sell(); 
+                sell.price = object.price;
                 let conditions = new SellConditions();
                 let objCon = object.conditions;
-                sell.price = objCon.price;
                 conditions.type = objCon.type;
                 conditions.yearInOwn = objCon.yearInOwn;
                 conditions.ownersCount = objCon.ownersCount;

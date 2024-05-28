@@ -42,6 +42,11 @@ export class AnnouncementController {
         return viewModels;
     }
 
+    async getAnnouncementsByUserId(userId: string): Promise<AnnouncementViewModel[]> {
+        let viewModels = await this._announcementBoard.getAnnouncementsByUserId(userId);
+        return viewModels;    
+    }
+
     async getSortedAnnouncements(announcementViewModels: AnnouncementViewModel[], sortParameters: SortParameters,
             direction: SortType): Promise<AnnouncementViewModel[]> {
         let viewModels: AnnouncementViewModel[] = 
