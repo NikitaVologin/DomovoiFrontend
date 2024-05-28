@@ -155,6 +155,7 @@ export default defineComponent({
 			let rc = container.resolve(ReceptionController);
 			rc.changeUserInformation(this.user.id, this.editedUser).then(() => {
 				this.user = this.editedUser;
+				store.state.user = this.editedUser;
 				this.infoEdited = false;
 			}).catch(err => {
 				console.log(err);

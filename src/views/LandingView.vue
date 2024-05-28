@@ -43,7 +43,7 @@ export default defineComponent({
 	methods: {
 		sellerButtonClick() {
 			if (!store.state.user) this.loginFormShown=true;
-			else router.push('/profile');
+			else router.push('/editAnnouncement/0');
 		}
 	},
 })

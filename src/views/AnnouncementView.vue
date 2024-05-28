@@ -13,7 +13,7 @@
 					@swiper="(sw:SwiperRef) => swiper = sw"
 					:modules="[ Scrollbar ]"
     				:scrollbar="{ draggable: true }"
-					slidesPerView="4"
+					:slidesPerView="4"
 					spaceBetween="16"
 				>
 					<SwiperSlide
