@@ -10,12 +10,7 @@ export class CounteragentViewModel {
 	announcements: Array<AnnouncementViewModel>;
 	reviews: Array<ReviewViewModel>;
 	type: CounteragentType = CounteragentType.Physical;
-	private _avatar?: string;
-
-	get avatar() {
-		if (this._avatar === undefined) return '/src/assets/img/avatar_default.png';
-		return this._avatar;
-	}
+	avatar?: string = "/src/assets/img/avatar_default.png";
 
 	// параметр addReviewPlacheloders временный, пока не будет сделана загрузка с сервера.
 	// пришлось добавить чтобы по кд не добавлялись отзывы, у которых есть параметр counteragent, у которого есть отзывы и т. д. до переполнения стека рекурсии

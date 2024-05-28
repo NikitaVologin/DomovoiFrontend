@@ -5,7 +5,22 @@
 	<main class="content-width">
 		<aside class="aside">
 			<div class="aside__avatar card" :style="`background-image: url('${user.avatar}');`"></div>
-			<button class="aside__button">Написать</button>
+			<div class="aside__info" v-if="!infoEdited">
+				<div class="aside__info__item">{{user.FIO}}</div>
+				<div class="aside__info__item">{{user.email}}</div>
+				<div class="aside__info__item" v-if="user.phone">{{user.phone}}</div>
+			</div>
+			<div class="aside__edit" v-if="infoEdited">
+				<input class="aside__edit__item" v-model="editedUser.FIO">
+				<input class="aside__edit__item" v-model="editedUser.email">
+				<input class="aside__edit__item" v-if="user.phone" v-model="editedUser.phone">
+				<button class="aside__buttons__item" @click="saveEditedInfo">Сохранить</button>
+				<button class="aside__buttons__item" @click="cancelEditing">Отмена</button>
+			</div>
+			<div class="aside__buttons" v-if="!infoEdited">
+				<button class="aside__buttons__item" v-if="!own">Написать</button>
+				<button class="aside__buttons__item" v-if="own" @click="editInfo">Редактировать</button>
+			</div>
 		</aside>
 		<div class="info">
 			<div class="info__annoncements-swiper-block">
@@ -16,7 +31,7 @@
 				</div>
 				<Swiper
 					class="info__annoncements-swiper"
-					slides-per-view="3"
+					:slidesPerView="3"
 					space-between="20"
 					loop
 					@swiper="getAnnouncementsSwiperRef"
@@ -40,7 +55,7 @@
 							</button>
 							<div class="info__reviews-block__toggles__no-reviews" v-if="user.reviews.length == 0">Пока нет отзывов</div>
 						</div>
-						<button>Написать отзыв</button>
+						<button v-if="!own && store.state.user">Написать отзыв</button>
 					</div>
 					<div class="info__reviews-block__reviews-list"  v-if="user.reviews.length != 0">
 						<div class="info__reviews-block__reviews-list-item review" v-for="review in sortedReviews">
@@ -84,12 +99,22 @@ import AnnouncementCard from "../components/AnnouncementCard.vue"
 import { CounteragentViewModel } from "../viewModel/CounteragentViewModel"
 import { AnnouncementViewModel } from '../viewModel/AnnouncementViewModel';
 import { ReviewViewModel } from '../viewModel/ReviewViewModel';
+import { router } from '../router';
+import store from '../store';
+import { container } from 'tsyringe';
+import { ReceptionController } from '../controllers/receptionController';
 
 export default defineComponent({
 	components: { Header, AnnouncementCard, Swiper, SwiperSlide },
 	data() {
 		return {
+			store: store,
+
 			user: new CounteragentViewModel(true, true),
+			own: false,
+			infoEdited: false,
+			editedUser: {} as CounteragentViewModel,
+
 			announcements: [...Array(7)].map(i => new AnnouncementViewModel()),
 			announcementsSwiper: {} as SwiperRef,
 
@@ -97,16 +122,47 @@ export default defineComponent({
 		}
 	},
 	computed: {
+		loggedUser: () => store.state.user, 
 		sortedReviews() : ReviewViewModel[] {
 			return this.user.reviews.sort((r1,r2) => {
 				return Math.sign((r1.rate - r2.rate) * (this.rewiewsSort == 'positive' ? -1 : 1));
 			})
 		}
 	},
+	watch: {
+		loggedUser: {
+			deep: true,
+			handler(val:CounteragentViewModel) {
+				this.checkIfOwnProfile();
+			}
+		}
+	},
 	mounted() {
-		
+		this.checkIfOwnProfile();
 	},
 	methods: {
+		checkIfOwnProfile() {
+			if (router.currentRoute.value.params.id == store.state.user?.id) {
+				this.own = true;
+				this.user = store.state.user;
+			}
+		},
+		editInfo() {
+			this.editedUser = JSON.parse(JSON.stringify(this.user));
+			this.infoEdited = true;
+		},
+		saveEditedInfo() {
+			let rc = container.resolve(ReceptionController);
+			rc.changeUserInformation(this.user.id, this.editedUser).then(() => {
+				this.user = this.editedUser;
+				this.infoEdited = false;
+			}).catch(err => {
+				console.log(err);
+			})
+		},
+		cancelEditing() {
+			this.infoEdited = false;
+		},
 		getAnnouncementsSwiperRef(sw:SwiperRef) {
 			this.announcementsSwiper = sw;
 		},
@@ -135,6 +191,30 @@ main {
 			background-size: cover;
 			aspect-ratio: .866;
 			padding: 0;
+		}
+
+		.aside__info {
+			display: flex;
+			flex-direction: column;
+			row-gap: .5rem;
+
+			.aside__info__item {
+				overflow: hidden;
+				white-space: nowrap;
+			}
+		}
+
+		.aside__edit {
+			display: flex;
+			flex-direction: column;
+			row-gap: .5rem;
+		}
+
+		.aside__buttons {
+
+			.aside__buttons__item {
+				width: 100%;
+			}
 		}
 	}
 
@@ -189,10 +269,16 @@ main {
 				display: flex;
 				align-items: center;
 				justify-content: space-between;
+				padding: 1rem 1.25rem;
+
+				.info__reviews-block__toggles__no-reviews {
+					color: #666;
+					font-weight: 300;
+				}
 			}
 
 			.info__reviews-block__reviews-list {
-				margin-top: 2rem;
+				// margin-top: 2rem;
 				.review	{
 					border: 1px solid #777;
 					border-right: none;

@@ -15,8 +15,8 @@
         </div>
         <transition name="popup-transition">
             <div class="profile-block__logged-in__popup" v-if="popupShown">
-                <div class="profile-block__logged-in__popup__list-item" @click="router.push('/profile')">Профиль</div>
-                <div class="profile-block__logged-in__popup__list-item" @click="store.state.user = undefined">Выйти</div>
+                <div class="profile-block__logged-in__popup__list-item" @click="router.push(`/profile/${store.state.user!.id}`)">Профиль</div>
+                <div class="profile-block__logged-in__popup__list-item" @click="logout">Выйти</div>
             </div>
         </transition>
     </div>
@@ -48,6 +48,10 @@ export default defineComponent({
     mounted() {
     },
     methods: {
+		logout() {
+			store.state.user = undefined;
+			localStorage.removeItem('user');
+		}
     },
 })
 </script>

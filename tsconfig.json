@@ -29,6 +29,6 @@
     //"resolveJsonModule": true,
     //"isolatedModules": true,
   },
-  "include": ["src/**/*.ts", "src/**/*.tsx", "src/**/*.vue, ./src/**/**/*.ts"],
+  "include": ["src/**/*.ts", "src/**/*.tsx", "src/**/*.vue", "./src/**/**/*.ts"],
   "references": [{ "path": "./tsconfig.node.json" }],
 }

@@ -96,14 +96,14 @@ export default defineComponent({
 			else await this.submitSignup()
 		},
 		async submitLogin() {
-			console.log('submitLogin');
 			this.error = false;
 			let rc = container.resolve(ReceptionController);
 			rc.authorize(this.loginData.email, this.loginData.password).then(res => {
 				res.email = this.loginData.email;
 				store.state.user = res;
 				this.$emit('success');
-				router.push('/profile')
+				router.push(`/profile/${store.state.user!.id}`)
+				localStorage.setItem('user', JSON.stringify(res))
 			}).catch(err => {
 				this.error = true;
 			})
@@ -115,7 +115,8 @@ export default defineComponent({
 				res.email = this.signupData.email;
 				store.state.user = res;
 				this.$emit('success');
-				router.push('/profile')
+				router.push(`/profile/${store.state.user!.id}`)
+				localStorage.setItem('user', JSON.stringify(res))
 			}).catch(err => {
 				this.error = true;
 			})

@@ -34,23 +34,23 @@
 								<div class="search-head__card_filters__inputs__col__item__caption">Тип сделки:</div>
 								<Picker
 									:items="store.state.realEstateParameterPickers.dealTypeForCustomer"
-									:defaultValue="(announcement.deal.dealType as String)"
-									@change="(val:any) => head.filters.dealType = val"
+									defaultValue="Rent"
+									@change="(val:any) => head.filters.DealType = val"
 								></Picker>
 							</div>
 							<div class="search-head__card_filters__inputs__col__item">
 								<div class="search-head__card_filters__inputs__col__item__caption">Тип недвижимости:</div>
 								<div class="search-head__card_filters__inputs__col__item__inputs">
-									<RealityTypePicker @change="(val : 'Flat'|'CommercialBuilding') => head.filters.realityType = val"></RealityTypePicker>
+									<RealityTypePicker @change="(val : RealityType) => head.filters.RealityType = val"></RealityTypePicker>
 								</div>
 							</div>
 						</div>
 						<div class="search-head__card_filters__inputs__col">
 							<RangeFilter class="search-head__card_filters__inputs__col__item"
 								caption="Цена, рублей" fieldsSize="medium"
-								@change="(obj:FilterRange) => head.filters.price = obj"
+								@change="(obj:FilterRange) => { head.filters.PriceStart = obj.from; head.filters.PriceEnd = obj.to; }"
 							/>
-							<RangeFilter class="search-head__card_filters__inputs__col__item"
+							<!-- <RangeFilter class="search-head__card_filters__inputs__col__item"
 								caption="Площадь, м2" fieldsSize="short"
 								@change="(obj:FilterRange) => head.filters.area = obj"
 							/>
@@ -61,9 +61,9 @@
 									multiple
 									@change="(val:any) => head.filters.roomsCount = val"
 								></Picker>
-							</div>
+							</div> -->
 						</div>
-						<div v-if="head.filters.dealType == ('Rent' as DealType) && head.filters.realityType == 'Flat'"
+						<!-- <div v-if="head.filters.DealType == ('Rent' as DealType) && head.filters.RealityType == 'Flat'"
 							class="search-head__card_filters__inputs__col search-head__card_filters__inputs__col_with-checkboxes"
 						>
 							<label class="search-head__card_filters__inputs__col__item search-head__card_filters__inputs__col__item_with-checkbox" for="with-animals-checkbox">
@@ -98,18 +98,18 @@
 								<input type="checkbox" id="can-smoke-checkbox" v-model="head.filters.isAccess">
 								<span>isAccess</span>
 							</label>
-						</div>
+						</div> -->
 					</div>
 					<div class="search-head__card_filters__more-filters"
 						@click="head.moreFiltersShown=!head.moreFiltersShown"
-						v-if="head.filters.realityType != 'CommercialBuilding'"
-					>
+						>
+						<!-- v-if="head.filters.RealityType && head.filters.RealityType != RealityType.Office" -->
 						<div class="search-head__card_filters__more-filters__inner">
 							{{ head.moreFiltersShown ? 'Меньше' : 'Больше' }} фильтров
 						</div>
 					</div>
 					<div class="search-head__card_filters__inputs search-head__card_filters__inputs_more" v-if="head.moreFiltersShown">
-						<div class="search-head__card_filters__inputs__col">
+						<!-- <div class="search-head__card_filters__inputs__col">
 							<RangeFilter class="search-head__card_filters__inputs__col__item"
 								caption="Жилая площадь, м2" fieldsSize="medium"
 								@change="(obj:FilterRange) => head.filters.livingArea = obj"
@@ -118,9 +118,16 @@
 								caption="Кухня, м2" fieldsSize="medium"
 								@change="(obj:FilterRange) => head.filters.kitchenArea = obj"
 							/>
-						</div>
+						</div> -->
 						<div class="search-head__card_filters__inputs__col search-head__card_filters__inputs__col_with-checkboxes">
-							
+							<label class="search-head__card_filters__inputs__col__item search-head__card_filters__inputs__col__item_with-checkbox" for="floor-ch-f">
+								<input type="checkbox" id="floor-ch-f" v-model="head.filtersProxy.floors.notFirst" @change="floorFilterChange">
+								<span>Не первый этаж</span>
+							</label>
+							<label class="search-head__card_filters__inputs__col__item search-head__card_filters__inputs__col__item_with-checkbox" for="floor-ch-l">
+								<input type="checkbox" id="floor-ch-l" v-model="head.filtersProxy.floors.notLast" @change="floorFilterChange">
+								<span>Не последний этаж</span>
+							</label>
 						</div>
 					</div>
 					<input type="submit" class="search-head__card_filters__submit" value="Найти" @click="submitSearch">
@@ -171,6 +178,8 @@ import { container } from 'tsyringe';
 import { AnnouncementController } from '../controllers/announcementContoller';
 import { DealType } from '../domain/enums/dealType';
 import { filter, head } from 'lodash';
+import { RealityType } from '../domain/enums/realityType';
+import { filterParameters } from '../domain/types';
 
 interface FilterRange {
 	from: number|undefined,
@@ -183,25 +192,36 @@ export default defineComponent({
 		return {
 			store: store,
 			DealType: DealType,
+			RealityType: RealityType,
 			head: {
 				filtersShown: true,
 				mapShown: false,
 				moreFiltersShown: false,
+				// filters: {
+				// 	dealType: DealType.Sell,
+				// 	realityType: "Flat" as "Flat"|"CommercialBuilding",
+				// 	price: {} as FilterRange,
+				// 	roomsCount: [] as number[],
+				// 	area: {} as FilterRange,
+				// 	withAnimals: false,
+				// 	withChildren: false,
+				// 	canSmoke: false,
+				// 	haveParking: false,
+				// 	entry: false,
+				// 	isUse: false,
+				// 	isAccess: false,
+				// 	livingArea: {} as FilterRange,
+				// 	kitchenArea: {} as FilterRange,
+				// }
 				filters: {
-					dealType: DealType.Sell,
-					realityType: "Flat" as "Flat"|"CommercialBuilding",
-					price: {} as FilterRange,
-					roomsCount: [] as number[],
-					area: {} as FilterRange,
-					withAnimals: false,
-					withChildren: false,
-					canSmoke: false,
-					haveParking: false,
-					entry: false,
-					isUse: false,
-					isAccess: false,
-					livingArea: {} as FilterRange,
-					kitchenArea: {} as FilterRange,
+					DealType: DealType.Rent,
+					RealityType: RealityType.Office
+				} as filterParameters,
+				filtersProxy: {
+					floors: {
+						notFirst:false,
+						notLast:false
+					}
 				}
 			},
 			map: {
@@ -212,12 +232,15 @@ export default defineComponent({
 		}
 	},
 	methods: {
+		floorFilterChange() {
+			this.head.filters.FloorFilter = 0;
+			if (this.head.filtersProxy.floors.notFirst) this.head.filters.FloorFilter++;
+			if (this.head.filtersProxy.floors.notLast) this.head.filters.FloorFilter += 2;
+		},
 		async submitSearch() {
 			let ac = container.resolve(AnnouncementController);
-			let announcements = await ac.getAnnouncements(10);
+			let announcements = await ac.getFilteredAnnouncements(this.head.filters);
 			this.announcementCards = announcements as Array<AnnouncementViewModel>;
-
-			this.head.filters.canSmoke  // works
 		}
 	}
 })

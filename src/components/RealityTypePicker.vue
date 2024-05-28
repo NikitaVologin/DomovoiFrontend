@@ -1,7 +1,7 @@
 <template>
 <div>
 	<select v-model="value">
-		<option :value="'CommercialBuilding'">Коммерческая</option>
+		<option :value="RealityType.Office">Офис</option>
 		<!-- <option :value="'Flat'">Квартира</option> -->
 	</select>
 </div>
@@ -10,12 +10,14 @@
 	
 <script lang="ts">
 import { defineComponent } from 'vue';
+import { RealityType } from '../domain/enums/realityType';
 
 export default defineComponent({
 	components: { },
 	data() {
 		return {
-			value: 'CommercialBuilding'
+			RealityType: RealityType,
+			value: RealityType.Office
 		}
 	},
 	emits: [ 'change' ],
