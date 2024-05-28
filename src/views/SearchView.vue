@@ -179,7 +179,7 @@ import { AnnouncementController } from '../controllers/announcementContoller';
 import { DealType } from '../domain/enums/dealType';
 import { filter, head } from 'lodash';
 import { RealityType } from '../domain/enums/realityType';
-import { filterParameters } from '../domain/types';
+import { FilterParameters } from '../domain/types';
 
 interface FilterRange {
 	from: number|undefined,
@@ -216,7 +216,7 @@ export default defineComponent({
 				filters: {
 					DealType: DealType.Rent,
 					RealityType: RealityType.Office
-				} as filterParameters,
+				} as FilterParameters,
 				filtersProxy: {
 					floors: {
 						notFirst:false,
@@ -230,6 +230,12 @@ export default defineComponent({
 			ann: {} as AnnouncementViewModel,
 			announcementCards: [] as Array<AnnouncementViewModel>,
 		}
+	},
+	mounted() {
+		let ac = container.resolve(AnnouncementController);
+		ac.getAnnouncements(20).then((res:Array<AnnouncementViewModel>) => {
+			this.announcementCards = res;
+		});
 	},
 	methods: {
 		floorFilterChange() {
