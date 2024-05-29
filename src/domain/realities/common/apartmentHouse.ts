@@ -1,15 +1,32 @@
 export class ApartmentHouse {
-    private _buildingYear!: number;
 
-    public get buildingYear(): number {
+    private _buildingYear?: number;
+
+    private _type?: string;
+
+    private _ceilingHeight?: number;
+    
+    private _isGas?: boolean;
+
+    private _haveGarbageChute?: boolean;
+
+    private _isSecurity?: boolean;
+
+    private _haveParking?: boolean;
+
+    private _isInfrastructure?: boolean;
+
+    private _isLandscaping?: boolean;
+
+    public readonly _elevators: Array<string> = [];
+
+    public get buildingYear(): number | undefined {
         return this._buildingYear;
     }
 
-    public set buildingYear(value: number) {
+    public set buildingYear(value: number | undefined) {
         this._buildingYear = value;
     }
-
-    private _type?: string | undefined;
 
     public get type(): string | undefined {
         return this._type;
@@ -19,77 +36,61 @@ export class ApartmentHouse {
         this._type = value;
     }
 
-    private _ceilingHeight!: number;
-
-    public get ceilingHeight(): number {
+    public get ceilingHeight(): number | undefined {
         return this._ceilingHeight;
     }
 
-    public set ceilingHeight(value: number) {
+    public set ceilingHeight(value: number | undefined) {
         this._ceilingHeight = value;
     }
 
-    private _isGas!: boolean;
-
-    public get isGas(): boolean {
+    public get isGas(): boolean | undefined {
         return this._isGas;
     }
 
-    public set isGas(value: boolean) {
+    public set isGas(value: boolean | undefined) {
         this._isGas = value;
     }
 
-    private _haveGarbageChute!: boolean;
-
-    public get haveGarbageChute(): boolean {
+    public get haveGarbageChute(): boolean | undefined {
         return this._haveGarbageChute;
     }
 
-    public set haveGarbageChute(value: boolean) {
+    public set haveGarbageChute(value: boolean | undefined) {
         this._haveGarbageChute = value;
     }
 
-    private _isSecurity!: boolean;
-
-    public get isSecurity(): boolean {
+    public get isSecurity(): boolean | undefined {
         return this._isSecurity;
     }
 
-    public set isSecurity(value: boolean) {
+    public set isSecurity(value: boolean | undefined) {
         this._isSecurity = value;
     }
 
-    private _haveParking!: boolean;
-
-    public get haveParking(): boolean {
+    public get haveParking(): boolean | undefined {
         return this._haveParking;
     }
 
-    public set haveParking(value: boolean) {
+    public set haveParking(value: boolean | undefined) {
         this._haveParking = value;
     }
 
-    private _isInfrastructure!: boolean;
-
-    public get isInfrastructure(): boolean {
+    public get isInfrastructure(): boolean | undefined {
         return this._isInfrastructure;
     }
 
-    public set isInfrastructure(value: boolean) {
+    public set isInfrastructure(value: boolean | undefined) {
         this._isInfrastructure = value;
     }
 
-    private _isLandscaping!: boolean;
-
-    public get isLandscaping(): boolean {
+    public get isLandscaping(): boolean | undefined {
         return this._isLandscaping;
     }
 
-    public set isLandscaping(value: boolean) {
+    public set isLandscaping(value: boolean | undefined) {
         this._isLandscaping = value;
     }
-
-    public readonly _elevators: Array<string> = [];
 
     // public constructor(id: string, buildingYear: number, ceilingHeight: number, isGas: boolean,
     //     haveGarbageChute: boolean, isSecurity: boolean, haveParking: boolean,

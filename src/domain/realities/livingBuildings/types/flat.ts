@@ -2,9 +2,22 @@ import { ApartmentHouse } from "../../common/apartmentHouse";
 import { LivingBuilding } from "../livingBuilding";
 
 export class Flat extends LivingBuilding {
-    private _roomsCount!: number;
 
-    public get roomsCount(): number {
+    private _isFresh?: boolean;
+
+    private _roomsCount?: number;
+
+    private _isRepaired?: boolean;
+    
+    private _kitchenArea?: number;
+
+    private _balconyType?: string;
+
+    private _viewFromBalcony?: string;
+
+    private _apartmentHouse?: ApartmentHouse;
+
+    public get roomsCount(): number | undefined {
         return this._roomsCount;
     }
 
@@ -12,37 +25,29 @@ export class Flat extends LivingBuilding {
         this._roomsCount = value;
     }
 
-    private _isRepaired!: boolean;
-
-    public get isRepaired(): boolean {
+    public get isRepaired(): boolean | undefined{
         return this._isRepaired;
     }
 
-    public set isRepaired(value: boolean) {
+    public set isRepaired(value: boolean | undefined) {
         this._isRepaired = value;
     }
 
-    private _isFresh!: boolean;
-
-    public get isFresh(): boolean {
+    public get isFresh(): boolean | undefined {
         return this._isFresh;
     }
 
-    public set isFresh(value: boolean) {
+    public set isFresh(value: boolean | undefined)  {
         this._isFresh = value;
     }
 
-    private _kitchenArea!: number;
-
-    public get kitchenArea(): number {
+    public get kitchenArea(): number  | undefined{
         return this._kitchenArea;
     }
 
-    public set kitchenArea(value: number) {
+    public set kitchenArea(value: number | undefined) {
         this._kitchenArea = value;
     }
-
-    private _balconyType?: string | undefined;
 
     public get balconyType(): string | undefined {
         return this._balconyType;
@@ -52,8 +57,6 @@ export class Flat extends LivingBuilding {
         this._balconyType = value;
     }
 
-    private _viewFromBalcony?: string | undefined;
-
     public get viewFromBalcony(): string | undefined {
         return this._viewFromBalcony;
     }
@@ -61,8 +64,6 @@ export class Flat extends LivingBuilding {
     public set viewFromBalcony(value: string | undefined) {
         this._viewFromBalcony = value;
     }
-
-    private _apartmentHouse?: ApartmentHouse | undefined;
 
     public get apartmentHouse(): ApartmentHouse | undefined {
         return this._apartmentHouse;

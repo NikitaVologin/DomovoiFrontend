@@ -1,6 +1,7 @@
 import { RealityType } from "../domain/enums/realityType";
 import { Building } from "../domain/realities/commercialBuildings/building";
 import { Office } from "../domain/realities/commercialBuildings/types/office";
+import { ApartmentHouse } from "../domain/realities/common/apartmentHouse";
 import { Flat } from "../domain/realities/livingBuildings/types/flat";
 import { Reality } from "../domain/realities/reality";
 import { RealityViewModel } from "../viewModel/RealityViewModel";
@@ -34,7 +35,28 @@ export class RealityMapper implements IRealityMapper {
             }  
             case(RealityType.Flat): {
                 let reality = new Flat();
+                let building = new ApartmentHouse();
+                reality.apartmentHouse = building;
+                reality.area = obj.area;
+                reality.address = obj.address
                 reality.type = type;
+                reality.isFresh = obj.isFresh;
+                reality.roomsCount = obj.roomsCount;
+                reality.isRepaired = obj.isRepaired;
+                reality.kitchenArea = obj.kitchenArea;
+                reality.balconyType = obj.balconyType;
+                reality.viewFromBalcony = obj.viewFromBalcony;
+                reality.floor = obj.floor;
+                reality.floorsCount = obj.floorsCount;
+                building.buildingYear = obj.building.buildingYear;
+                building.type = obj.building.type;
+                building.ceilingHeight = obj.building.ceilingHeight;
+                building.isGas = obj.building.isGas;
+                building.haveGarbageChute = obj.building.haveGarbageChute;
+                building.isSecurity = obj.building.isSecurity;
+                building.haveParking = obj.building.haveParking;
+                building.isInfrastructure = obj.building.isInfrastructure;
+                building.isLandscaping = obj.building.isLandscaping;
                 return reality;
             } 
             default: {
@@ -42,6 +64,7 @@ export class RealityMapper implements IRealityMapper {
             }  
         }
     }
+
 
     public mapRealityToModelView(reality: Reality): RealityViewModel {
         let viewModel = new RealityViewModel();
@@ -90,6 +113,11 @@ export class RealityMapper implements IRealityMapper {
                 (reality as Office).building = building;
                 return (reality as Office);
             }   
+            case (RealityType.Flat): {
+                let reality = new Reality();
+                reality.type = viewModel.realityType;
+                return reality;
+            }
             default: {
                 throw new Error('Unsupported realty type'); 
             }  

@@ -11,16 +11,6 @@ export class Reality {
         this._area = value;
     }
 
-    private _type?: RealityType | undefined;
-
-    public get type(): RealityType | undefined {
-        return this._type;
-    }
-
-    public set type(value: RealityType | undefined) {
-        this._type = value;
-    }
-
     private _address?: string 
 
     public get address(): string | undefined {
@@ -29,6 +19,16 @@ export class Reality {
 
     public set address(value: string | undefined) {
         this._address = value;
+    }
+
+    private _type?: RealityType | undefined;
+
+    public get type(): RealityType | undefined {
+        return this._type;
+    }
+
+    public set type(value: RealityType | undefined) {
+        this._type = value;
     }
 
     // public getInstance(id: string, area: number, type?: string | undefined): Reality {
