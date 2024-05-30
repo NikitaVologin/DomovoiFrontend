@@ -21,6 +21,8 @@ export class Reception implements IReception {
         let userInformation = newUser.getInformationObject();
         userInformation.password = new_password;
         await this._service.putUserInformation(idOldUser, userInformation);
+        let updatedUserInformation = await this.getUserInformation(idOldUser);
+        localStorage.setItem('user', JSON.stringify(updatedUserInformation))
     }
 
     async checkOut(id: string): Promise<void> {
