@@ -10,6 +10,7 @@ export class HTTPClient implements IHTTPClient {
     constructor(@inject("baseURL") baseURL: string) {
         this._axios = axios.create({
             baseURL: baseURL,
+            withCredentials: true
         });
     }
 
