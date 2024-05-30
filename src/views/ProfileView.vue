@@ -18,7 +18,7 @@
 				<button class="aside__buttons__item" @click="cancelEditing">Отмена</button>
 			</div>
 			<div class="aside__buttons" v-if="!infoEdited">
-				<button class="aside__buttons__item" v-if="!own">Написать</button>
+				<button class="aside__buttons__item" v-if="!own" @click="openChat">Написать</button>
 				<button class="aside__buttons__item" v-if="own" @click="editInfo">Редактировать</button>
 			</div>
 		</aside>
@@ -169,6 +169,9 @@ export default defineComponent({
 		},
 		changeReviewsSort() {
 			this.rewiewsSort = this.rewiewsSort == 'positive' ? 'negative' : 'positive';
+		},
+		openChat(){
+			router.push("/chat");
 		}
 	}
 })

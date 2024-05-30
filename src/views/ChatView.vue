@@ -2,26 +2,41 @@
     <Header></Header>
     <div class="chat">
         <div class="chat__contacts"> 
-            <div class="chat__contacts__contact" v-for="user in otherCounterAgents">
-                <div class="chat__contacts__contact__ava">{{ user.avatar }}</div>  
+            <div class="chat__contacts__contact" v-for="user in otherCounterAgents" @click="openChoosenUsersChat">
+                <div class="chat__contacts__contact__ava":style="`background-image: url('${user.avatar}'`"></div>  
                 <div class="chat__contacts__contact__name">{{ user.FIO }}</div>  
-            </div>     
+            </div> 
+            <div class="chat__contacts__contact">
+                <div class="chat__contacts__contact__ava":style="`background-image: url('${currentCounterAgent.avatar}'`"></div>  
+                <div class="chat__contacts__contact__name">{{ currentCounterAgent.FIO }}</div>  
+            </div> 
             <hr class="chat__contacts__straight">      
         </div>
         <div class="chat__field">
             <div class="chat__header">
                 <div class="chat__header__name">{{ currentCounterAgent.FIO }}</div>
-                <div class="chat__header__status">Online</div>
+                <div :class="[IsCounterAgentOnline ? online_class : offline_class]">{{IsCounterAgentOnline?'online':'offline'}}</div>
             </div>
-            <div class="chat__messages">
-                <div class="chat__messages__message">
-                    <div class="chat__messages__message__ava"></div>
-                    <div class="chat__messages__message__field">LOOOOOOOOOOOOOOl</div>
+            <div class="chat__messages">     
+                <div class="chat__messages__message__reverse"  @click="openChoosenUsersChat">
+                    <div @click="openUserProfile" class="chat__messages__message__ava":style="`background-image: url('${currentCounterAgent.avatar}'`"></div>
+                    <div class="chat__messages__message__field">
+                        Иногда просто физическое присутствие близкого человека может быть лучшей поддержкой. Просто будьте рядом с братом, поддерживайте его в трудные моменты, обнимите, если это поможет. Ваша поддержка и забота сейчас очень важны.
+
+В такие моменты слова не всегда нужны, главное - ваша поддержка и понимание. Будьте терпеливыми, заботливыми и бережными в отношениях с братом, который переживает утрату мамы. Помните, что вместе вы сможете преодолеть этот трудный период и поддержать друг друга.
+                    </div>
                 </div>
+                    <div class="chat__messages__message" >
+                        <div @click="openUserProfile" class="chat__messages__message__ava":style="`background-image: url('${currentCounterAgent.avatar}'`"></div>
+                        <div class="chat__messages__message__field">
+                            Иногда просто физическое присутствие близкого человека может быть лучшей поддержкой. Просто будьте рядом с братом, поддерживайте его в трудные моменты, обнимите, если это поможет. Ваша поддержка и забота сейчас очень важны.
+
+В такие моменты слова не всегда нужны, главное - ваша поддержка и понимание. Будьте терпеливыми, заботливыми и бережными в отношениях с братом, который переживает утрату мамы. Помните, что вместе вы сможете преодолеть этот трудный период и поддержать друг друга.
+                        </div>
+                    </div>
             </div>
             <div class="chat__intput-field">
-                <!-- <p1 class="chat__intput-field__text" v-if="visible">Напишите текст...</p1> -->
-                <textarea v-model="input_text" placeholder="Напишите сообщение..." class="chat__intput-field__text"></textarea>
+                <textarea v-on:keyup.enter="enterMessage" v-model="input_text" placeholder="Напишите сообщение..." class="chat__intput-field__text"></textarea>
             </div>
         </div>
     </div>
@@ -43,8 +58,10 @@
                 otherCounterAgents: [] as Array<CounteragentViewModel>,
                 messages: [] as Array<MessageViewModel>,
                 currentCounterAgent: new CounteragentViewModel(),
-                visible: true,
+                IsCounterAgentOnline: false,
                 input_text: "",
+                offline_class: "chat__header__offline-status",
+                online_class: "chat__header__online-status"
             };
         },
         computed: {
@@ -52,6 +69,15 @@
         mounted() {
         },
         methods: {
+            enterMessage(){
+                this.input_text="Хай))))0";
+            },
+            openChoosenUsersChat(){
+
+            },
+            openUserProfile() {
+
+            }
         },
     })
     </script>
@@ -71,13 +97,28 @@
         background-color: rgba(163, 201, 179, 0.5);
         
         display: flex;
+        box-shadow:
+            inset 0 -2em 2em rgba(0, 0, 0, 0.1),
+            0 0 0 1px rgb(255, 255, 255),
+            0.1em 0.1em 0.5em rgba(0, 0, 0, 0.3);
     }
 
     .chat__contacts {
+        display: block;
         width: 30%;
         height: 100%;
         background-color: rgba(255, 255, 255, 1);
         border-right: 1px solid rgba(154, 154, 154, 1);
+        overflow-y: scroll;
+
+        .chat__contacts__contact:hover {
+            display: flex;
+            flex-direction: row;
+            width: 100%;
+            height: 70px;
+            background-color: rgba(243, 243, 243, 1);
+            cursor: pointer;
+        }
 
         .chat__contacts__contact {
             display: flex;
@@ -86,16 +127,25 @@
             height: 70px;
 
             .chat__contacts__contact__ava {
-                width: 100px;
-                height: 50px;
+                display: flex;
+                flex-wrap: wrap;
+                height: 3rem;
+                aspect-ratio: 1/1;
+                border-radius: 50%;
+                background-size: cover;
+                align-self: center;
+                justify-content: center;
+                margin-left: 10px;
             }
             .chat__contacts__contact__name {
                 display: flex;
                 align-self: center;
+                padding-left: 15px;
             }
         }
         .chat__contacts__straight{
-            color: 1px solid rgba(154, 154, 154, 1);
+            border: none;
+            border-bottom: 1px solid rgba(154, 154, 154, 1);
         }
     }
 
@@ -116,28 +166,70 @@
             height: 50px;
             background-color: rgba(243, 243, 243, 1);
         }
+        .chat__header__online-status {
+            color: blue;
+        }
+        .chat__header__offline-status {
+            color: rgba(154, 154, 154, 1);
+        }
         .chat__messages {
-            display: flex;
-            flex-direction: column;
+            display: block;
             width: 100%;
             height: 100%;
-            justify-content: end;
-            align-content: end;
+            overflow-y: scroll;
+
+            // .chat__messages__message__wrapped {
+            //     display: flex;
+            //     width: 100%;
+            // }
 
             .chat__messages__message {
                 display: flex;
+                width: 80%;
                 flex-direction: row;
-                justify-content: start;
+                justify-content: flex-start;
+
                 .chat__messages__message__ava {
-                    padding-right: 15px;
+                    margin-left: 15px;
+                    margin-right: 15px;
+                    display: flex;
+                    height: 2.5rem;
+                    aspect-ratio: 1/1;
+                    border-radius: 50%;
+                    background-size: cover;
+                    cursor: pointer;
                 }
                 .chat__messages__message__field {
-                    width: 100px;
+                    background-color: rgba(255, 249, 249, 1);
+                    border-radius: 15px;
+                    margin-bottom: 10px;
+                    padding: 10px;
                 }
+
             }
-             .chat__messages__message_reverse{
+             .chat__messages__message__reverse{
                 display: flex;
                 flex-direction: row-reverse;
+                justify-content: flex-start;
+                margin-left: 20%;
+
+                .chat__messages__message__ava {
+                    margin-left: 15px;
+                    margin-right: 15px;
+                    display: flex;
+                    height: 2.5rem;
+                    aspect-ratio: 1/1;
+                    border-radius: 50%;
+                    background-size: cover;
+                    cursor: pointer
+                }
+                .chat__messages__message__field {
+                    word-wrap: break-word;
+                    background-color: rgba(255, 249, 249, 1);
+                    border-radius: 15px;
+                    margin-bottom: 10px;
+                    padding: 10px;
+                }
             }   
         }   
         .chat__intput-field{
@@ -157,6 +249,10 @@
                 background-color: rgba(243, 243, 243, 1);
                 border: 0px;
             }
+        }
+        :active, :hover, :focus {
+            outline: 0;
+            outline-offset: 0;
         }
     }
     </style>
