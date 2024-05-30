@@ -8,7 +8,7 @@ import { ICouterAgentMapper } from "../../mappers/interfaces/couteragentMapperIn
 export class Reception implements IReception {
 
     public constructor(@inject("IReceptionService") private readonly _service: IReceptionService,
-        @inject("ICouterAgentMapper") private readonly _userMapper: ICouterAgentMapper) { }
+                       @inject("ICouterAgentMapper") private readonly _userMapper: ICouterAgentMapper) { }
 
     async getUserInformation(id: string): Promise<CounteragentViewModel> {
         let user = await this._service.getUserInformation(id);
@@ -20,9 +20,12 @@ export class Reception implements IReception {
         let newUser = this._userMapper.mapViewModelToCouterAget(newUserInformation);
         let userInformation = newUser.getInformationObject();
         userInformation.password = new_password;
-        await this._service.putUserInformation(idOldUser, userInformation);
-        let updatedUserInformation = await this.getUserInformation(idOldUser);
-        localStorage.setItem('user', JSON.stringify(updatedUserInformation))
+        try {
+            await this._service.putUserInformation(idOldUser, userInformation);
+            localStorage.setItem('user', JSON.stringify(newUserInformation));
+        } catch (exception) {
+            throw exception;
+        }
     }
 
     async checkOut(id: string): Promise<void> {
@@ -32,13 +35,13 @@ export class Reception implements IReception {
 
     async registration(userType: string, mail: string, password: string): Promise<CounteragentViewModel> {
         let userDto = await this._service.registration(userType, mail, password);
-        let viewModel = this._userMapper.mapCouterAgentToViewModel(userDto);    
+        let viewModel = this._userMapper.mapCouterAgentToViewModel(userDto);
         return viewModel;
     }
 
     async authorize(mail: string, password: string): Promise<CounteragentViewModel> {
         let userDto = await this._service.authorize(mail, password);
-        let viewModel = this._userMapper.mapCouterAgentToViewModel(userDto);    
+        let viewModel = this._userMapper.mapCouterAgentToViewModel(userDto);
         return viewModel;
-    } 
+    }
 }
