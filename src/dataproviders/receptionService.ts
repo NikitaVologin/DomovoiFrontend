@@ -12,16 +12,20 @@ export class ReceptionService implements IReceptionService {
         @inject("ICouterAgentMapper") private readonly _userMapper: ICouterAgentMapper) { }
 
     async getUserInformation(id: string): Promise<CounterAgent> {
-        throw new Error("Method not implemented.");
-        let url = "";
+        let url = "/CounterAgent/" + id;
 
         let response = await this._httpClient.get<CounterAgentResponse>(url).catch((error) => {
             throw (error);
         });
 
-        return new Promise((resolve, reject) => {
-            reject(response);
-        });
+        if (response.status == 200) {
+            let user = this._userMapper.mapObjectToCouterAgent(response.data);
+            return user;
+        }
+        
+        return new Promise(
+            (resolve, reject) => reject(response)
+        );
     }
 
     async putUserInformation(idOldUser: string, newUserInformation: any): Promise<void> {
@@ -29,10 +33,13 @@ export class ReceptionService implements IReceptionService {
 
         let data = newUserInformation;
 
-        let response = await this._httpClient.put<any>(url, data).catch((error) => {
+        let response = await this._httpClient.put<any>(url, data)
+            .catch((error) => {
             throw (error);
         });
 
+        if(response.status == 200) return;
+        
         return new Promise((resolve, reject) => {
             reject(response);
         });
