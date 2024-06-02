@@ -29,13 +29,13 @@
 				</Swiper>
 			</div>
 			<div class="info__text">
-				<div class="info__text__author">
+				<router-link :to="`/profile/${announcement.counteragent.id}`" class="no-link-style info__text__author">
 					<div
 						class="info__text__author__avatar"
 						:style="`background-image: url(${announcement.counteragent.avatar});`"
 					></div>
 					<div class="info__text__author__name">{{ announcement.counteragent.FIO }}</div>
-				</div>
+				</router-link>
 				<div class="info__text__props">
 					<div class="info__text__props-col">
 						<div class="info__text__props-col__item">{{ announcement.reality.address }}</div>
@@ -75,6 +75,9 @@ import { Scrollbar } from 'swiper/modules';
 import Header from "../components/Header.vue"
 import AnnouncementCard from "../components/AnnouncementCard.vue"
 import { AnnouncementViewModel } from '../viewModel/AnnouncementViewModel';
+import { container } from 'tsyringe';
+import { AnnouncementController } from '../controllers/announcementContoller';
+import { router } from '../router';
 
 export default defineComponent({
 	components: { Header, Swiper, SwiperSlide, AnnouncementCard },
@@ -94,6 +97,10 @@ export default defineComponent({
 	computed: {
 	},
 	mounted() {
+		let ac = container.resolve(AnnouncementController);
+		ac.getAnnouncementById((router.currentRoute.value.params.id as string)).then(res => {
+			this.announcement = res;
+		})
 	},
 	methods: {
 		showImage(i:number) {
@@ -142,6 +149,7 @@ export default defineComponent({
 		padding-top: 0.5rem;
 		width: 46%;
 		.info__text__author {
+			color: #000;
 			display: flex;
 			align-items: center;
 			margin-bottom: 1.5rem;
@@ -153,9 +161,6 @@ export default defineComponent({
 				margin-right: 1rem;
 				height: 2rem;
 			}
-			// .info__text__author__name {
-			// 	// font-size: 0.9rem;
-			// }
 		}
 		.info__text__props {
 			display: flex;
