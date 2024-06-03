@@ -6,10 +6,10 @@
                 <div class="chat__contacts__contact__ava":style="`background-image: url('${user.avatar}'`"></div>  
                 <div class="chat__contacts__contact__name">{{ user.FIO }}</div>  
             </div> 
-            <div class="chat__contacts__contact">
+            <!-- <div class="chat__contacts__contact">
                 <div class="chat__contacts__contact__ava":style="`background-image: url('${currentCounterAgent.avatar}'`"></div>  
                 <div class="chat__contacts__contact__name">{{ currentCounterAgent.FIO }}</div>  
-            </div> 
+            </div>  -->
             <hr class="chat__contacts__straight">      
         </div>
         <div class="chat__field">
@@ -49,6 +49,8 @@
     import Header from "../components/Header.vue"
     import { CounteragentViewModel } from '../viewModel/CounteragentViewModel';
     import { MessageViewModel } from '../viewModel/MessageViewModel.ts';
+    import { container } from 'tsyringe';
+import { ReceptionController } from '../controllers/receptionController.ts';
     
     export default defineComponent({
         components: { Header},
@@ -67,10 +69,14 @@
         computed: {
         },
         mounted() {
+            let ac = container.resolve(ReceptionController);
+		    ac.getUserInformation((router.currentRoute.value.params.id as string)).then(res => {
+			    this.currentCounterAgent = res;
+		    })
         },
         methods: {
             enterMessage(){
-                this.input_text="Хай))))0";
+
             },
             openChoosenUsersChat(){
 

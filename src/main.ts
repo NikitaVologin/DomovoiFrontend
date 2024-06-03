@@ -15,6 +15,15 @@ import { DealMapper } from './mappers/dealMapper';
 import { RealityMapper } from './mappers/realityMapper';
 import { CounterAgentMapper } from './mappers/couteragentMapper';
 
+import { VueSignalR } from '@dreamonkey/vue-signalr';
+import { HubConnectionBuilder } from '@microsoft/signalr';
+
+const connection = new HubConnectionBuilder()
+  .withUrl('http://localhost:5000/signalr')
+  .build();
+
+createApp(App).use(VueSignalR, { connection }).mount('#app');
+
 createApp(App).provide("$store", store).use(router).use(store).mount('#app');
 
 container.register("IHTTPClient", {

@@ -11,6 +11,7 @@
   "dependencies": {
     "@automapper/classes": "^8.8.1",
     "@automapper/core": "^8.8.1",
+    "@dreamonkey/vue-signalr": "github:dreamonkey/vue-signalr",
     "axios": "^1.6.7",
     "lodash": "^4.17.21",
     "reflect-metadata": "^0.1.14",

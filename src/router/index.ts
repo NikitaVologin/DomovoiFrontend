@@ -38,7 +38,7 @@ const routes = [
 		component: AnnouncementView
 	},
 	{
-		path: '/chat',
+		path: '/chat/:id',
 		name: 'chat',
 		component: ChatView
 	},
