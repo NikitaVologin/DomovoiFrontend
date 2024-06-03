@@ -2,24 +2,24 @@
     <Header></Header>
     <div class="chat">
         <div class="chat__contacts"> 
-            <div class="chat__contacts__contact" v-for="user in otherCounterAgents" @click="openChoosenUsersChat">
+            <div class="chat__contacts__contact" v-for="user in contactsUsers" @click="openChoosenUsersChat">
                 <div class="chat__contacts__contact__ava":style="`background-image: url('${user.avatar}'`"></div>  
                 <div class="chat__contacts__contact__name">{{ user.FIO }}</div>  
             </div> 
             <!-- <div class="chat__contacts__contact">
-                <div class="chat__contacts__contact__ava":style="`background-image: url('${currentCounterAgent.avatar}'`"></div>  
-                <div class="chat__contacts__contact__name">{{ currentCounterAgent.FIO }}</div>  
+                <div class="chat__contacts__contact__ava":style="`background-image: url('${user.avatar}'`"></div>  
+                <div class="chat__contacts__contact__name">{{ user.FIO }}</div>  
             </div>  -->
             <hr class="chat__contacts__straight">      
         </div>
         <div class="chat__field">
             <div class="chat__header">
-                <div class="chat__header__name">{{ currentCounterAgent.FIO }}</div>
-                <div :class="[IsCounterAgentOnline ? online_class : offline_class]">{{IsCounterAgentOnline?'online':'offline'}}</div>
+                <div class="chat__header__name">{{ user.FIO }}</div>
+                <div :class="[isUserOnline ? online_class : offline_class]">{{isUserOnline?'online':'offline'}}</div>
             </div>
             <div class="chat__messages">     
                 <!-- <div class="chat__messages__message__reverse"  @click="openChoosenUsersChat">
-                    <div @click="openUserProfile" class="chat__messages__message__ava":style="`background-image: url('${currentCounterAgent.avatar}'`"></div>
+                    <div @click="openUserProfile" class="chat__messages__message__ava":style="`background-image: url('${user.avatar}'`"></div>
                     <div class="chat__messages__message__field">
                         Иногда просто физическое присутствие близкого человека может быть лучшей поддержкой. Просто будьте рядом с братом, поддерживайте его в трудные моменты, обнимите, если это поможет. Ваша поддержка и забота сейчас очень важны.
 
@@ -27,7 +27,7 @@
                     </div>
                 </div>
                     <div class="chat__messages__message" >
-                        <div @click="openUserProfile" class="chat__messages__message__ava":style="`background-image: url('${currentCounterAgent.avatar}'`"></div>
+                        <div @click="openUserProfile" class="chat__messages__message__ava":style="`background-image: url('${user.avatar}'`"></div>
                         <div class="chat__messages__message__field">
                             Иногда просто физическое присутствие близкого человека может быть лучшей поддержкой. Просто будьте рядом с братом, поддерживайте его в трудные моменты, обнимите, если это поможет. Ваша поддержка и забота сейчас очень важны.
 
@@ -57,10 +57,10 @@ import { ReceptionController } from '../controllers/receptionController.ts';
         data() {
             return {
                 store: store,
-                otherCounterAgents: [] as Array<CounteragentViewModel>,
+                contactsUsers: [] as Array<CounteragentViewModel>,
                 messages: [] as Array<MessageViewModel>,
-                currentCounterAgent: new CounteragentViewModel(),
-                IsCounterAgentOnline: false,
+                user: new CounteragentViewModel(),
+                isUserOnline: false,
                 input_text: "",
                 offline_class: "chat__header__offline-status",
                 online_class: "chat__header__online-status"
@@ -71,7 +71,7 @@ import { ReceptionController } from '../controllers/receptionController.ts';
         mounted() {
             let ac = container.resolve(ReceptionController);
 		    ac.getUserInformation((router.currentRoute.value.params.id as string)).then(res => {
-			    this.currentCounterAgent = res;
+			    this.user = res;
 		    })
         },
         methods: {
