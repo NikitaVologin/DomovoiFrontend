@@ -4,6 +4,7 @@ import SearchView from '../views/SearchView.vue';
 import ProfileView from '../views/ProfileView.vue';
 import AnnouncementEditView from '../views/AnnouncementEditView.vue';
 import AnnouncementView from '../views/AnnouncementView.vue';
+import ChatView from '../views/ChatView.vue';
 
 const routes = [
 	{
@@ -35,6 +36,11 @@ const routes = [
 		path: '/announcement/:id',
 		name: 'announcement',
 		component: AnnouncementView
+	},
+	{
+		path: '/chat',
+		name: 'chat',
+		component: ChatView
 	},
 ] as Readonly<RouteRecordRaw[]>;
 
