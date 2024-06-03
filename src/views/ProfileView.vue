@@ -7,7 +7,7 @@
 			<div class="aside__avatar card" :style="`background-image: url('${user.avatar}');`"></div>
 			<div class="aside__info" v-if="!infoEdited">
 				<div class="aside__info__item">{{user.FIO}}</div>
-				<div class="aside__info__item">{{user.email}}</div>
+				<div class="aside__info__item" v-if="user.email">{{user.email}}</div>
 				<div class="aside__info__item" v-if="user.phone">{{user.phone}}</div>
 			</div>
 			<div class="aside__edit" v-if="infoEdited">
@@ -23,29 +23,40 @@
 			</div>
 		</aside>
 		<div class="info">
-			<div class="info__annoncements-swiper-block">
-				<div class="info__annoncements-swiper-block__arrow info__annoncements-swiper-block__arrow_left" @click="announcementsSwiper.slidePrev()">
+			<div class="info__annoncements-swiper-block" v-if="announcements.length > 0">
+				<div class="info__annoncements-swiper-block__arrow info__annoncements-swiper-block__arrow_left"
+					v-if="announcements.length>3"
+					@click="announcementsSwiper.slidePrev()"
+				>
 					<svg viewBox="0 0 13 22" xmlns="http://www.w3.org/2000/svg">
 						<path d="M10.2193 21.2575L12.181 19.3817L3.82205 10.4407L12.6627 1.98688L10.8052 0L-9.95432e-05 10.3324L10.2193 21.2575Z"/>
 					</svg>
 				</div>
 				<Swiper
 					class="info__annoncements-swiper"
-					:slidesPerView="3"
+					:slidesPerView="Math.min(announcements.length,3)"
 					space-between="20"
-					loop
+					:loop="announcements.length > 3"
 					@swiper="getAnnouncementsSwiperRef"
+					:style="`width: ${Math.min(announcements.length*33.3333)}%`"
 				>
 					<SwiperSlide v-for="ann in announcements">
-						<AnnouncementCard :announcement="ann" minimized />
+						<AnnouncementCard 
+							:announcement="ann" minimized :editable="own" 
+							@delete="announcements = announcements.filter(a => a.id != ann.id)"
+						/>
 					</SwiperSlide>
 				</Swiper>
-				<div class="info__annoncements-swiper-block__arrow info__annoncements-swiper-block__arrow_right" @click="announcementsSwiper.slideNext()">
+				<div class="info__annoncements-swiper-block__arrow info__annoncements-swiper-block__arrow_right"
+					v-if="announcements.length>3"
+					@click="announcementsSwiper.slideNext()"
+				>
 					<svg viewBox="0 0 13 22" xmlns="http://www.w3.org/2000/svg" style="transform: rotate(180deg);">
 						<path d="M10.2193 21.2575L12.181 19.3817L3.82205 10.4407L12.6627 1.98688L10.8052 0L-9.95432e-05 10.3324L10.2193 21.2575Z"/>
 					</svg>
 				</div>
 			</div>
+			<div class="no-annoucements" v-if="announcements.length == 0">Нет объявлений</div>
 			<div class="info__reviews-block card">
 				<div>
 					<div class="info__reviews-block__toggles">
@@ -103,6 +114,7 @@ import { router } from '../router';
 import store from '../store';
 import { container } from 'tsyringe';
 import { ReceptionController } from '../controllers/receptionController';
+import { AnnouncementController } from '../controllers/announcementContoller';
 
 export default defineComponent({
 	components: { Header, AnnouncementCard, Swiper, SwiperSlide },
@@ -115,7 +127,7 @@ export default defineComponent({
 			infoEdited: false,
 			editedUser: {} as CounteragentViewModel,
 
-			announcements: [...Array(7)].map(i => new AnnouncementViewModel()),
+			announcements: [] as AnnouncementViewModel[],
 			announcementsSwiper: {} as SwiperRef,
 
 			rewiewsSort: 'positive' as 'positive'|'negative',
@@ -133,19 +145,31 @@ export default defineComponent({
 		loggedUser: {
 			deep: true,
 			handler(val:CounteragentViewModel) {
-				this.checkIfOwnProfile();
+				this.loadData();
 			}
 		}
 	},
 	mounted() {
-		this.checkIfOwnProfile();
+		this.loadData();
 	},
 	methods: {
-		checkIfOwnProfile() {
+		loadData() {
+			let rc = container.resolve(ReceptionController);
 			if (router.currentRoute.value.params.id == store.state.user?.id) {
 				this.own = true;
 				this.user = store.state.user;
 			}
+			else {
+				this.own = false;
+				rc.getUserInformation(router.currentRoute.value.params.id as string).then(res => {
+					this.user = res;
+				})
+			}
+			// this.user.announcements = this.user.announcements;
+			let ac = container.resolve(AnnouncementController);
+			ac.getAnnouncementsByUserId(this.user.id).then(res => {
+				this.announcements = res;
+			})
 		},
 		editInfo() {
 			this.editedUser = JSON.parse(JSON.stringify(this.user));
@@ -229,6 +253,10 @@ main {
 			column-gap: 1rem;
 			margin-bottom: 2rem;
 
+			.info__annoncements-swiper {
+				margin: 0;
+			}
+
 			.info__annoncements-swiper-block__arrow {
 				min-width: 1.75rem;
 				min-height: 1.75rem;
@@ -263,6 +291,12 @@ main {
 			// .ann-card:deep(.ann-card__img) {
 			// 	aspect-ratio: 1/1;
 			// }
+		}
+
+		.no-annoucements {
+			margin-top: 0.5rem;
+			margin-bottom: 1rem;
+			color: #444;
 		}
 
 		.info__reviews-block {

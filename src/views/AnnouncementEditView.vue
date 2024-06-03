@@ -8,7 +8,7 @@
 				<div class="primary-parameters__item__caption">Тип сделки:</div>
 				<Picker
 					:items="store.state.realEstateParameterPickers.dealTypeForBusiness"
-					:defaultValue="(announcement.deal.dealType as String)"
+					:defaultValue="(announcement.deal.dealType as string)"
 					@change="dealTypeChange"
 				></Picker>
 			</div>
@@ -68,7 +68,7 @@
 						<div class="secondary-parameters__block__col__item__caption">Кол-во комнат:</div>
 						<Picker
 							:items="store.state.realEstateParameterPickers.roomsCount"
-							@change="(val:number) => announcement.reality.roomsCount = val"
+							@change="(val:number) => announcement.reality.roomCount = val"
 						></Picker>
 					</div>
 					<div class="secondary-parameters__block__col__item">
@@ -81,7 +81,7 @@
 							</div>
 						</div>
 					</div>
-					<div class="secondary-parameters__block__col__item" v-if="announcement.deal.dealType == 'Rent'">
+					<div class="secondary-parameters__block__col__item" v-if="announcement.deal.dealType == 'Rent' && announcement.deal.rentConditions">
 						<div class="secondary-parameters__block__col__item__caption">Период:</div>
 						<div class="secondary-parameters__block__col__item__inputs-row">
 							<div class="secondary-parameters__block__col__item__inputs-row__item">
@@ -91,7 +91,7 @@
 						</div>
 					</div>
 				</div>
-				<div class="secondary-parameters__block__col" v-if="announcement.deal.dealType == 'Rent'">
+				<div class="secondary-parameters__block__col" v-if="announcement.deal.dealType == 'Rent' && announcement.deal.rentConditions">
 					<div class="secondary-parameters__block__col__item">
 						<div class="secondary-parameters__block__col__item__caption">Коммунальные платежи:</div>
 						<div class="secondary-parameters__block__col__item__inputs-row">
@@ -120,7 +120,7 @@
 						</div>
 					</div>
 				</div>
-				<div class="secondary-parameters__block__col" v-if="announcement.deal.dealType == 'Sell'">
+				<div class="secondary-parameters__block__col" v-if="announcement.deal.dealType == 'Sell' && announcement.deal.sellConditions">
 					<div class="secondary-parameters__block__col__item">
 						<div class="secondary-parameters__block__col__item__caption">Предыдущих владельцев:</div>
 						<div class="secondary-parameters__block__col__item__inputs-row">
@@ -150,14 +150,14 @@
 					</div>
 				</div>
 				<div class="secondary-parameters__block__col secondary-parameters__block__col_with-checkboxes"
-					v-if="announcement.deal.dealType == ('Rent' as DealType) && announcement.reality.realityType == 'Flat'"
+					v-if="announcement.deal.dealType == ('Rent' as DealType) && announcement.deal.rentConditions && announcement.reality.realityType == 'Flat'"
 				>
 					<label class="secondary-parameters__block__col__item secondary-parameters__block__col__item_with-checkbox" for="with-animals-checkbox">
 						<input type="checkbox" id="with-animals-checkbox" v-model="announcement.deal.rentConditions.withAnimals">
 						<span>Можно с животными</span>
 					</label>
 					<label class="secondary-parameters__block__col__item secondary-parameters__block__col__item_with-checkbox" for="with-kids-checkbox">
-						<input type="checkbox" id="with-kids-checkbox" v-model="announcement.deal.rentConditions.withChildren">
+						<input type="checkbox" id="with-kids-checkbox" v-model="announcement.deal.rentConditions.withKids">
 						<span>Можно с детьми</span>
 					</label>
 					<label class="secondary-parameters__block__col__item secondary-parameters__block__col__item_with-checkbox" for="can-smoke-checkbox">
@@ -172,7 +172,7 @@
 						<input type="checkbox" id="with-animals-checkbox" v-model="announcement.reality.haveParking">
 						<span>Есть парковка</span>
 					</label>
-					<label class="secondary-parameters__block__col__item secondary-parameters__block__col__item_with-checkbox" for="with-kids-checkbox">
+					<!-- <label class="secondary-parameters__block__col__item secondary-parameters__block__col__item_with-checkbox" for="with-kids-checkbox">
 						<input type="checkbox" id="with-kids-checkbox" v-model="announcement.reality.entry">
 						<span>entry</span>
 					</label>
@@ -183,7 +183,7 @@
 					<label class="secondary-parameters__block__col__item secondary-parameters__block__col__item_with-checkbox" for="can-smoke-checkbox">
 						<input type="checkbox" id="can-smoke-checkbox" v-model="announcement.reality.isAccess">
 						<span>isAccess</span>
-					</label>
+					</label> -->
 				</div>
 			</div>
 		</div>
@@ -223,6 +223,7 @@ export default defineComponent({
 			store: store,
 			DealType: DealType,
 			announcement: new AnnouncementViewModel(),
+			mode: "create" as "create"|"edit",
 		}
 	},
 	computed: {
@@ -231,9 +232,18 @@ export default defineComponent({
 		}
 	},
 	beforeMount() {
-		if (this.announcement.deal.dealType == DealType.Rent)
-			 this.announcement.deal.rentConditions = new RentConditionsViewModel();
-		else this.announcement.deal.sellConditions = new SellConditionsViewModel();
+		if (router.currentRoute.value.params.id == '0') {
+			if (this.announcement.deal.dealType == DealType.Rent)
+				 this.announcement.deal.rentConditions = new RentConditionsViewModel();
+			else this.announcement.deal.sellConditions = new SellConditionsViewModel();
+		}
+		else {
+			let ac = container.resolve(AnnouncementController);
+			ac.getAnnouncementById(router.currentRoute.value.params.id as string).then(res => {
+				this.announcement = res;
+			});
+			this.mode = 'edit';
+		}
 	},
 	methods: {
 		dealTypeChange(val:String) {
@@ -250,9 +260,17 @@ export default defineComponent({
 		async submit() {
 			// обращаться к созданному объекту AnnouncementViewModel через this.announcement
 			let ac = container.resolve(AnnouncementController);
-			this.announcement.counteragent = this.store.state.user!;
-			let response = await ac.postAnnouncement(this.announcement);
-			console.log(response);
+			if (this.mode == 'create') {
+				this.announcement.counteragent = this.store.state.user!;
+				ac.postAnnouncement(this.announcement).then(res => {
+					router.push('/announcement/'+res);
+				})
+			}
+			else {
+				ac.changeAnnouncement(this.store.state.user!.id, this.announcement).then(res => {
+					router.push('/announcement/'+this.announcement.id);
+				})
+			}
 			// router.push('/profile');   // раскомментить когда всё заработает
 		}
 	},	

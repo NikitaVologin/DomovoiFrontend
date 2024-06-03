@@ -11,7 +11,7 @@ export class AnnouncementBoardService implements IAnnouncementBoardService {
         @inject("IAnnoucementMapper") private readonly _annoucementMapper: IAnnoucementMapper) { }
 
     async getAnnouncementsByUserId(userId: string): Promise<Announcement[]> {
-        let url = "/Announcement/User" + userId;
+        let url = "/Announcement/User/" + userId;
 
         let response = await this._httpClient.get<any>(url).catch((error) => {
             throw (error);      
@@ -37,6 +37,8 @@ export class AnnouncementBoardService implements IAnnouncementBoardService {
             throw (error);
         });
 
+		if (response.status == 200) return;
+
         return new Promise((resolve, reject) => {
             reject(response);
         });
@@ -60,6 +62,8 @@ export class AnnouncementBoardService implements IAnnouncementBoardService {
         let response = await this._httpClient.put<any[]>(url, data).catch((error) => {
             throw (error);
         });
+
+		if (response.status == 200) return;
 
         return new Promise((resolve, reject) => {
             reject(response);
