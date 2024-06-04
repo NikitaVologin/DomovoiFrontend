@@ -42,6 +42,11 @@ const routes = [
 		name: 'chat',
 		component: ChatView
 	},
+	{
+		path: '/chat',
+		name: 'chatEmpty',
+		component: ChatView
+	},
 ] as Readonly<RouteRecordRaw[]>;
 
 export const router = createRouter({

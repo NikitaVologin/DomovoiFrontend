@@ -49,11 +49,11 @@ export class ReceptionController {
     }
     
      /**
-     * Удалить аккаунт пользователя.
+     * Выход пользователя из системы.
      *
      * @param {string} id - Идентификационный ключ пользователя.
      */
-    async checkOut(id: string): Promise<void> {
-        return await this._reception.checkOut(id);
+    async checkOut(): Promise<void> {
+        return await this._reception.checkOut();
     }
 }

@@ -50,7 +50,7 @@ export default defineComponent({
 			store: store,
             controller: {} as ChatController,
 			chatService: {} as ChatService, 
-			user: new CounteragentViewModel(),
+			user: {} as CounteragentViewModel,
 			me_user: new CounteragentViewModel(),
 			isUserOnline: false,
 			input_text: "",
@@ -88,31 +88,35 @@ export default defineComponent({
 	},
 	unmounted() {
 		window.removeEventListener("resize", this.resizeChat);
+        this.controller.close();
 	},
 	methods: {
 		getUserInfo() {
-			this.controller = container.resolve(ChatController);
-			let ac = container.resolve(ReceptionController);
-			ac.getUserInformation((router.currentRoute.value.params.id as string)).then(res => {
-				this.user = res;
-				this.me_user = this.store.state.user!;
-			})
-			.then(() => this.load_data())
-			.then(() => {
-				let s = this.$refs.down_chat as HTMLElement;
-					s.scrollTo({ top: s.scrollHeight});
-			});
+            this.controller = container.resolve(ChatController);     
+            if (router.currentRoute.value.params.id) {
+                let ac = container.resolve(ReceptionController);
+                ac.getUserInformation((router.currentRoute.value.params.id as string)).then(res => {
+                    this.user = res;
+                    this.load_data().then(() => {
+                        let s = this.$refs.down_chat as HTMLElement;
+                        s.scrollTo({ top: s.scrollHeight});
+                    });
+                });
+            }
+            else {
+                this.load_data().then(() => {
+                    let s = this.$refs.down_chat as HTMLElement;
+				    s.scrollTo({ top: s.scrollHeight});
+                });
+            }
 		},
         async load_data(){
-            this.controller.user = this.me_user;
-            this.controller.companion = this.user;
-			await this.controller.start(this.user, this.me_user);
+			await this.controller.start(this.user, this.store.state.user!);
         },
 		enterMessage(){
             let message =  this.input_text;
 			this.controller.addMessage(message).then(() => {
-                this.input_text = "";
-             
+                this.input_text = "";        
             });
 		},
 		openChoosenUsersChat(id: string){
@@ -149,8 +153,6 @@ export default defineComponent({
 		0.1em 0.1em 0.5em rgba(0, 0, 0, 0.3);
 }
 
-.chat__contacts.chat__contacts__contact_active
-
 .chat__contacts {
 	display: block;
 	width: 30%;
@@ -159,21 +161,20 @@ export default defineComponent({
 	border-right: 1px solid rgba(154, 154, 154, 1);
 	overflow-y: scroll;
 
-
-	&.chat__contacts__contact_active {
-		background: rgba(243, 243, 243, 1);
-	}
-
 	.chat__contacts__contact {
 		display: flex;
 		flex-direction: row;
 		width: 100%;
 		height: 70px;
 		cursor: pointer;
-
+        
 		&:hover {
 			background-color: rgba(243, 243, 243, 1);
 		}
+
+        &.chat__contacts__contact_active {
+		    background: rgb(221, 221, 221);
+	    }
 
 		.chat__contacts__contact__ava {
 			display: flex;
