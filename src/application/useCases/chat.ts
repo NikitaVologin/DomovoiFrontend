@@ -3,7 +3,6 @@ import { Message } from "../../domain/chat/message";
 import { CounterAgent } from "../../domain/counteragents/counteragent";
 import { ChatService } from "../../dataproviders/chat/ChatService";
 
-@injectable()
 export class Chat {
     private _messages: Message[] = [];
     private _contacts: CounterAgent[] = [];
@@ -15,6 +14,7 @@ export class Chat {
 
     public addMessage(message: Message): void {
         this._messages.push(message);
+        console.log(message);
     }
 
     public addContact(user: CounterAgent) {
@@ -23,6 +23,14 @@ export class Chat {
     
     public clearChat(): void {
         this._messages = [];
+    }
+
+    public get messages(): Message[] {
+        return this._messages;
+    }
+
+    public get contacts(): CounterAgent[] {
+        return this.contacts;
     }
 
     public get isCompanionOnline() {

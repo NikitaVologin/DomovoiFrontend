@@ -6,10 +6,6 @@
                 <div class="chat__contacts__contact__ava":style="`background-image: url('${user.avatar}'`"></div>  
                 <div class="chat__contacts__contact__name">{{ user.FIO }}</div>  
             </div> 
-            <!-- <div class="chat__contacts__contact">
-                <div class="chat__contacts__contact__ava":style="`background-image: url('${user.avatar}'`"></div>  
-                <div class="chat__contacts__contact__name">{{ user.FIO }}</div>  
-            </div>  -->
             <hr class="chat__contacts__straight">      
         </div>
         <div class="chat__field">
@@ -18,22 +14,12 @@
                 <div :class="[isUserOnline ? online_class : offline_class]">{{isUserOnline?'online':'offline'}}</div>
             </div>
             <div class="chat__messages">     
-                <!-- <div class="chat__messages__message__reverse"  @click="openChoosenUsersChat">
+                <div :class="[message.senderId != me_user.id ? send_class : receive_class]" v-for="(message, index) in messages" :key="index" @click="openUserProfile()">
                     <div @click="openUserProfile" class="chat__messages__message__ava":style="`background-image: url('${user.avatar}'`"></div>
                     <div class="chat__messages__message__field">
-                        Иногда просто физическое присутствие близкого человека может быть лучшей поддержкой. Просто будьте рядом с братом, поддерживайте его в трудные моменты, обнимите, если это поможет. Ваша поддержка и забота сейчас очень важны.
-
-В такие моменты слова не всегда нужны, главное - ваша поддержка и понимание. Будьте терпеливыми, заботливыми и бережными в отношениях с братом, который переживает утрату мамы. Помните, что вместе вы сможете преодолеть этот трудный период и поддержать друг друга.
+                        {{ message.text }}
                     </div>
                 </div>
-                    <div class="chat__messages__message" >
-                        <div @click="openUserProfile" class="chat__messages__message__ava":style="`background-image: url('${user.avatar}'`"></div>
-                        <div class="chat__messages__message__field">
-                            Иногда просто физическое присутствие близкого человека может быть лучшей поддержкой. Просто будьте рядом с братом, поддерживайте его в трудные моменты, обнимите, если это поможет. Ваша поддержка и забота сейчас очень важны.
-
-В такие моменты слова не всегда нужны, главное - ваша поддержка и понимание. Будьте терпеливыми, заботливыми и бережными в отношениях с братом, который переживает утрату мамы. Помните, что вместе вы сможете преодолеть этот трудный период и поддержать друг друга.
-                        </div>
-                    </div> -->
             </div>
             <div class="chat__intput-field">
                 <textarea v-on:keyup.enter="enterMessage" v-model="input_text" placeholder="Напишите сообщение..." class="chat__intput-field__text"></textarea>
@@ -48,23 +34,34 @@
     import store from '../store';
     import Header from "../components/Header.vue"
     import { CounteragentViewModel } from '../viewModel/CounteragentViewModel';
-    import { MessageViewModel } from '../viewModel/MessageViewModel.ts';
     import { container } from 'tsyringe';
-import { ReceptionController } from '../controllers/receptionController.ts';
+    import { ReceptionController } from '../controllers/receptionController.ts';
+    import { Message } from '../domain/chat/message.ts';
+    import { ChatService } from '../dataproviders/chat/ChatService.ts';
+    import { watch } from 'fs';
     
     export default defineComponent({
         components: { Header},
         data() {
             return {
                 store: store,
+                chatService: {} as ChatService, 
                 contactsUsers: [] as Array<CounteragentViewModel>,
-                messages: [] as Array<MessageViewModel>,
+                messages: [] as Array<Message>,
                 user: new CounteragentViewModel(),
+                me_user: new CounteragentViewModel(),
                 isUserOnline: false,
                 input_text: "",
                 offline_class: "chat__header__offline-status",
-                online_class: "chat__header__online-status"
+                online_class: "chat__header__online-status",
+                send_class: "chat__messages__message__reverse",
+                receive_class: "chat__messages__message",
             };
+        },
+        watch: {
+            messages(newMessages, oldMessages) {
+                this.reloadChat();
+            }
         },
         computed: {
         },
@@ -72,17 +69,29 @@ import { ReceptionController } from '../controllers/receptionController.ts';
             let ac = container.resolve(ReceptionController);
 		    ac.getUserInformation((router.currentRoute.value.params.id as string)).then(res => {
 			    this.user = res;
-		    })
+                this.me_user = this.store.state.user!;
+                this.load_data();
+		    });
         },
         methods: {
+            load_data(){
+                let chatService = container.resolve(ChatService);
+                this.chatService = chatService;
+                chatService.start(this.user.id,  this.me_user!);
+                this.messages = this.chatService.messages;
+            },
             enterMessage(){
-
+                this.chatService.sendMessage(this.input_text);
+                this.input_text = "";
             },
             openChoosenUsersChat(){
 
             },
             openUserProfile() {
-
+                router.push(`/profile/${this.user.id}`)
+            },
+            reloadChat() {
+                this.$forceUpdate();
             }
         },
     })
