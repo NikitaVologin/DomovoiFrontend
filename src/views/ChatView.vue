@@ -1,6 +1,6 @@
 <template>
     <Header></Header>
-    <div class="chat">
+    <div class="chat" ref="chat">
         <div class="chat__contacts"> 
             <div class="chat__contacts__contact" v-for="user in controller.contacts" @click="openChoosenUsersChat(user.id)">
                 <div class="chat__contacts__contact__ava":style="`background-image: url('${user.avatar}'`"></div>  
@@ -54,12 +54,16 @@ export default defineComponent({
 			online_class: "chat__header__online-status",
 			send_class: "chat__messages__message__reverse",
 			receive_class: "chat__messages__message",
+			chatHeight: 0,
 		};
 	},
 	computed: {
         messages(){
             return this.controller.messages;
-        }
+        },
+		routePathId() {
+			return router.currentRoute.value.params.id;
+		}
 	},
     watch: {
         messages: {
@@ -68,24 +72,33 @@ export default defineComponent({
                 let s = (this.$refs.down_chat as HTMLElement);
                 s.scrollTo({ top: s.scrollHeight});
             }
-        }
+        },
+		routePathId(val) {
+			this.getUserInfo();
+		}
     },
 	mounted() {
-        this.controller = container.resolve(ChatController);
-		let ac = container.resolve(ReceptionController);
-		ac.getUserInformation((router.currentRoute.value.params.id as string)).then(res => {
-			this.user = res;
-			this.me_user = this.store.state.user!;
-            
-		})
-        .then(() => this.load_data())
-        .then(() => {
-            let s = (this.$refs.down_chat as HTMLElement);
-                s.scrollTo({ top: s.scrollHeight});
-        });
-
+		this.getUserInfo();
+		this.resizeChat();
+		window.addEventListener("resize", this.resizeChat)
+	},
+	unmounted() {
+		window.removeEventListener("resize", this.resizeChat);
 	},
 	methods: {
+		getUserInfo() {
+			this.controller = container.resolve(ChatController);
+			let ac = container.resolve(ReceptionController);
+			ac.getUserInformation((router.currentRoute.value.params.id as string)).then(res => {
+				this.user = res;
+				this.me_user = this.store.state.user!;
+			})
+			.then(() => this.load_data())
+			.then(() => {
+				let s = this.$refs.down_chat as HTMLElement;
+					s.scrollTo({ top: s.scrollHeight});
+			});
+		},
         async load_data(){
             this.controller.user = this.me_user;
             this.controller.companion = this.user;
@@ -104,6 +117,10 @@ export default defineComponent({
 		openUserProfile(id: string) {
 			router.push(`/profile/${id}`);
 		},
+		resizeChat() {
+			let chatElRect = (this.$refs.chat as HTMLElement).getBoundingClientRect();
+			this.chatHeight = window.innerHeight - (chatElRect.top + window.scrollX);
+		}
 	},
 })
 </script>
@@ -118,7 +135,7 @@ export default defineComponent({
 	margin-right: auto; 
 	
 	width: 1200px;
-	height: 100%;
+	height: calc(v-bind(chatHeight) * 1px);
 	background-color: rgba(163, 201, 179, 0.5);
 	
 	display: flex;
