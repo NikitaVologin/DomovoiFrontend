@@ -48,7 +48,7 @@ export class ReceptionService implements IReceptionService {
     async deleteUser(): Promise<void> {
         let url = "/CounterAgent/Logout";
 
-        let response = await this._httpClient.delete<string>(url).catch((error) => {
+        let response = await this._httpClient.post<string>(url).catch((error) => {
             throw (error);
         });
 
