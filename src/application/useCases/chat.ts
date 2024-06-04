@@ -40,7 +40,8 @@ export class Chat implements IChat {
             var user = await this._receptionSerive.getUserInformation(id);
             this._contacts.push(this._userMapper.mapCouterAgentToViewModel(user));
         }
-        this.messages = reactive(await this.getDiaologMessages(this.user.id, this.companion.id)) as Array<Message>;
+        let messagi = await this.getDiaologMessages(this.user.id, this.companion.id)
+        this.messages.push(...messagi);
         await this._chatService.start();
     }
 

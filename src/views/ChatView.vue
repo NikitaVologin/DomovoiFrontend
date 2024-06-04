@@ -13,7 +13,7 @@
                 <div class="chat__header__name">{{ user.FIO }}</div>
                 <div :class="[controller.isCompanionOnline ? online_class : offline_class]">{{controller.isCompanionOnline?'online':'offline'}}</div>
             </div>
-            <div class="chat__messages">     
+            <div class="chat__messages" ref="down_chat">     
                 <div :class="[message.senderId != me_user.id ? send_class : receive_class]" v-for="(message, index) in controller.messages" :key="index">
                     <div @click="openUserProfile(message.senderId != me_user.id ? message.senderId : message.recieverId)" class="chat__messages__message__ava":style="`background-image: url('${user.avatar}'`"></div>
                     <div class="chat__messages__message__field">
@@ -57,7 +57,19 @@ export default defineComponent({
 		};
 	},
 	computed: {
+        messages(){
+            return this.controller.messages;
+        }
 	},
+    watch: {
+        messages: {
+            deep: true,
+            handler() {
+                let s = (this.$refs.down_chat as HTMLElement);
+                s.scrollTo({ top: s.scrollHeight});
+            }
+        }
+    },
 	mounted() {
         this.controller = container.resolve(ChatController);
 		let ac = container.resolve(ReceptionController);
@@ -65,7 +77,13 @@ export default defineComponent({
 			this.user = res;
 			this.me_user = this.store.state.user!;
             
-		}).then(() => this.load_data());
+		})
+        .then(() => this.load_data())
+        .then(() => {
+            let s = (this.$refs.down_chat as HTMLElement);
+                s.scrollTo({ top: s.scrollHeight});
+        });
+
 	},
 	methods: {
         async load_data(){
@@ -77,6 +95,7 @@ export default defineComponent({
             let message =  this.input_text;
 			this.controller.addMessage(message).then(() => {
                 this.input_text = "";
+             
             });
 		},
 		openChoosenUsersChat(id: string){
