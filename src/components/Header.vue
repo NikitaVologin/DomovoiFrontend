@@ -13,11 +13,11 @@
 			</nav>
 		</div>
 		<div class="header__secondary">
-			<ProfileHeaderBlock loginIsButton @loginClick="loginFormShown=true"></ProfileHeaderBlock>
+			<ProfileHeaderBlock loginIsButton @loginClick="loginFormShown=true" @logout="$emit('logout')"></ProfileHeaderBlock>
 		</div>
 	</div>
 
-	<LoginFormFullscreen :shown="loginFormShown" @close="loginFormShown=false"></LoginFormFullscreen>
+	<LoginFormFullscreen :shown="loginFormShown" :headToProfileAfterLogin="headToProfileAfterLogin" @close="loginFormShown=false"></LoginFormFullscreen>
 </header>
 </template>
 
@@ -31,6 +31,9 @@ import { router } from '../router';
 
 export default defineComponent({
 	components: { LoginFormFullscreen, ProfileHeaderBlock },
+	props: {
+		headToProfileAfterLogin: Boolean,
+	},
 	data() {
 		return {
 			loginFormShown: false,

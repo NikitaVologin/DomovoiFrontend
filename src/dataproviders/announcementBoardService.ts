@@ -102,7 +102,6 @@ export class AnnouncementBoardService implements IAnnouncementBoardService {
         });
 
         if (response.status == 200) {
-            console.log(response.data);
             let announcement = this._annoucementMapper.mapObjectToAnnoucement(response.data);
             return announcement;
         }   
@@ -154,7 +153,6 @@ export class AnnouncementBoardService implements IAnnouncementBoardService {
 
     async postAnnouncement(announcement: Announcement): Promise<string> {
         let url = "/Announcement"
-
         let data = {
             description: announcement.description,
             connectionType: announcement.connectionType,
