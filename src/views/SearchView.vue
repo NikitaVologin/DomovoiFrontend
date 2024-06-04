@@ -235,6 +235,7 @@ export default defineComponent({
 		let ac = container.resolve(AnnouncementController);
 		ac.getAnnouncementsFromTo().then((res:Array<AnnouncementViewModel>) => {
 			this.announcementCards = res;
+			console.log(this.announcementCards);
 		});
 	},
 	methods: {
@@ -247,6 +248,7 @@ export default defineComponent({
 			let ac = container.resolve(AnnouncementController);
 			let announcements = await ac.getFilteredAnnouncements(this.head.filters);
 			this.announcementCards = announcements as Array<AnnouncementViewModel>;
+			console.log(this.announcementCards);
 		}
 	}
 })

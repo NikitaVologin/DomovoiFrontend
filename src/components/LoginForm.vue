@@ -42,6 +42,9 @@ import store from '../store';
 export default defineComponent({
 	components: { },
 	emits: [ 'success' ],
+	props: {
+		headToProfileAfterLogin: Boolean
+	},
 	data() {
 		return {
 			mode: 0 as 0|1, // 0 - login, 1 - signup
@@ -102,7 +105,7 @@ export default defineComponent({
 				res.email = this.loginData.email;
 				store.state.user = res;
 				this.$emit('success');
-				router.push(`/profile/${store.state.user!.id}`)
+				if(this.headToProfileAfterLogin) router.push(`/profile/${store.state.user!.id}`)
 				localStorage.setItem('user', JSON.stringify(res))
 			}).catch(err => {
 				this.error = true;
@@ -115,7 +118,7 @@ export default defineComponent({
 				res.email = this.signupData.email;
 				store.state.user = res;
 				this.$emit('success');
-				router.push(`/profile/${store.state.user!.id}`)
+				if(this.headToProfileAfterLogin) router.push(`/profile/${store.state.user!.id}`)
 				localStorage.setItem('user', JSON.stringify(res))
 			}).catch(err => {
 				this.error = true;

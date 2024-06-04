@@ -48,7 +48,7 @@ export default defineComponent({
 		}
 	},
 	mounted() {
-		console.log(this.announcement);
+		// console.log(this.announcement);
 	},
 	methods: {
 		deleteAnnouncement() {

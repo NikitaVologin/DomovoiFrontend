@@ -1,6 +1,6 @@
 <template>
 <div class="search content-width-container">
-	<Header></Header>
+	<Header @logout="$router.replace('/search')"></Header>
 	
 	<main class="content-width">
 		<div class="primary-parameters card">
@@ -168,10 +168,10 @@
 				<div v-if="announcement.reality.realityType == 'Office'"
 					class="secondary-parameters__block__col secondary-parameters__block__col_with-checkboxes"
 				>
-					<label class="secondary-parameters__block__col__item secondary-parameters__block__col__item_with-checkbox" for="with-animals-checkbox">
+					<!-- <label class="secondary-parameters__block__col__item secondary-parameters__block__col__item_with-checkbox" for="with-animals-checkbox">
 						<input type="checkbox" id="with-animals-checkbox" v-model="announcement.reality.haveParking">
 						<span>Есть парковка</span>
-					</label>
+					</label> -->
 					<!-- <label class="secondary-parameters__block__col__item secondary-parameters__block__col__item_with-checkbox" for="with-kids-checkbox">
 						<input type="checkbox" id="with-kids-checkbox" v-model="announcement.reality.entry">
 						<span>entry</span>
@@ -232,6 +232,7 @@ export default defineComponent({
 		}
 	},
 	beforeMount() {
+		if (!store.state.user) router.replace('/search');
 		if (router.currentRoute.value.params.id == '0') {
 			if (this.announcement.deal.dealType == DealType.Rent)
 				 this.announcement.deal.rentConditions = new RentConditionsViewModel();
@@ -239,11 +240,14 @@ export default defineComponent({
 		}
 		else {
 			let ac = container.resolve(AnnouncementController);
-			ac.getAnnouncementById(router.currentRoute.value.params.id as string).then(res => {
+			ac.getAnnouncementById(router.currentRoute.value.params.id as string).then((res:AnnouncementViewModel) => {
 				this.announcement = res;
-			});
+			}).catch(err => {
+				router.replace(`/profile/${store.state.user!.id}`);
+			})
 			this.mode = 'edit';
 		}
+		// console.log(this.announcement.deal.dealType);
 	},
 	methods: {
 		dealTypeChange(val:String) {
@@ -264,14 +268,15 @@ export default defineComponent({
 				this.announcement.counteragent = this.store.state.user!;
 				ac.postAnnouncement(this.announcement).then(res => {
 					router.push('/announcement/'+res);
+					window.scrollTo({top:0});
 				})
 			}
 			else {
 				ac.changeAnnouncement(this.store.state.user!.id, this.announcement).then(res => {
 					router.push('/announcement/'+this.announcement.id);
+					window.scrollTo({top:0});
 				})
 			}
-			// router.push('/profile');   // раскомментить когда всё заработает
 		}
 	},	
 })

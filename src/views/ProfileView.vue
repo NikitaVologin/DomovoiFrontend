@@ -10,13 +10,14 @@
 				<div class="aside__info__item" v-if="user.email">{{user.email}}</div>
 				<div class="aside__info__item" v-if="user.phone">{{user.phone}}</div>
 			</div>
-			<div class="aside__edit" v-if="infoEdited">
-				<input class="aside__edit__item" v-model="editedUser.FIO">
-				<input class="aside__edit__item" v-model="editedUser.email">
-				<input class="aside__edit__item" v-if="user.phone" v-model="editedUser.phone">
-				<button class="aside__buttons__item" @click="saveEditedInfo">Сохранить</button>
-				<button class="aside__buttons__item" @click="cancelEditing">Отмена</button>
-			</div>
+			<form class="aside__edit" v-if="infoEdited" @submit.prevent="saveEditedInfo">
+				<input class="aside__edit__item" v-model="editedUser.FIO" placeholder="Имя" @input="emptyFieldsErrorShown=false">
+				<input class="aside__edit__item" v-model="editedUser.email" placeholder="E-mail" @input="emptyFieldsErrorShown=false">
+				<input class="aside__edit__item" v-model="editedUser.phone" placeholder="Телефон" @input="emptyFieldsErrorShown=false">
+				<div class="aside__edit__error" v-if="emptyFieldsErrorShown">Пустые поля недопустимы.</div>
+				<input type="submit" class="aside__buttons__item" value="Сохранить">
+				<button class="aside__buttons__item aside__buttons__item_cancel" @click="cancelEditing">Отмена</button>
+			</form>
 			<div class="aside__buttons" v-if="!infoEdited">
 				<button class="aside__buttons__item" v-if="!own"@click="startChat">Написать</button>
 				<button class="aside__buttons__item" v-if="own" @click="editInfo">Редактировать</button>
@@ -124,8 +125,10 @@ export default defineComponent({
 
 			user: new CounteragentViewModel(true, true),
 			own: false,
+
 			infoEdited: false,
 			editedUser: {} as CounteragentViewModel,
+			emptyFieldsErrorShown: false,
 
 			announcements: [] as AnnouncementViewModel[],
 			announcementsSwiper: {} as SwiperRef,
@@ -139,7 +142,8 @@ export default defineComponent({
 			return this.user.reviews.sort((r1,r2) => {
 				return Math.sign((r1.rate - r2.rate) * (this.rewiewsSort == 'positive' ? -1 : 1));
 			})
-		}
+		},
+		currentRoutePath: () => router.currentRoute.value.path,
 	},
 	watch: {
 		loggedUser: {
@@ -147,13 +151,16 @@ export default defineComponent({
 			handler(val:CounteragentViewModel) {
 				this.loadData();
 			}
+		},
+		currentRoutePath(val) {
+			this.loadData();
 		}
 	},
 	mounted() {
 		this.loadData();
 	},
 	methods: {
-		loadData() {
+		async loadData() {
 			let rc = container.resolve(ReceptionController);
 			if (router.currentRoute.value.params.id == store.state.user?.id) {
 				this.own = true;
@@ -161,7 +168,7 @@ export default defineComponent({
 			}
 			else {
 				this.own = false;
-				rc.getUserInformation(router.currentRoute.value.params.id as string).then(res => {
+				await rc.getUserInformation(router.currentRoute.value.params.id as string).then(res => {
 					this.user = res;
 				})
 			}
@@ -169,13 +176,17 @@ export default defineComponent({
 			let ac = container.resolve(AnnouncementController);
 			ac.getAnnouncementsByUserId(this.user.id).then(res => {
 				this.announcements = res;
-			})
+			});
 		},
 		editInfo() {
 			this.editedUser = JSON.parse(JSON.stringify(this.user));
 			this.infoEdited = true;
 		},
 		saveEditedInfo() {
+			if (this.editedUser.email.trim() == '' || (this.editedUser.phone && this.editedUser.phone.trim() == '') || this.editedUser.FIO.trim() == '') {
+				this.emptyFieldsErrorShown = true;
+				return;
+			}
 			let rc = container.resolve(ReceptionController);
 			rc.changeUserInformation(this.user.id, this.editedUser).then(() => {
 				this.user = this.editedUser as CounteragentViewModel;
@@ -237,6 +248,19 @@ main {
 			display: flex;
 			flex-direction: column;
 			row-gap: .5rem;
+			.aside__edit__item {
+				padding: .25rem .5rem;
+				font-size: 0.9rem;
+			}
+			.aside__edit__error {
+				font-size: 0.85rem;
+				color: #444;
+				text-align: center;
+			}
+			.aside__buttons__item_cancel {
+				background: #ddd;
+				color: #000;
+			}
 		}
 
 		.aside__buttons {

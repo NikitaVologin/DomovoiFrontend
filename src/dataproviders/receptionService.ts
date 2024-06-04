@@ -58,10 +58,11 @@ export class ReceptionService implements IReceptionService {
     }
 
     async registration(userType: string, mail: string, password: string): Promise<CounterAgent> {
-        let url = "/CounterAgent/" + userType;
+        let url = "/CounterAgent";
         let data = {
             email: mail,
-            password: password
+            password: password,
+			type: userType
         };
 		
         let response = await this._httpClient.post<any>(url, data).catch((error) => {

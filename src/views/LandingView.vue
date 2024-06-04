@@ -17,7 +17,7 @@
 			</div>
 		</div>
 	</div>
-	<LoginFormFullscreen :shown="loginFormShown" @close="loginFormShown=false"></LoginFormFullscreen>
+	<LoginFormFullscreen :shown="loginFormShown" headToProfileAfterLogin @close="loginFormShown=false"></LoginFormFullscreen>
 </div>
 </template>
 	

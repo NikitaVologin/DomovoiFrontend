@@ -14,7 +14,6 @@ export class Chat {
 
     public addMessage(message: Message): void {
         this._messages.push(message);
-        console.log(message);
     }
 
     public addContact(user: CounterAgent) {

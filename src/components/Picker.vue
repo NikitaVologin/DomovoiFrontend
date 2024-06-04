@@ -54,6 +54,11 @@ export default defineComponent({
 	},
 	computed: {
 	},
+	watch: {
+		defaultValue(val:string|number|boolean) {
+			this.pickedValue = val;
+		}
+	},
 	mounted() {
 		this.rnd = Math.random();
 		if (this.defaultValue) {

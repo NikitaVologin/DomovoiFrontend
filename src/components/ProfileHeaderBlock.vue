@@ -14,7 +14,7 @@
             <div class="profile-block__logged-in__title__avatar" :style="`background-image: url('${store.state.user.avatar}'`"></div>
         </div>
         <transition name="popup-transition">
-            <div class="profile-block__logged-in__popup" v-if="popupShown">
+            <div class="profile-block__logged-in__popup" v-if="popupShown" @click="popupShown=false">
                 <div class="profile-block__logged-in__popup__list-item" @click="router.push(`/profile/${store.state.user!.id}`)">Профиль</div>
                 <div class="profile-block__logged-in__popup__list-item" @click="logout">Выйти</div>
             </div>
@@ -32,7 +32,7 @@ export default defineComponent({
     components: {
 
     },
-    emits: [ "loginClick" ],
+    emits: [ "loginClick", "logout" ],
     props: {
         loginIsButton:Boolean
     },
@@ -51,6 +51,7 @@ export default defineComponent({
 		logout() {
 			store.state.user = undefined;
 			localStorage.removeItem('user');
+			this.$emit('logout');
 		}
     },
 })
