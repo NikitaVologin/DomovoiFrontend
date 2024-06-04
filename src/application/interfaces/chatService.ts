@@ -9,7 +9,13 @@ export interface IChatService {
 
     get messages(): Message[]
 
-    sendMessage(text: string, to: string, from: string): Promise<void> 
+    set messages(value: Message[]); 
+
+    set meUserId(value: string);
+
+    set companionId(value: string);
+
+    sendMessage(text: string): Promise<void> 
 
     receiveMessage(text: string, idSender: string, messageId: string, messageStatus: string): void 
 

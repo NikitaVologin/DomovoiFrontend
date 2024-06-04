@@ -1,5 +1,5 @@
 import  { HubConnection, HubConnectionBuilder } from "@microsoft/signalr";
-import { inject, singleton } from "tsyringe";
+import { inject, injectable, singleton } from "tsyringe";
 import { Message } from "../../domain/chat/message";
 import { MessageStatus } from "../../domain/enums/chatEnum";
 import { reactive } from "vue";
@@ -9,7 +9,6 @@ import { IMessageMapper } from "../../mappers/interfaces/messageMapperInterface"
 
 @singleton()
 export class ChatService implements IChatService{
-
     private readonly _connection: HubConnection;
     private _messages: Message[] = reactive([]);
     private _contacts: string[] = reactive([]);
@@ -55,7 +54,7 @@ export class ChatService implements IChatService{
     }
 
     public async getDialogs(userId: string): Promise<string[]> {
-        let url = `/Chat/Take/${userId}`;
+        let url = `/Chat/Take/$${userId}`;
 
         let response = await this._httpClient.get<any>(url).catch((error) => {
             throw (error);
@@ -86,6 +85,10 @@ export class ChatService implements IChatService{
         return this._messages;
     }
 
+    public set messages(values: Message[]) {
+        this._messages = values;
+    }
+
     public get contacts(): string[] {
         return this._contacts;
     }
@@ -103,6 +106,7 @@ export class ChatService implements IChatService{
         try {
             await this._connection.send("Send", message.text, message.recieverId);
             this.messages.push(message);
+            console.log(message);
         }
         catch(e){
             throw(e);
@@ -118,6 +122,7 @@ export class ChatService implements IChatService{
         let message = new Message(messageId, text, idSender, this.meUserId);
         let status: MessageStatus = MessageStatus[messageStatus as keyof typeof MessageStatus];
         message.status = status;
+        console.log(message);
         this._messages.push(message);
     } 
 

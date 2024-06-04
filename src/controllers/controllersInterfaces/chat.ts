@@ -6,7 +6,7 @@ export interface IChat {
     getDialogs(userId: string): Promise<string[]>;
     start(companion: CounteragentViewModel, me_user: CounteragentViewModel): Promise<void>;
     close(): void;
-    addMessage(message: Message): void;
+    addMessage(text: string): Promise<void>;
     addContact(user: CounteragentViewModel): void;
     clearChat(): void;
     get messages(): Message[];

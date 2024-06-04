@@ -26,8 +26,8 @@ export class ChatController {
         this._chat.close();
     }
 
-    public addMessage(message: Message): void {
-        this._chat.addMessage(message);
+    public async addMessage(text: string): Promise<void> {
+        await this._chat.addMessage(text);
     }
 
     public addContact(user: CounteragentViewModel): void {

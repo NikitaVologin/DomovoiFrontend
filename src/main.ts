@@ -52,10 +52,10 @@ container.register("IChat", {
     useClass: Chat
 });
 container.register("IChatService", {
-    useValue: ChatService
+    useClass: ChatService
 });
 container.register("IMessageMapper", {
-    useValue: MessageMapper
+    useClass: MessageMapper
 });
 container.register("chatURL", {
     useValue: chatURL

@@ -3,14 +3,13 @@ import { CounterAgent } from "../../domain/counteragents/counteragent";
 import { reactive } from "vue";
 import { IChat } from "../../controllers/controllersInterfaces/chat";
 import { IChatService } from "../interfaces/chatService";
-import { inject, singleton } from "tsyringe";
+import { inject, injectable, singleton } from "tsyringe";
 import { CounteragentViewModel } from "../../viewModel/CounteragentViewModel";
 import { ICouterAgentMapper } from "../../mappers/interfaces/couteragentMapperInterface";
 import { IReceptionService } from "../interfaces/receptionService";
 
 @singleton()
 export class Chat implements IChat {
-    private _messages: Message[] = reactive([]);
     private _contacts: CounteragentViewModel[] = reactive([]);
     private _isCompanionOnline!: boolean; 
     private _companion!: CounterAgent;
@@ -34,12 +33,14 @@ export class Chat implements IChat {
         this._isCompanionOnline = false;
         this.companion = companion;
         this.user = me_user; 
+        this._chatService.meUserId = this.user.id;
+        this._chatService.companionId = this.companion.id;
         let ids = await this.getDialogs(this.user.id);
         for (let id of ids) {
             var user = await this._receptionSerive.getUserInformation(id);
             this._contacts.push(this._userMapper.mapCouterAgentToViewModel(user));
         }
-        this._messages = await this.getDiaologMessages(this.user.id, this.companion.id);
+        this.messages = await this.getDiaologMessages(this.user.id, this.companion.id);
         await this._chatService.start();
     }
 
@@ -47,9 +48,8 @@ export class Chat implements IChat {
         this._chatService.close();
     }
 
-    public addMessage(message: Message): void {
-        this._chatService.sendMessage(message.text, message.senderId, message.recieverId);
-        this._messages.push(message);
+    public async addMessage(text: string ): Promise<void> {
+        await this._chatService.sendMessage(text);
     }
 
     public addContact(user: CounteragentViewModel) {
@@ -57,11 +57,15 @@ export class Chat implements IChat {
     } 
     
     public clearChat(): void {
-        this._messages = [];
+        //this._messages = [];
     }
 
     public get messages(): Message[] {
-        return this._messages;
+        return this._chatService.messages;
+    }
+
+    public set messages(obj: Message[]) {
+        this._chatService.messages = obj;
     }
 
     public get contacts(): CounteragentViewModel[] {

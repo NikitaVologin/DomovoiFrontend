@@ -14,8 +14,8 @@
                 <div :class="[controller.isCompanionOnline ? online_class : offline_class]">{{controller.isCompanionOnline?'online':'offline'}}</div>
             </div>
             <div class="chat__messages">     
-                <div :class="[message.senderId != me_user.id ? send_class : receive_class]" v-for="(message, index) in controller.messages" :key="index" @click="openUserProfile()">
-                    <div @click="openUserProfile" class="chat__messages__message__ava":style="`background-image: url('${user.avatar}'`"></div>
+                <div :class="[message.senderId != me_user.id ? send_class : receive_class]" v-for="(message, index) in controller.messages" :key="index"">
+                    <div @click="openUserProfile(message.senderId != me_user.id ? message.senderId : message.recieverId)" class="chat__messages__message__ava":style="`background-image: url('${user.avatar}'`"></div>
                     <div class="chat__messages__message__field">
                         {{ message.text }}
                     </div>
@@ -38,6 +38,7 @@ import { container } from 'tsyringe';
 import { ReceptionController } from '../controllers/receptionController.ts';
 import { ChatService } from '../dataproviders/chat/ChatService.ts';
 import { ChatController } from '../controllers/chatController.ts';
+import { Message } from '../domain/chat/message.ts';
 
 export default defineComponent({
 	components: { Header},
@@ -74,14 +75,17 @@ export default defineComponent({
 			await this.controller.start(this.user, this.me_user);
         },
 		enterMessage(){
-			this.chatService.sendMessage(this.input_text);
-			this.input_text = "";
+            let message = this.input_text;
+			this.controller.addMessage(message).then(() => {
+   
+            });
+            //this.input_text = "";
 		},
 		openChoosenUsersChat(id: string){
             router.push(`/profile/${id}`)
 		},
-		openUserProfile() {
-			router.push(`/profile/${this.user.id}`)
+		openUserProfile(id: string) {
+			router.push(`/profile/${id}`)
 		},
 	},
 })
