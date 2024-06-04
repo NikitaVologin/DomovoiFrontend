@@ -1,2 +1,8 @@
-export enum MessageResult { Ok, }
-export enum MessageStatus { NotSend, Send, Recieve, Read }
+export enum MessageStatus {
+    NotSend = "NotSend",
+    Send = "Send",
+    Recieve = "Recieve",
+    Read = "Read",
+    Remove = "Remove",
+    Change = "Change"
+}

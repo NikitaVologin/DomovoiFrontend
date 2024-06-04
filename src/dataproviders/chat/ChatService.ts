@@ -1,67 +1,139 @@
-import  { HttpTransportType, HubConnection, HubConnectionBuilder } from "@microsoft/signalr";
+import  { HubConnection, HubConnectionBuilder } from "@microsoft/signalr";
 import { inject, singleton } from "tsyringe";
-import { Chat } from "../../application/useCases/chat";
 import { Message } from "../../domain/chat/message";
 import { MessageStatus } from "../../domain/enums/chatEnum";
-import { CounterAgent } from "../../domain/counteragents/counteragent";
-import { CounteragentViewModel } from "../../viewModel/CounteragentViewModel";
-import { ICouterAgentMapper } from "../../mappers/interfaces/couteragentMapperInterface";
+import { reactive } from "vue";
+import { IChatService } from "../../application/interfaces/chatService";
+import { IHTTPClient } from "../interfaces/HTTPClient";
+import { IMessageMapper } from "../../mappers/interfaces/messageMapperInterface";
 
 @singleton()
-export class ChatService {
+export class ChatService implements IChatService{
 
     private readonly _connection: HubConnection;
-    private _listener!: Chat;
+    private _messages: Message[] = reactive([]);
+    private _contacts: string[] = reactive([]);
+    private _meUserId!: string;
+    private _companionId!: string;
     
-    public constructor(@inject("chatURL") private readonly _baseURL: string,
-        @inject("ICouterAgentMapper") private readonly _userMapper: ICouterAgentMapper) {
+    public constructor(@inject("IHTTPClient") private readonly _httpClient: IHTTPClient,
+            @inject("chatURL") private readonly _baseURL: string,
+            @inject("IMessageMapper") private readonly _messageMapeer: IMessageMapper) {
         this._connection = new HubConnectionBuilder()
             .withUrl(this._baseURL, {
                 withCredentials: true,
             })
             .withAutomaticReconnect()
             .build();
-        this._connection.on("Receive", (text: string, idSender: string) => this.receiveMessage(text, idSender));
-        this._connection.on("NotifySendMethod", (text: string) => console.log(text));
+        this._connection.on("Receive", 
+        (text: string, idSender: string, messageId: string, messageStatus: string) => this.receiveMessage(text, idSender, messageId, messageStatus));
+        this._connection.on("NotifySendMethod", async (messageId: string, messageStatus: string) => await this.changeMessageStatus(messageId, messageStatus));
+        // this._connection.on("NotifyUserStatus", (idCompanion: string, companionStatus: string) => {});
+        // this._connection.on("NotifyReadDialog", (idCompanion: string) => {});
+        // this._connection.on("NotifyMessageStatus", (idMessage: string, newText: string, messageStatus: string) => {});
     }
 
-    public start(idCompanion: string, user: CounteragentViewModel): void {
-        let counteragent = this._userMapper.mapViewModelToCouterAget(user);
-        this._listener = new Chat(this, true, idCompanion, counteragent);
+    public async getDiaologMessages(userId: string, idCompanion: string): Promise<Message[]> {
+        let url = `/Chat/Take/${userId}/${idCompanion}` ;
+
+        let response = await this._httpClient.get<any>(url).catch((error) => {
+            throw (error);
+        });
+
+        if (response.status == 200) {
+            let list: Message[] = [];
+            for (let messageData of response.data) {
+                let message = this._messageMapeer.mapObjectToMessage(messageData);
+                list.push(message);
+            }
+            return list;
+        }
+        
+        return new Promise(
+            (resolve, reject) => reject(response)
+        );
+    }
+
+    public async getDialogs(userId: string): Promise<string[]> {
+        let url = `/Chat/Take/${userId}`;
+
+        let response = await this._httpClient.get<any>(url).catch((error) => {
+            throw (error);
+        });
+
+        if (response.status == 200) {
+            return response.data as string[];
+        }
+        
+        return new Promise(
+            (_resolve, reject) => reject(response)
+        );
+    }
+
+    public async start(): Promise<void> {
         this._connection.start();
     }
 
     public close(): void {
         this._connection.stop()
     }
-
+    
     public get state(): string {
         return this._connection.state.toString();
     }
 
     public get messages(): Message[] {
-        return this._listener.messages;
+        return this._messages;
+    }
+
+    public get contacts(): string[] {
+        return this._contacts;
+    }
+
+    public set meUserId(value: string) {
+        this._meUserId = value;
+    }
+
+    public set companionId(value: string) {
+        this._companionId = value;
     }
 
     public async sendMessage(text: string): Promise<void> {
-        let message = new Message("", text, this._listener.user.id!, this._listener.idCompanion);
+        let message = new Message("", text, this._meUserId, this._companionId);
         try {
-            let response = await this._connection.invoke("Send", message.text, message.recieverId);
-            message.status = MessageStatus.Send;            
+            await this._connection.send("Send", message.text, message.recieverId);
+            this.messages.push(message);
         }
         catch(e){
-            message.status = MessageStatus.NotSend;
-            console.log(e);
             throw(e);
-        }
-        finally {
-            this._listener.addMessage(message);
         }
     }
 
-    public receiveMessage(text: string, idSender: string): void {
-        let message = new Message("", text, idSender, this._listener.user.id!);
-        message.status = MessageStatus.Recieve;
-        this._listener.addMessage(message);
+    public changeMessageStatus(idMessage: string, statusstr: string){
+        let status: MessageStatus = MessageStatus[statusstr as keyof typeof MessageStatus];
+        this.messages.find((x) => x.id == idMessage)!.status = status;
+    }
+
+    public receiveMessage(text: string, idSender: string, messageId: string, messageStatus: string): void {
+        let message = new Message(messageId, text, idSender, this.meUserId);
+        let status: MessageStatus = MessageStatus[messageStatus as keyof typeof MessageStatus];
+        message.status = status;
+        this._messages.push(message);
     } 
+
+    public async notifyUserStatus(meUserId: string, status: string) {
+        throw new Error("The Method is not implement");
+    }
+
+    public async NotifyReadDialog(companionId: string) {
+        throw new Error("The Method is not implement");
+    }
+
+    public async NotifyRemoveMessage(messageId: string) {
+        throw new Error("The Method is not implement");
+    }
+
+    public async NotifyChangeMessage(messageId: string, newText: string) {
+        throw new Error("The Method is not implement");
+    }
 }

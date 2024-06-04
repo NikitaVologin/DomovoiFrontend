@@ -2,7 +2,7 @@
     <Header></Header>
     <div class="chat">
         <div class="chat__contacts"> 
-            <div class="chat__contacts__contact" v-for="user in contactsUsers" @click="openChoosenUsersChat">
+            <div class="chat__contacts__contact" v-for="user in controller.contacts" @click="openChoosenUsersChat(user.id)">
                 <div class="chat__contacts__contact__ava":style="`background-image: url('${user.avatar}'`"></div>  
                 <div class="chat__contacts__contact__name">{{ user.FIO }}</div>  
             </div> 
@@ -11,10 +11,10 @@
         <div class="chat__field">
             <div class="chat__header">
                 <div class="chat__header__name">{{ user.FIO }}</div>
-                <div :class="[isUserOnline ? online_class : offline_class]">{{isUserOnline?'online':'offline'}}</div>
+                <div :class="[controller.isCompanionOnline ? online_class : offline_class]">{{controller.isCompanionOnline?'online':'offline'}}</div>
             </div>
             <div class="chat__messages">     
-                <div :class="[message.senderId != me_user.id ? send_class : receive_class]" v-for="(message, index) in messages" :key="index" @click="openUserProfile()">
+                <div :class="[message.senderId != me_user.id ? send_class : receive_class]" v-for="(message, index) in controller.messages" :key="index" @click="openUserProfile()">
                     <div @click="openUserProfile" class="chat__messages__message__ava":style="`background-image: url('${user.avatar}'`"></div>
                     <div class="chat__messages__message__field">
                         {{ message.text }}
@@ -36,18 +36,16 @@ import Header from "../components/Header.vue"
 import { CounteragentViewModel } from '../viewModel/CounteragentViewModel';
 import { container } from 'tsyringe';
 import { ReceptionController } from '../controllers/receptionController.ts';
-import { Message } from '../domain/chat/message.ts';
 import { ChatService } from '../dataproviders/chat/ChatService.ts';
-import { watch } from 'fs';
+import { ChatController } from '../controllers/chatController.ts';
 
 export default defineComponent({
 	components: { Header},
 	data() {
 		return {
 			store: store,
+            controller: {} as ChatController,
 			chatService: {} as ChatService, 
-			contactsUsers: [] as Array<CounteragentViewModel>,
-			// messages: [] as Array<Message>,
 			user: new CounteragentViewModel(),
 			me_user: new CounteragentViewModel(),
 			isUserOnline: false,
@@ -58,48 +56,36 @@ export default defineComponent({
 			receive_class: "chat__messages__message",
 		};
 	},
-	watch: {
-		messages(newMessages, oldMessages) {
-			this.reloadChat();
-		}
-	},
 	computed: {
-		messages() : Array<Message> {
-			return this.chatService.messages as Array<Message>;
-		}
 	},
 	mounted() {
+        this.controller = container.resolve(ChatController);
 		let ac = container.resolve(ReceptionController);
 		ac.getUserInformation((router.currentRoute.value.params.id as string)).then(res => {
 			this.user = res;
 			this.me_user = this.store.state.user!;
-			this.load_data();
-		});
+            
+		}).then(() => this.load_data());
 	},
 	methods: {
-		load_data(){
-			let chatService = container.resolve(ChatService);
-			this.chatService = chatService;
-			chatService.start(this.user.id,  this.me_user!);
-			// this.messages = this.chatService.messages;
-		},
+        async load_data(){
+            this.controller.user = this.me_user;
+            this.controller.companion = this.user;
+			await this.controller.start(this.user, this.me_user);
+        },
 		enterMessage(){
 			this.chatService.sendMessage(this.input_text);
 			this.input_text = "";
 		},
-		openChoosenUsersChat(){
-
+		openChoosenUsersChat(id: string){
+            router.push(`/profile/${id}`)
 		},
 		openUserProfile() {
 			router.push(`/profile/${this.user.id}`)
 		},
-		reloadChat() {
-			this.$forceUpdate();
-		}
 	},
 })
 </script>
-	
 	
 <style lang="scss" scoped>
 

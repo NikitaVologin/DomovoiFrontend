@@ -1,23 +1,58 @@
-import { inject, injectable } from "tsyringe";
 import { Message } from "../../domain/chat/message";
 import { CounterAgent } from "../../domain/counteragents/counteragent";
-import { ChatService } from "../../dataproviders/chat/ChatService";
+import { reactive } from "vue";
+import { IChat } from "../../controllers/controllersInterfaces/chat";
+import { IChatService } from "../interfaces/chatService";
+import { inject, singleton } from "tsyringe";
+import { CounteragentViewModel } from "../../viewModel/CounteragentViewModel";
+import { ICouterAgentMapper } from "../../mappers/interfaces/couteragentMapperInterface";
+import { IReceptionService } from "../interfaces/receptionService";
 
-export class Chat {
-    private _messages: Message[] = [];
-    private _contacts: CounterAgent[] = [];
+@singleton()
+export class Chat implements IChat {
+    private _messages: Message[] = reactive([]);
+    private _contacts: CounteragentViewModel[] = reactive([]);
+    private _isCompanionOnline!: boolean; 
+    private _companion!: CounterAgent;
+    private _user!: CounterAgent;
 
-    public constructor(private readonly _chatService: ChatService,
-        private _isCompanionOnline: boolean,
-        private _idCompanion: string,
-        private _user: CounterAgent) { }
+    public constructor(@inject("IChatService") private readonly _chatService: IChatService,
+        @inject("ICouterAgentMapper") private readonly _userMapper: ICouterAgentMapper,
+        @inject("IReceptionService") private readonly _receptionSerive: IReceptionService) { }
 
-    public addMessage(message: Message): void {
-        this._messages.push(message);
-        console.log(message);
+    public async getDiaologMessages(userId: string, idCompanion: string): Promise<Message[]> {
+        let messages = await this._chatService.getDiaologMessages(userId, idCompanion);
+        return messages;
     }
 
-    public addContact(user: CounterAgent) {
+    public async getDialogs(userId: string): Promise<string[]> {
+        let contacts = await this._chatService.getDialogs(userId);
+        return contacts;
+    }
+
+    public async start(companion: CounteragentViewModel, me_user: CounteragentViewModel): Promise<void> {
+        this._isCompanionOnline = false;
+        this.companion = companion;
+        this.user = me_user; 
+        let ids = await this.getDialogs(this.user.id);
+        for (let id of ids) {
+            var user = await this._receptionSerive.getUserInformation(id);
+            this._contacts.push(this._userMapper.mapCouterAgentToViewModel(user));
+        }
+        this._messages = await this.getDiaologMessages(this.user.id, this.companion.id);
+        await this._chatService.start();
+    }
+
+    public close(): void {
+        this._chatService.close();
+    }
+
+    public addMessage(message: Message): void {
+        this._chatService.sendMessage(message.text, message.senderId, message.recieverId);
+        this._messages.push(message);
+    }
+
+    public addContact(user: CounteragentViewModel) {
         this._contacts.push(user);
     } 
     
@@ -29,8 +64,8 @@ export class Chat {
         return this._messages;
     }
 
-    public get contacts(): CounterAgent[] {
-        return this.contacts;
+    public get contacts(): CounteragentViewModel[] {
+        return this._contacts;
     }
 
     public get isCompanionOnline() {
@@ -41,19 +76,24 @@ export class Chat {
         this._isCompanionOnline = status;
     }
 
-    public get idCompanion() {
-        return this._idCompanion;
+    public get companion() : CounteragentViewModel {
+        let user = this._userMapper.mapCouterAgentToViewModel(this._companion);
+        return user;
     }
 
-    public set idCompanion(id: string) {
-        this._idCompanion = id;
+    public set companion(user: CounteragentViewModel) 
+    {
+        let obj = this._userMapper.mapViewModelToCouterAget(user);
+        this._companion = obj;
     }
 
-    public get user() {
-        return this._user;
+    public get user(): CounteragentViewModel {
+        let obj = this._userMapper.mapCouterAgentToViewModel(this._user);
+        return obj;
     }
 
-    public set user(user: CounterAgent) {
-        this._user = user;
+    public set user(user: CounteragentViewModel) {
+        let obj = this._userMapper.mapViewModelToCouterAget(user);
+        this._user = obj;
     }
 }
