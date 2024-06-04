@@ -28,8 +28,8 @@ export class Reception implements IReception {
         }
     }
 
-    async checkOut(id: string): Promise<void> {
-        let responseId = await this._service.deleteUser(id);
+    async checkOut(): Promise<void> {
+        let responseId = await this._service.deleteUser();
         return responseId;
     }
 

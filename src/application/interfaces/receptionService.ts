@@ -5,5 +5,5 @@ export interface IReceptionService {
     authorize(mail: string, password: string): Promise<CounterAgent>;
     getUserInformation(id: string): Promise<CounterAgent>;
     putUserInformation(idOldUser: string, newUserInformation: any): Promise<void>;
-    deleteUser(id: string): Promise<void>;
+    deleteUser(): Promise<void>;
 }
