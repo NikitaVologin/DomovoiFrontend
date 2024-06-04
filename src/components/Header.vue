@@ -4,12 +4,14 @@
 		<div class="header__primary">
 			<div class="header__primary__name">
 				<router-link to="/" class="no-link-style">
-					<h1>ДОМОВОЙ</h1>
+					<!-- <h1>ДОМОВОЙ</h1> -->
+					<img src="../assets/img/logo.webp" alt="">
 				</router-link>
 			</div>
 			<nav class="header__primary__links">
 				<router-link to="/search" class="header__primary__links__item">Найти</router-link>
 				<span class="header__primary__links__item" @click="publishClick">Опубликовать</span>
+				<router-link to="/chat" class="header__primary__links__item" v-if="store.state.user">Чат</router-link>
 			</nav>
 		</div>
 		<div class="header__secondary">
@@ -36,6 +38,7 @@ export default defineComponent({
 	},
 	data() {
 		return {
+			store: store,
 			loginFormShown: false,
 		}
 	},
@@ -51,10 +54,12 @@ export default defineComponent({
 
 <style lang="scss" scoped>
 header {
-	background: #CF3030;
-	color: #fff;
+	// background: #CF3030;
+	color: #555;
 	width: 100%;
-	box-shadow: 0 0px 10px 1px #0000004a;
+	padding: 1rem 0 0;
+	// border-bottom: 4px solid #CF3030;
+	// box-shadow: 0 0px 10px 1px #0000004a;
 
 	.content-width {
 		display: flex;
@@ -73,15 +78,19 @@ header {
 			letter-spacing: .03rem;
 			color: #fff;
 		}
+		.header__primary__name img {
+			height: 2.2rem;
+		}
 
 		.header__primary__links {
 			margin-left: 3rem;
+			margin-bottom: -.2rem;
 			display: flex;
 			align-items: center;
 			column-gap: 1.5rem;
 			.header__primary__links__item {
 				&, &:visited {
-					color: #ddd;
+					color: #444;
 					text-decoration: none;
 					border-bottom: none;
 					cursor: pointer;

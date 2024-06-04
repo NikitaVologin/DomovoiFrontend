@@ -27,6 +27,8 @@
 import { defineComponent } from 'vue';
 import { router } from '../router';
 import store from '../store';
+import { container } from 'tsyringe';
+import { ReceptionController } from '../controllers/receptionController';
 
 export default defineComponent({
     components: {
@@ -49,9 +51,13 @@ export default defineComponent({
     },
     methods: {
 		logout() {
-			store.state.user = undefined;
-			localStorage.removeItem('user');
-			this.$emit('logout');
+			if (!store.state.user) return;
+			let rc = container.resolve(ReceptionController);
+			rc.checkOut(store.state.user!.id).then(() => {
+				store.state.user = undefined;
+				localStorage.removeItem('user');
+				this.$emit('logout');
+			})
 		}
     },
 })

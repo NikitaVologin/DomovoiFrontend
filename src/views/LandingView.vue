@@ -10,6 +10,7 @@
 		</div>
 		<div class="title__center">
 			<h1 class="title__center__header">ДОМОВОЙ</h1>
+			<!-- <img src="../assets/img/logo.webp" class="title__center__header" alt=""> -->
 			<div class="title__center__subheader">Аренда и продажа недвижимости</div>
 			<div class="title__center__buttons">
 				<button class="title__center__buttons__item" @click="sellerButtonClick">Хочу продать / сдать</button>
