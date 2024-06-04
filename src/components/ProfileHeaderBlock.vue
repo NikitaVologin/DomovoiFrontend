@@ -53,7 +53,7 @@ export default defineComponent({
 		logout() {
 			if (!store.state.user) return;
 			let rc = container.resolve(ReceptionController);
-			rc.checkOut(store.state.user!.id).then(() => {
+			rc.checkOut().then(() => {
 				store.state.user = undefined;
 				localStorage.removeItem('user');
 				this.$emit('logout');
