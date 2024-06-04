@@ -280,7 +280,7 @@ export default defineComponent({
 		align-content: center;;
 		flex-wrap: wrap;
 		width: 100%;
-		height: 50px;
+
 		background-color: rgba(243, 243, 243, 1);
 		border-top: 1px solid rgba(154, 154, 154, 1);
 
