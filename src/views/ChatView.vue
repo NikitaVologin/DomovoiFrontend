@@ -2,7 +2,11 @@
     <Header></Header>
     <div class="chat" ref="chat">
         <div class="chat__contacts"> 
-            <div class="chat__contacts__contact" v-for="user in controller.contacts" @click="openChoosenUsersChat(user.id)">
+            <div
+				class="chat__contacts__contact"
+				v-for="user in controller.contacts" @click="openChoosenUsersChat(user.id)"
+				:class="user.id == $router.currentRoute.value.params.id ? 'chat__contacts__contact_active' : ''"
+			>
                 <div class="chat__contacts__contact__ava":style="`background-image: url('${user.avatar}'`"></div>  
                 <div class="chat__contacts__contact__name">{{ user.FIO }}</div>  
             </div> 
@@ -145,6 +149,8 @@ export default defineComponent({
 		0.1em 0.1em 0.5em rgba(0, 0, 0, 0.3);
 }
 
+.chat__contacts.chat__contacts__contact_active
+
 .chat__contacts {
 	display: block;
 	width: 30%;
@@ -153,13 +159,9 @@ export default defineComponent({
 	border-right: 1px solid rgba(154, 154, 154, 1);
 	overflow-y: scroll;
 
-	.chat__contacts__contact:hover {
-		display: flex;
-		flex-direction: row;
-		width: 100%;
-		height: 70px;
-		background-color: rgba(243, 243, 243, 1);
-		cursor: pointer;
+
+	&.chat__contacts__contact_active {
+		background: rgba(243, 243, 243, 1);
 	}
 
 	.chat__contacts__contact {
@@ -167,6 +169,11 @@ export default defineComponent({
 		flex-direction: row;
 		width: 100%;
 		height: 70px;
+		cursor: pointer;
+
+		&:hover {
+			background-color: rgba(243, 243, 243, 1);
+		}
 
 		.chat__contacts__contact__ava {
 			display: flex;
