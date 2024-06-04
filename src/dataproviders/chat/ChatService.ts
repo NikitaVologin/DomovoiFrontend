@@ -86,7 +86,7 @@ export class ChatService implements IChatService{
     }
 
     public set messages(values: Message[]) {
-        this._messages = values;
+        this._messages = reactive(values) as Array<Message>;
     }
 
     public get contacts(): string[] {
@@ -105,7 +105,7 @@ export class ChatService implements IChatService{
         let message = new Message("", text, this._meUserId, this._companionId);
         try {
             await this._connection.send("Send", message.text, message.recieverId);
-            this.messages.push(message);
+            this._messages.push(message);
             console.log(message);
         }
         catch(e){
@@ -116,6 +116,7 @@ export class ChatService implements IChatService{
     public changeMessageStatus(idMessage: string, statusstr: string){
         let status: MessageStatus = MessageStatus[statusstr as keyof typeof MessageStatus];
         this.messages.find((x) => x.id == idMessage)!.status = status;
+        console.log(idMessage);
     }
 
     public receiveMessage(text: string, idSender: string, messageId: string, messageStatus: string): void {

@@ -20,7 +20,7 @@ export class Chat implements IChat {
         @inject("IReceptionService") private readonly _receptionSerive: IReceptionService) { }
 
     public async getDiaologMessages(userId: string, idCompanion: string): Promise<Message[]> {
-        let messages = await this._chatService.getDiaologMessages(userId, idCompanion);
+        let messages = reactive(await this._chatService.getDiaologMessages(userId, idCompanion)) as Array<Message>;
         return messages;
     }
 
@@ -40,7 +40,7 @@ export class Chat implements IChat {
             var user = await this._receptionSerive.getUserInformation(id);
             this._contacts.push(this._userMapper.mapCouterAgentToViewModel(user));
         }
-        this.messages = await this.getDiaologMessages(this.user.id, this.companion.id);
+        this.messages = reactive(await this.getDiaologMessages(this.user.id, this.companion.id)) as Array<Message>;
         await this._chatService.start();
     }
 
@@ -65,7 +65,7 @@ export class Chat implements IChat {
     }
 
     public set messages(obj: Message[]) {
-        this._chatService.messages = obj;
+        this._chatService.messages = reactive(obj) as Array<Message>;
     }
 
     public get contacts(): CounteragentViewModel[] {

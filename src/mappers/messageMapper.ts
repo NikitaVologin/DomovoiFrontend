@@ -5,8 +5,8 @@ export class MessageMapper {
         let message = new Message(
             obj.id,
             obj.text,
-            obj.senderId,
-            obj.recieverId,
+            obj.idSender,
+            obj.idReciever,
         );
         return message;
     }
